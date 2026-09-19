@@ -371,3 +371,162 @@ body.gh-home .sidebar::-webkit-scrollbar {
     transition: none !important;
   }
 }
+
+/* ============================================================
+   UNIFIED SIDEBAR — platform pages match homepage style
+   ============================================================ */
+
+body.gh-platform .gh-sidebar,
+body.gh-platform aside.gh-sidebar {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  padding: 12px 10px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+body.gh-platform .gh-sidebar .side-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 0;
+}
+
+body.gh-platform .gh-sidebar .side-group,
+body.gh-platform .gh-sidebar .gh-side-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 8px;
+}
+
+body.gh-platform .gh-sidebar .side-group-label,
+body.gh-platform .gh-sidebar .gh-side-label {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+  color: #94a3b8 !important;
+  padding: 8px 12px 4px !important;
+  margin: 0 !important;
+}
+
+body.gh-platform .gh-sidebar .gh-side-link,
+body.gh-platform .gh-sidebar a.side-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-height: 42px !important;
+  padding: 8px 10px !important;
+  border-radius: 12px !important;
+  color: #475569 !important;
+  text-decoration: none !important;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  transition: background .15s ease, color .15s ease, border-color .15s ease !important;
+}
+
+body.gh-platform .gh-sidebar .gh-side-link:hover,
+body.gh-platform .gh-sidebar a.side-item:hover {
+  color: #4338ca !important;
+  background: #f4f2ff !important;
+  border-color: #e8e5ff !important;
+}
+
+body.gh-platform .gh-sidebar .gh-side-link.active,
+body.gh-platform .gh-sidebar a.side-item.active {
+  color: #4338ca !important;
+  background: #eef2ff !important;
+  border-color: #dfe4ff !important;
+  font-weight: 600 !important;
+}
+
+body.gh-platform .gh-sidebar .side-icon {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 10px !important;
+  display: grid !important;
+  place-items: center !important;
+  flex: none !important;
+  background: #f8fafc !important;
+  color: #64748b !important;
+  font-size: 16px !important;
+}
+
+body.gh-platform .gh-sidebar .gh-side-link:hover .side-icon,
+body.gh-platform .gh-sidebar a.side-item:hover .side-icon,
+body.gh-platform .gh-sidebar .gh-side-link.active .side-icon,
+body.gh-platform .gh-sidebar a.side-item.active .side-icon {
+  color: #4f46e5 !important;
+  background: #e8eaff !important;
+}
+
+body.gh-platform .gh-sidebar .chev,
+body.gh-platform .gh-sidebar .end {
+  margin-left: auto !important;
+  color: #c0c7d2 !important;
+  font-size: 14px !important;
+}
+
+body.gh-platform .gh-sidebar .side-quote,
+body.gh-platform .gh-sidebar .gh-quote {
+  margin: 14px 6px 0 !important;
+  padding: 14px !important;
+  border-radius: 16px !important;
+  background: linear-gradient(135deg, #eef2ff, #f5f3ff) !important;
+  color: #4338ca !important;
+  font-size: 12px !important;
+  line-height: 1.55 !important;
+  border: 1px solid #e2e6ff !important;
+}
+
+body.gh-platform .gh-sidebar .side-quote small,
+body.gh-platform .gh-sidebar .gh-quote small {
+  display: block !important;
+  margin-top: 6px !important;
+  opacity: .85 !important;
+  font-size: 11px !important;
+}
+
+/* Hide flat "Điều hướng / Giáo viên" labels left by old shell if still present */
+body.gh-platform .gh-sidebar > .gh-side-label:first-child,
+body.gh-platform .gh-sidebar > .gh-side-divider {
+  display: none !important;
+}
+
+/* Collapsed state parity with homepage */
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .side-group-label,
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-side-label,
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .chev,
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .end,
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .side-quote,
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-quote,
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-side-link > span:not(.side-icon),
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar a.side-item > span:not(.side-icon) {
+  display: none !important;
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-side-link,
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar a.side-item {
+  justify-content: center !important;
+  padding: 8px !important;
+  gap: 0 !important;
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .side-icon {
+  width: 40px !important;
+  height: 40px !important;
+  margin: 0 !important;
+}
+
+/* Role-only items hidden until unified script runs (fallback) */
+[data-role-only="admin"] {
+  display: none !important;
+}
+body[data-gh-role="admin"] [data-role-only="admin"],
+aside[data-gh-role="admin"] [data-role-only="admin"] {
+  display: flex !important;
+}
