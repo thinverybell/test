@@ -1,0 +1,350 @@
+/* ============================================================
+   GIA HUY — MASTER NAVIGATION SURFACE
+   One sidebar + one top navigation language for every unlocked page.
+   The selected page always keeps a visible violet/blue glow.
+   ============================================================ */
+:root{
+  --gh-nav-width: 220px;
+  --gh-nav-radius: 12px;
+  --gh-nav-item-h: 40px;
+  --gh-nav-text: #48566b;
+  --gh-nav-muted: #98a5b7;
+  --gh-nav-border: #e1e6f0;
+  --gh-nav-hover-bg: #f5f7ff;
+  --gh-nav-active-bg: linear-gradient(90deg,#edf1ff 0%,#f5f6ff 100%);
+  --gh-nav-active-border: #c8d2ff;
+  --gh-nav-active-text: #2746a8;
+  --gh-nav-icon: #738097;
+  --gh-nav-icon-active: #5448df;
+  --gh-nav-accent: #5a49ef;
+}
+
+/* -------- Shared sidebar rail -------- */
+body.gh-unlocked .sidebar,
+body.gh-unlocked .gh-sidebar{
+  width: var(--gh-nav-width) !important;
+  min-width: var(--gh-nav-width) !important;
+  background: #fff !important;
+  border-right: 1px solid #edf0f5 !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+body.gh-unlocked .sidebar .side-inner,
+body.gh-unlocked .gh-sidebar .side-inner{
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 52px 10px 14px !important;
+  margin: 0 !important;
+  background: #fff !important;
+}
+
+/* Every navigation row is literally the same component. */
+body.gh-unlocked .sidebar a.side-item,
+body.gh-unlocked .gh-sidebar a.side-item,
+body.gh-unlocked .sidebar .gh-side-link,
+body.gh-unlocked .gh-sidebar .gh-side-link{
+  width: 100% !important;
+  min-width: 0 !important;
+  height: var(--gh-nav-item-h) !important;
+  min-height: var(--gh-nav-item-h) !important;
+  margin: 2px 0 !important;
+  padding: 3px 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 9px !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--gh-nav-radius) !important;
+  background: #fff !important;
+  color: var(--gh-nav-text) !important;
+  text-decoration: none !important;
+  font: 500 11px/1.2 'Be Vietnam Pro',sans-serif !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: background .16s ease,border-color .16s ease,color .16s ease,box-shadow .16s ease !important;
+}
+body.gh-unlocked .sidebar a.side-item:hover,
+body.gh-unlocked .gh-sidebar a.side-item:hover,
+body.gh-unlocked .sidebar .gh-side-link:hover,
+body.gh-unlocked .gh-sidebar .gh-side-link:hover{
+  background: var(--gh-nav-hover-bg) !important;
+  border-color: #e0e5f4 !important;
+  color: #3f46b9 !important;
+  box-shadow: 0 4px 11px rgba(79,70,229,.06) !important;
+}
+
+/* Active page: always visible on the item itself. */
+body.gh-unlocked .sidebar a.side-item.gh-nav-current,
+body.gh-unlocked .gh-sidebar a.side-item.gh-nav-current,
+body.gh-unlocked .sidebar a.side-item.active,
+body.gh-unlocked .gh-sidebar a.side-item.active,
+body.gh-unlocked .sidebar .gh-side-link.gh-nav-current,
+body.gh-unlocked .gh-sidebar .gh-side-link.gh-nav-current{
+  background: var(--gh-nav-active-bg) !important;
+  border-color: var(--gh-nav-active-border) !important;
+  color: var(--gh-nav-active-text) !important;
+  font-weight: 700 !important;
+  box-shadow:
+    inset 3px 0 0 var(--gh-nav-accent),
+    0 7px 18px rgba(79,70,229,.13),
+    0 0 0 1px rgba(99,102,241,.035) !important;
+}
+body.gh-unlocked .sidebar a.side-item.gh-nav-current::before,
+body.gh-unlocked .gh-sidebar a.side-item.gh-nav-current::before,
+body.gh-unlocked .sidebar a.side-item.active::before,
+body.gh-unlocked .gh-sidebar a.side-item.active::before{
+  content: '' !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 5px !important;
+  bottom: 5px !important;
+  width: 3px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg,#5746ee,#7b63ff) !important;
+  box-shadow: 0 0 12px rgba(91,69,239,.58) !important;
+  pointer-events: none !important;
+}
+
+body.gh-unlocked .sidebar .side-icon,
+body.gh-unlocked .gh-sidebar .side-icon{
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  flex: 0 0 28px !important;
+  display: grid !important;
+  place-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 9px !important;
+  background: #f5f7fb !important;
+  color: var(--gh-nav-icon) !important;
+  box-shadow: none !important;
+}
+body.gh-unlocked .sidebar .side-item:hover .side-icon,
+body.gh-unlocked .sidebar .side-item.active .side-icon,
+body.gh-unlocked .sidebar .side-item.gh-nav-current .side-icon,
+body.gh-unlocked .gh-sidebar .side-item:hover .side-icon,
+body.gh-unlocked .gh-sidebar .side-item.active .side-icon,
+body.gh-unlocked .gh-sidebar .side-item.gh-nav-current .side-icon{
+  background: #e9ebff !important;
+  color: var(--gh-nav-icon-active) !important;
+}
+body.gh-unlocked .sidebar .side-icon i,
+body.gh-unlocked .gh-sidebar .side-icon i{
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  font-size: 14px !important;
+}
+body.gh-unlocked .sidebar .side-label,
+body.gh-unlocked .gh-sidebar .side-label{
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  color: inherit !important;
+}
+body.gh-unlocked .sidebar .chev,
+body.gh-unlocked .gh-sidebar .chev{
+  margin-left: auto !important;
+  color: #b7c0cf !important;
+  flex: 0 0 auto !important;
+  font-size: 15px !important;
+  line-height: 1 !important;
+}
+body.gh-unlocked .sidebar .side-item.gh-nav-current .chev,
+body.gh-unlocked .sidebar .side-item.active .chev,
+body.gh-unlocked .gh-sidebar .side-item.gh-nav-current .chev,
+body.gh-unlocked .gh-sidebar .side-item.active .chev{
+  color: #9290d7 !important;
+}
+
+/* Section labels are the same on every page. */
+body.gh-unlocked .sidebar .side-group,
+body.gh-unlocked .gh-sidebar .side-group{
+  margin: 5px 0 0 !important;
+  padding: 0 !important;
+  gap: 0 !important;
+}
+body.gh-unlocked .sidebar .side-group-label,
+body.gh-unlocked .gh-sidebar .side-group-label{
+  margin: 0 !important;
+  padding: 7px 8px 4px !important;
+  color: var(--gh-nav-muted) !important;
+  font-size: 8px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  letter-spacing: .09em !important;
+  text-transform: uppercase !important;
+}
+body.gh-unlocked .sidebar .side-quote,
+body.gh-unlocked .gh-sidebar .side-quote{
+  margin: 10px 2px 6px !important;
+}
+
+/* -------- Standalone collapse control -------- */
+body.gh-unlocked .sidebar .sidebar-toggle-control,
+body.gh-unlocked .gh-sidebar .gh-sidebar-toggle{
+  position: absolute !important;
+  top: 8px !important;
+  left: 10px !important;
+  right: 10px !important;
+  width: calc(100% - 20px) !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 0 8px !important;
+  margin: 0 !important;
+  border: 1px solid #e0e5ef !important;
+  border-radius: 11px !important;
+  background: #fff !important;
+  color: #526077 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  justify-content: flex-start !important;
+  box-sizing: border-box !important;
+  z-index: 100 !important;
+}
+body.gh-unlocked .sidebar .sidebar-toggle-control:hover,
+body.gh-unlocked .gh-sidebar .gh-sidebar-toggle:hover{
+  background: #f6f7ff !important;
+  border-color: #ccd5ff !important;
+  color: #474ac2 !important;
+  box-shadow: 0 6px 16px rgba(79,70,229,.09) !important;
+}
+body.gh-unlocked .sidebar .sidebar-toggle-control .gh-toggle-icon,
+body.gh-unlocked .gh-sidebar .gh-sidebar-toggle .gh-toggle-icon{
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 8px !important;
+  background: #f1f3f8 !important;
+}
+body.gh-unlocked .sidebar .sidebar-toggle-control .gh-toggle-text,
+body.gh-unlocked .gh-sidebar .gh-sidebar-toggle .gh-toggle-text{
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+}
+body.gh-unlocked .sidebar .sidebar-toggle-control .gh-toggle-shortcut,
+body.gh-unlocked .gh-sidebar .gh-sidebar-toggle .gh-toggle-shortcut{
+  margin-left: auto !important;
+  padding: 3px 5px !important;
+  border: 1px solid #e3e7ef !important;
+  border-radius: 6px !important;
+  background: #fafbfc !important;
+  color: #8b97aa !important;
+  font: 600 8px/1 ui-monospace,SFMono-Regular,Menlo,monospace !important;
+}
+
+/* -------- Top bar — one shared style everywhere -------- */
+body.gh-unlocked .topbar,
+body.gh-unlocked .gh-header{
+  background: rgba(255,255,255,.97) !important;
+  border-bottom: 1px solid #edf0f5 !important;
+  box-shadow: 0 1px 0 rgba(28,38,56,.02) !important;
+}
+body.gh-unlocked .topnav,
+body.gh-unlocked .gh-header-nav{
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scrollbar-width: none !important;
+  padding: 4px 3px !important;
+}
+body.gh-unlocked .topnav::-webkit-scrollbar,
+body.gh-unlocked .gh-header-nav::-webkit-scrollbar{ display:none !important; }
+body.gh-unlocked .topnav > a,
+body.gh-unlocked .gh-header-nav > a{
+  flex: 0 0 auto !important;
+  min-height: 34px !important;
+  height: 34px !important;
+  padding: 0 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  border: 1px solid transparent !important;
+  border-radius: 10px !important;
+  color: #536178 !important;
+  background: transparent !important;
+  text-decoration: none !important;
+  font: 600 11px/1 'Be Vietnam Pro',sans-serif !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+  transition: background .16s ease,border-color .16s ease,color .16s ease,box-shadow .16s ease !important;
+}
+body.gh-unlocked .topnav > a:hover,
+body.gh-unlocked .gh-header-nav > a:hover{
+  background: #f5f7ff !important;
+  border-color: #e0e5f4 !important;
+  color: #3f46b9 !important;
+}
+body.gh-unlocked .topnav > a.active,
+body.gh-unlocked .gh-header-nav > a.active,
+body.gh-unlocked .topnav > a.gh-nav-current,
+body.gh-unlocked .gh-header-nav > a.gh-nav-current{
+  background: linear-gradient(90deg,#edf1ff,#f4f5ff) !important;
+  border-color: #c8d2ff !important;
+  color: #3047a3 !important;
+  box-shadow: inset 0 -2px 0 #5b4bf0,0 4px 12px rgba(79,70,229,.07) !important;
+}
+body.gh-unlocked .topnav > a i,
+body.gh-unlocked .gh-header-nav > a i{ color: inherit !important; }
+
+/* The app-shell platform pages need the same left rail math as index. */
+body.gh-unlocked.gh-platform .gh-layout{
+  grid-template-columns: var(--gh-nav-width) minmax(0,1fr) !important;
+}
+body.gh-unlocked.gh-platform .gh-sidebar{
+  width: var(--gh-nav-width) !important;
+}
+
+/* Collapsed rail remains consistent. */
+body.gh-unlocked.gh-sidebar-collapsed .sidebar,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar{ width: 72px !important; min-width: 72px !important; }
+body.gh-unlocked.gh-sidebar-collapsed .sidebar .side-inner,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar .side-inner{ padding: 52px 8px 12px !important; }
+body.gh-unlocked.gh-sidebar-collapsed .sidebar a.side-item,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar a.side-item{
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 3px !important;
+  justify-content: center !important;
+  gap: 0 !important;
+}
+body.gh-unlocked.gh-sidebar-collapsed .sidebar a.side-item > span:not(.side-icon),
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar a.side-item > span:not(.side-icon){ display:none !important; }
+body.gh-unlocked.gh-sidebar-collapsed .sidebar .side-icon,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar .side-icon{ width:30px !important;height:30px !important;min-width:30px !important;min-height:30px !important; }
+body.gh-unlocked.gh-sidebar-collapsed .sidebar .side-group-label,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar .side-group-label,
+body.gh-unlocked.gh-sidebar-collapsed .sidebar .side-quote,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar .side-quote{ display:none !important; }
+body.gh-unlocked.gh-sidebar-collapsed .sidebar .sidebar-toggle-control,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar .gh-sidebar-toggle{ left:8px !important; right:8px !important; width:calc(100% - 16px) !important; justify-content:center !important; }
+body.gh-unlocked.gh-sidebar-collapsed .sidebar .gh-toggle-text,
+body.gh-unlocked.gh-sidebar-collapsed .sidebar .gh-toggle-shortcut,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar .gh-toggle-text,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar .gh-toggle-shortcut{ display:none !important; }
+
+@media (max-width: 820px){
+  body.gh-unlocked .sidebar,
+  body.gh-unlocked .gh-sidebar{ width: min(82vw,300px) !important; min-width: min(82vw,300px) !important; }
+  body.gh-unlocked .sidebar .side-inner,
+  body.gh-unlocked .gh-sidebar .side-inner{ padding-top: 12px !important; }
+  body.gh-unlocked .sidebar .sidebar-toggle-control,
+  body.gh-unlocked .gh-sidebar .gh-sidebar-toggle{ position: relative !important; top:auto !important; left:auto !important; right:auto !important; width:100% !important; margin:0 0 8px !important; }
+}

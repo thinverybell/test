@@ -103,7 +103,10 @@
   function detectActiveKey() {
     var path = (location.pathname || '').split('/').pop() || 'index.html';
     if (!path) path = 'index.html';
-    if (PAGE_KEY_MAP[path]) return PAGE_KEY_MAP[path];
+    var lowerPath = String(path).toLowerCase();
+    if (PAGE_KEY_MAP[lowerPath]) return PAGE_KEY_MAP[lowerPath];
+    var cleanPath = lowerPath.replace(/\.html$/, '');
+    if (PAGE_KEY_MAP[cleanPath]) return PAGE_KEY_MAP[cleanPath];
     var bodyPage = document.body && document.body.getAttribute('data-page');
     if (bodyPage && PAGE_KEY_MAP[bodyPage + '.html']) return PAGE_KEY_MAP[bodyPage + '.html'];
     if (bodyPage) return bodyPage;
