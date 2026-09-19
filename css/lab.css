@@ -11,3 +11,111 @@
   .gh-lab.mobile-console-open .lab-console{transform:translateX(0)}
   .gh-lab.mobile-console-open:after{content:"";position:fixed;inset:0;background:rgba(15,23,42,.42);z-index:1500}
 }
+
+/* =========================================================
+   BẢN SỬA GIAO DIỆN PHÒNG THÍ NGHIỆM — desktop / màn hình lớn
+   ========================================================= */
+html:has(body.gh-lab){background:#fff!important;scroll-behavior:smooth}
+body.gh-lab{
+  min-height:100vh!important;
+  height:auto!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  color:#152238!important;
+  background:#fff!important;
+}
+body.gh-lab .page-bg{
+  position:fixed!important;inset:0!important;z-index:-3!important;
+  background:#fff!important;
+}
+body.gh-lab .page-overlay{position:fixed!important;inset:0!important;z-index:-2!important;background:#fff!important;opacity:1!important}
+body.gh-lab .content{
+  min-height:calc(100vh + 1px)!important;
+  height:auto!important;
+  padding-bottom:40px!important;
+  overflow:visible!important;
+}
+body.gh-lab .lab-shell{max-width:none!important}
+body.gh-lab .shell{width:100%!important;max-width:none!important}
+body.gh-lab .lab-heading,
+body.gh-lab .lab-toolbar,
+body.gh-lab .lab-workspace{width:100%!important;max-width:none!important}
+body.gh-lab .lab-heading{padding-left:24px!important;padding-right:24px!important}
+body.gh-lab .lab-toolbar{padding-left:24px!important;padding-right:24px!important;background:rgba(255,255,255,.88)!important;border-color:#dce4ee!important}
+body.gh-lab .lab-workspace{
+  align-items:start!important;
+  grid-template-columns:290px minmax(560px,1fr) 430px!important;
+  padding:12px 24px 18px!important;
+}
+body.gh-lab .lab-library,
+body.gh-lab .lab-console{
+  min-height:0!important;
+  height:min(720px,calc(100vh - 230px))!important;
+  max-height:720px!important;
+}
+body.gh-lab .lab-library{overflow:hidden!important}
+body.gh-lab .module-list{overscroll-behavior:auto!important;scrollbar-width:thin}
+body.gh-lab .lab-console{overflow:hidden!important}
+body.gh-lab .console-body,
+body.gh-lab .serial-body,
+body.gh-lab .events-body{overscroll-behavior:auto!important;scrollbar-width:thin}
+body.gh-lab .lab-center{min-width:0!important;display:grid!important;grid-template-rows:auto auto auto!important;align-content:start!important}
+body.gh-lab .circuit-canvas{min-height:600px!important;height:600px!important;background:#edf3f8!important;border-color:#d2dce7!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 14px 34px rgba(15,23,42,.07)!important}
+body.gh-lab .canvas-grid{background-image:linear-gradient(#d8e2ec 1px,transparent 1px),linear-gradient(90deg,#d8e2ec 1px,transparent 1px)!important;opacity:.72!important}
+body.gh-lab .board-card{background:linear-gradient(145deg,#172338,#0d1728)!important;border-color:#31415a!important;box-shadow:0 22px 44px rgba(15,23,42,.24)!important}
+body.gh-lab .component-head{cursor:grab!important}
+body.gh-lab .component-head:active,
+body.gh-lab .board-head:active{cursor:grabbing!important}
+body.gh-lab .board-head{cursor:grab!important}
+body.gh-lab .board-node{z-index:6!important}
+body.gh-lab .component-node{z-index:7!important}
+body.gh-lab .drop-hint{bottom:14px!important;color:#75859a!important}
+body.gh-lab .lesson-card{margin-top:0!important;min-height:92px!important}
+body.gh-lab .code-shell{margin:0 24px 30px!important}
+body.gh-lab .lab-heading-actions .lab-btn.primary{background:#4f46e5!important}
+body.gh-lab .lab-heading-actions .lab-btn.success{background:#047857!important}
+body.gh-lab .lab-btn.danger{background:#fff!important}
+body.gh-lab .status-chip{letter-spacing:.04em!important}
+body.gh-lab .lab-kicker{color:#574be7!important}
+body.gh-lab .mobile-console-open{display:none!important}
+body.gh-lab .lab-workspace:after{display:none!important}
+body.gh-lab .lab-drop-highlight{outline:3px dashed rgba(79,70,229,.36)!important;outline-offset:-6px!important;background:#f1f5ff!important}
+body.gh-lab .node-focused{box-shadow:0 0 0 4px rgba(79,70,229,.20),0 20px 48px rgba(79,70,229,.16)!important}
+
+/* Chế độ tối vẫn đồng bộ, không còn nền sáng xen nền tối. */
+body.gh-lab.gh-dark{background:#07111e!important;color:#e8eef7!important}
+body.gh-lab.gh-dark .page-bg{background:radial-gradient(circle at 8% 0%,rgba(99,102,241,.20),transparent 30%),radial-gradient(circle at 92% 10%,rgba(14,165,233,.14),transparent 26%),linear-gradient(180deg,#091322 0%,#0a1220 100%)!important}
+body.gh-lab.gh-dark .page-overlay{background:rgba(2,8,16,.18)!important}
+body.gh-lab.gh-dark .lab-library,
+body.gh-lab.gh-dark .canvas-toolbar,
+body.gh-lab.gh-dark .lab-console,
+body.gh-lab.gh-dark .lesson-card,
+body.gh-lab.gh-dark .code-shell,
+body.gh-lab.gh-dark .lab-toolbar{background:#0f1b2d!important;border-color:#263954!important;color:#e8eef7!important}
+body.gh-lab.gh-dark .module-card:hover{background:#142238!important}
+body.gh-lab.gh-dark .component-head,
+body.gh-lab.gh-dark .component-body{background:#111d30!important;border-color:#293a53!important;color:#e8eef7!important}
+body.gh-lab.gh-dark .lab-heading p,
+body.gh-lab.gh-dark .toolbar-note,
+body.gh-lab.gh-dark .lesson-card p{color:#9fb0c5!important}
+body.gh-lab.gh-dark .circuit-canvas{background:#0c1625!important;border-color:#253650!important}
+body.gh-lab.gh-dark .canvas-grid{background-image:linear-gradient(#1c2b40 1px,transparent 1px),linear-gradient(90deg,#1c2b40 1px,transparent 1px)!important}
+
+@media (max-width:1500px){
+  body.gh-lab .lab-workspace{grid-template-columns:270px minmax(500px,1fr) 390px!important}
+}
+@media (max-width:1200px){
+  body.gh-lab .lab-workspace{grid-template-columns:250px minmax(0,1fr)!important}
+  body.gh-lab .lab-console{grid-column:1/-1;height:520px!important;max-height:none!important}
+}
+@media (max-width:900px){
+  body.gh-lab .lab-heading,.gh-lab .lab-toolbar,.gh-lab .lab-workspace{padding-left:12px!important;padding-right:12px!important}
+  body.gh-lab .lab-workspace{grid-template-columns:1fr!important}
+  body.gh-lab .lab-library{height:380px!important;max-height:380px!important}
+  body.gh-lab .lab-console{height:520px!important}
+  body.gh-lab .circuit-canvas{height:650px!important;min-height:650px!important}
+}
+@media (max-width:760px){
+  body.gh-lab .mobile-console-open{display:inline-flex!important}
+  body.gh-lab .lab-console{height:calc(100vh - 32px)!important;max-height:none!important}
+}
