@@ -1,0 +1,10 @@
+{
+  "meta": {
+    "app": "giahuy-hub",
+    "version": 1,
+    "exportedAt": null,
+    "source": "UserSettings.exportAll",
+    "note": "Mẫu file rỗng — dùng làm tham chiếu định dạng export."
+  },
+  "localStorage": {}
+}

@@ -1,0 +1,10 @@
+{
+  "admin-panel.html": "36e4c32275db03ec062cd7935c0695f42a29e3cbad584e2a05efaffa760508df",
+  "admin-login.html": "2cfb645b991636a80b938fa3c43e2e54c6964a536bf81d475df92bfcdd5ab432",
+  "login.html": "653f853d9993c805914b14b4a7d014cc169f1e5e208a4b844c6a46ab4cab3ea0",
+  "register.html": "30a0a1861168f0475ae50b0a8c35194c69f6b84d6bacc6e87c44d249539b2a20",
+  "teacher-login.html": "025167d780c2726aaf3fbacdb86058d49e47de27fa0721ebfe959104b06b3d7d",
+  "teacher.html": "6b80cd79dafaf4b8a93b026fe33944096a976e6a8cc1275d8ebc448747cf87d1",
+  "student.html": "0710e88ef36a3a7b7a8cee657fe9a4152d5ff08c032916613fa382a3b713406d",
+  "guest-login.html": "cb957dbc4aa6ed0a2f22e8919a9b1d992368a6380bdea46f22acc37b04c47e1a"
+}

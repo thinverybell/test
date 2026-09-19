@@ -1,0 +1,200 @@
+/*
+  THAY GIA HUY — FINAL SIDEBAR / MAIN LAYOUT REPAIR
+  Scope: homepage (.gh-home) only.
+  Purpose: make fixed sidebar and main content share ONE source of truth.
+  Locked Panel/Login/Auth pages are intentionally excluded.
+*/
+
+body.gh-unlocked.gh-home {
+  --gh-home-sidebar-open: 220px;
+  --gh-home-sidebar-collapsed: 78px;
+  --gh-home-sidebar-left: 12px;
+  --gh-home-main-gap: 20px;
+  --gh-home-main-left: calc(var(--gh-home-sidebar-left) + var(--gh-home-sidebar-open) + var(--gh-home-main-gap));
+}
+
+body.gh-unlocked.gh-home.gh-sidebar-collapsed {
+  --gh-home-main-left: calc(var(--gh-home-sidebar-left) + var(--gh-home-sidebar-collapsed) + var(--gh-home-main-gap));
+}
+
+/* The sidebar is visually fixed, but the main area reserves its real footprint. */
+body.gh-unlocked.gh-home aside.sidebar,
+body.gh-unlocked.gh-home .sidebar {
+  position: fixed !important;
+  left: var(--gh-home-sidebar-left) !important;
+  top: calc(var(--top-h, 64px) + 4px) !important;
+  bottom: 12px !important;
+  width: var(--gh-home-sidebar-open) !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  z-index: 25 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+body.gh-unlocked.gh-home.gh-sidebar-collapsed aside.sidebar,
+body.gh-unlocked.gh-home.gh-sidebar-collapsed .sidebar {
+  width: var(--gh-home-sidebar-collapsed) !important;
+}
+
+body.gh-unlocked.gh-home aside.sidebar::-webkit-scrollbar,
+body.gh-unlocked.gh-home .sidebar::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+
+/* Main content must live to the right of the sidebar, never underneath it. */
+body.gh-unlocked.gh-home main.content,
+body.gh-unlocked.gh-home .content {
+  position: relative !important;
+  z-index: 1 !important;
+  width: calc(100% - var(--gh-home-main-left)) !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin-left: var(--gh-home-main-left) !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 24px !important;
+  padding-top: calc(var(--top-h, 64px) + 18px) !important;
+  box-sizing: border-box !important;
+  overflow-x: clip !important;
+  transition: width .24s ease, margin-left .24s ease !important;
+}
+
+/* Every homepage shell is sized from its actual parent, not viewport math. */
+body.gh-unlocked.gh-home .content > .shell,
+body.gh-unlocked.gh-home .shell {
+  width: min(var(--content-max, 1240px), calc(100% - 24px)) !important;
+  max-width: var(--content-max, 1240px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Prevent old full-viewport rules from escaping the main column. */
+body.gh-unlocked.gh-home .content > section,
+body.gh-unlocked.gh-home .content > .shell,
+body.gh-unlocked.gh-home .content .shell {
+  min-width: 0 !important;
+  max-width: min(var(--content-max, 1240px), 100%) !important;
+}
+
+body.gh-unlocked.gh-home .content img,
+body.gh-unlocked.gh-home .content video,
+body.gh-unlocked.gh-home .content canvas,
+body.gh-unlocked.gh-home .content iframe {
+  max-width: 100%;
+}
+
+/* Footer belongs to main, so it follows the same parent geometry. */
+body.gh-unlocked.gh-home footer.footer,
+body.gh-unlocked.gh-home .footer.shell,
+body.gh-unlocked.gh-home .footer {
+  width: min(var(--content-max, 1240px), calc(100% - 24px)) !important;
+  max-width: var(--content-max, 1240px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Toggle button stays inside the sidebar and never occupies the main grid. */
+body.gh-unlocked.gh-home .sidebar .sidebar-toggle-control {
+  left: 14px !important;
+  right: auto !important;
+  width: calc(100% - 28px) !important;
+}
+
+body.gh-unlocked.gh-home.gh-sidebar-collapsed .sidebar .sidebar-toggle-control {
+  left: 50% !important;
+  right: auto !important;
+  width: 44px !important;
+  transform: translateX(-50%) !important;
+}
+
+body.gh-unlocked.gh-home.gh-sidebar-collapsed .sidebar .sidebar-toggle-control:hover {
+  transform: translateX(-50%) translateY(-1px) !important;
+}
+
+/* Collapsed sidebar: keep the menu below the toggle control and centered. */
+body.gh-unlocked.gh-home.gh-sidebar-collapsed .sidebar .side-inner {
+  padding-top: 58px !important;
+}
+
+body.gh-unlocked.gh-home.gh-sidebar-collapsed .sidebar .side-item {
+  width: 100% !important;
+  min-height: 46px !important;
+  margin: 4px 0 !important;
+  padding: 8px !important;
+  justify-content: center !important;
+  gap: 0 !important;
+  box-sizing: border-box !important;
+}
+
+body.gh-unlocked.gh-home.gh-sidebar-collapsed .sidebar .side-item > span:not(.side-icon),
+body.gh-unlocked.gh-home.gh-sidebar-collapsed .sidebar .side-item .chev,
+body.gh-unlocked.gh-home.gh-sidebar-collapsed .sidebar .side-group-label,
+body.gh-unlocked.gh-home.gh-sidebar-collapsed .sidebar .side-quote {
+  display: none !important;
+}
+
+body.gh-unlocked.gh-home.gh-sidebar-collapsed .sidebar .side-icon {
+  width: 40px !important;
+  height: 40px !important;
+  margin: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 12px !important;
+}
+
+/* Desktop only: collapsed/open are real layout states. */
+@media (min-width: 821px) {
+  body.gh-unlocked.gh-home.gh-sidebar-collapsed .content {
+    width: calc(100% - var(--gh-home-main-left)) !important;
+  }
+}
+
+/* Mobile uses the existing mobile navigation instead of a desktop fixed rail. */
+@media (max-width: 820px) {
+  body.gh-unlocked.gh-home {
+    --gh-home-main-left: 0px;
+  }
+
+  body.gh-unlocked.gh-home aside.sidebar,
+  body.gh-unlocked.gh-home .sidebar {
+    position: static !important;
+    width: 100% !important;
+    max-height: none !important;
+    height: auto !important;
+    margin: 0 !important;
+    display: none !important;
+  }
+
+  body.gh-unlocked.gh-home main.content,
+  body.gh-unlocked.gh-home .content {
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  body.gh-unlocked.gh-home .content > .shell,
+  body.gh-unlocked.gh-home .shell,
+  body.gh-unlocked.gh-home footer.footer,
+  body.gh-unlocked.gh-home .footer {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.gh-unlocked.gh-home main.content,
+  body.gh-unlocked.gh-home .content {
+    transition: none !important;
+  }
+}

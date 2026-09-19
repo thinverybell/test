@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "name": "giahuy-user-settings",
+  "description": "Schema mô tả toàn bộ data settings / tài khoản người dùng (localStorage + IndexedDB)",
+  "storage": {
+    "localStorage_prefix": "giahuy-",
+    "indexedDB": {
+      "name": "giahuy-hub",
+      "version": 2,
+      "stores": ["files", "music", "meta"]
+    }
+  },
+  "keys": {
+    "session": { "key": "giahuy-session", "type": "object", "group": "auth" },
+    "guests": { "key": "giahuy-guests", "type": "array", "group": "accounts" },
+    "students": { "key": "giahuy-students", "type": "array", "group": "accounts" },
+    "teachers": { "key": "giahuy-teachers", "type": "array", "group": "accounts" },
+    "managers": { "key": "giahuy-managers", "type": "array", "group": "accounts" },
+    "adminProfile": { "key": "giahuy-admin-profile", "type": "object", "group": "accounts" },
+    "adminFlag": { "key": "giahuy-admin", "type": "string", "group": "auth" },
+    "classes": { "key": "giahuy-classes", "type": "array", "group": "school" },
+    "schedule": { "key": "giahuy-schedule", "type": "array", "group": "school" },
+    "theme": { "key": "giahuy-theme", "type": "string", "group": "ui" },
+    "siteAvatar": { "key": "giahuy-avatar", "type": "string", "group": "ui" },
+    "announcement": { "key": "giahuy-announcement", "type": "string", "group": "ui" },
+    "notifications": { "key": "giahuy-notifications-v1", "type": "array", "group": "ui" },
+    "tickets": { "key": "giahuy-tickets-v1", "type": "array", "group": "tickets" },
+    "ticketSeq": { "key": "giahuy-ticket-seq", "type": "string", "group": "tickets" },
+    "ticketAdmin": { "key": "giahuy-ticket-admin", "type": "string", "group": "tickets" },
+    "history": { "key": "giahuy-history", "type": "array", "group": "activity" },
+    "lastTrack": { "key": "giahuy-last-track", "type": "string", "group": "ui" },
+    "fabDockPos": { "key": "giahuy-fab-dock-pos", "type": "object", "group": "ui" },
+    "openAdminTab": { "key": "giahuy-open-admin-tab", "type": "string", "group": "ui" },
+    "totalViews": { "key": "giahuy-total-views", "type": "string", "group": "activity" }
+  },
+  "keyPatterns": {
+    "guestAvatar": "giahuy-avatar-guest-{id}",
+    "teacherAvatar": "giahuy-avatar-{id}",
+    "favorite": "giahuy-fav-{id}",
+    "like": "giahuy-like-{id}",
+    "downloadCount": "giahuy-dl-{id}"
+  },
+  "exportFormat": {
+    "meta": {
+      "app": "giahuy-hub",
+      "version": 1,
+      "exportedAt": "ISO-8601",
+      "source": "UserSettings.exportAll"
+    },
+    "localStorage": "object map key -> string value",
+    "note": "IndexedDB (files/music) không nằm trong export JSON mặc định vì có thể rất lớn (blob)."
+  }
+}

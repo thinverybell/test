@@ -1,0 +1,85 @@
+/* ============================================================
+   THẦY GIA HUY — BRAND SYSTEM
+   Scoped to unlocked/modern pages only.
+   LOCKED Panel/Login/Auth files do not load this stylesheet.
+   ============================================================ */
+body.gh-unlocked,
+body.gh-platform {
+  --gh-brand-primary: #4f46e5;
+  --gh-brand-primary-light: #eef2ff;
+  --gh-brand-primary-2: #7c3aed;
+  --gh-brand-accent: #0d9488;
+  --gh-brand-blue: #0ea5e9;
+  --gh-brand-green: #10b981;
+  --gh-brand-orange: #f59e0b;
+  --gh-brand-pink: #ec4899;
+  --gh-brand-bg: #f5f7fb;
+  --gh-brand-surface: #ffffff;
+  --gh-brand-surface-soft: #f8fafc;
+  --gh-brand-text: #172033;
+  --gh-brand-muted: #64748b;
+  --gh-brand-soft: #94a3b8;
+  --gh-brand-border: #e6ebf2;
+  --gh-brand-radius-sm: 10px;
+  --gh-brand-radius-md: 12px;
+  --gh-brand-radius-lg: 18px;
+  --gh-brand-radius-xl: 24px;
+  --gh-brand-shadow: 0 6px 24px rgba(15, 23, 42, .06);
+  --gh-brand-shadow-hover: 0 14px 34px rgba(15, 23, 42, .09);
+  font-family: "Be Vietnam Pro", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body.gh-unlocked {
+  background: var(--gh-brand-bg) !important;
+  color: var(--gh-brand-text);
+}
+
+body.gh-platform {
+  background: var(--gh-brand-bg);
+  color: var(--gh-brand-text);
+}
+
+body.gh-unlocked a,
+body.gh-platform a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body.gh-unlocked button,
+body.gh-platform button,
+body.gh-unlocked input,
+body.gh-platform input,
+body.gh-unlocked select,
+body.gh-platform select,
+body.gh-unlocked textarea,
+body.gh-platform textarea {
+  font-family: inherit;
+}
+
+body.gh-unlocked :where(a, button, input, select, textarea):focus-visible,
+body.gh-platform :where(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid rgba(79, 70, 229, .20);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.gh-unlocked *,
+  body.gh-platform * {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* New pages: align the existing platform tokens with the brand. */
+body.gh-platform {
+  --gh-primary: var(--gh-brand-primary);
+  --gh-primary-2: var(--gh-brand-primary-2);
+  --gh-bg: var(--gh-brand-bg);
+  --gh-surface: var(--gh-brand-surface);
+  --gh-surface-2: var(--gh-brand-surface-soft);
+  --gh-text: var(--gh-brand-text);
+  --gh-muted: var(--gh-brand-muted);
+  --gh-soft: var(--gh-brand-soft);
+  --gh-border: var(--gh-brand-border);
+}

@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panel học sinh — Thầy Gia Huy</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@coreui/icons/css/free.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/auth.css">
+<style>
+  .stu-grid {
+    display: grid;
+    grid-template-columns: 1.15fr .85fr;
+    gap: 16px;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .stu-grid { grid-template-columns: 1fr; }
+  }
+  .stu-welcome {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .stu-welcome h2 {
+    margin: 0 0 6px;
+    font-size: 20px;
+    color: #0f2d52;
+  }
+  .stu-welcome p {
+    margin: 0;
+    color: #5a7390;
+    font-size: 13px;
+  }
+  .stu-quick {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .stu-quick a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1px solid #d5dee8;
+    background: #f5f8fc;
+    color: #0f2d52;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .stu-quick a:hover { background: #e8eef5; border-color: #163a66; }
+
+  .cal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .cal-head h3 { margin: 0; font-size: 15px; color: #0f2d52; }
+  .cal-nav { display: flex; gap: 6px; }
+  .cal-nav button {
+    width: 32px; height: 32px; border-radius: 8px;
+    border: 1px solid #d5dee8; background: #fff; cursor: pointer; color: #0f2d52;
+  }
+  .cal-month { font-weight: 700; color: #12263a; font-size: 13px; margin-bottom: 8px; }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    text-align: center;
+  }
+  .cal-dow {
+    font-size: 11px; font-weight: 700; color: #5a7390; padding: 6px 0;
+  }
+  .cal-day {
+    position: relative;
+    min-height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; color: #12263a;
+    cursor: default;
+  }
+  .cal-day.mute { color: #b0bec8; }
+  .cal-day.today {
+    background: #1a4f8c; color: #fff;
+  }
+  .cal-dots {
+    position: absolute; bottom: 4px; left: 0; right: 0;
+    display: flex; justify-content: center; gap: 3px;
+  }
+  .cal-dots i {
+    width: 5px; height: 5px; border-radius: 50%; display: block;
+  }
+  .dot-online { background: #3b82f6; }
+  .dot-study { background: #10b981; }
+  .dot-exam { background: #ef4444; }
+  .cal-legend {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    margin-top: 12px; font-size: 12px; color: #3a5168;
+  }
+  .cal-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .cal-legend i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .act-list, .nf-list, .mat-list { display: flex; flex-direction: column; gap: 10px; }
+  .act-item, .nf-item, .mat-item {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px; border-radius: 12px; background: #f7fafc;
+    border: 1px solid #e8eef5;
+  }
+  .act-ico, .nf-ico, .mat-ico {
+    width: 34px; height: 34px; border-radius: 10px;
+    display: grid; place-items: center; flex-shrink: 0;
+    font-size: 15px;
+  }
+  .act-ico.dl { background: #e0f2fe; color: #0369a1; }
+  .act-ico.fav { background: #fef3c7; color: #b45309; }
+  .act-ico.like { background: #fce7f3; color: #be185d; }
+  .nf-ico { background: #eef2ff; color: #4338ca; }
+  .mat-ico { background: #ecfdf5; color: #047857; }
+  .act-body b, .nf-body b, .mat-body b {
+    display: block; font-size: 13px; color: #0f2d52; font-weight: 700;
+  }
+  .act-body span, .nf-body span, .mat-body span {
+    display: block; font-size: 11px; color: #5a7390; margin-top: 2px;
+  }
+  .section-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .section-top h3 { margin: 0; font-size: 15px; color: #0f2d52; }
+  .section-top a {
+    font-size: 12px; font-weight: 600; color: #1a4f8c; text-decoration: none;
+  }
+  .empty-mini {
+    text-align: center; color: #7a8fa3; font-size: 13px; padding: 18px 8px;
+  }
+  .stack-cards { display: flex; flex-direction: column; gap: 16px; }
+
+  /* Student panel: keep site overlays hidden until opened */
+  .donate-modal { display: none !important; }
+  .donate-modal.open { display: flex !important; }
+  .ticket-launcher { z-index: 1200; }
+  .petal-layer, .page-bg, .page-overlay { display: none !important; }
+
+  .panel-shell {
+    display: grid;
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 20px;
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+    box-sizing: border-box;
+  }
+  @media (max-width: 800px) {
+    .panel-shell { grid-template-columns: 1fr; }
+    .panel-nav { flex-direction: row !important; flex-wrap: wrap; position: relative !important; }
+  }
+  .panel-nav {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 14px 10px;
+    background: linear-gradient(180deg, #0f2d52, #163a66);
+    border-radius: 16px;
+    position: sticky; top: 16px; align-self: start;
+  }
+  .panel-nav-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 1px;
+    text-transform: uppercase; color: rgba(255,255,255,.45);
+    padding: 8px 10px 4px;
+  }
+  .panel-nav button {
+    display: flex; align-items: center; gap: 8px; width: 100%;
+    border: 0; background: transparent; color: rgba(255,255,255,.85);
+    font: 600 13px 'Be Vietnam Pro', sans-serif;
+    padding: 10px 12px; border-radius: 10px; cursor: pointer; text-align: left;
+  }
+  .panel-nav button:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .panel-nav button.active { background: #fff; color: #0f2d52; }
+  .panel-main {
+    min-width: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .panel-main > .teacher-body {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+  /* Mọi mục: cùng khung full width, cùng vị trí */
+  .panel-main .stu-view.t-card,
+  .panel-main .t-card.stu-view {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    padding: 28px 32px !important;
+    border-radius: 18px !important;
+    min-height: 280px;
+  }
+  .stu-grid,
+  .stack-cards {
+    display: contents; /* bỏ layout 2 cột lệch */
+  }
+  .stu-view[hidden] { display: none !important; }
+  @media (max-width: 700px) {
+    .panel-main .stu-view.t-card {
+      padding: 20px 16px !important;
+      min-height: 200px;
+    }
+  }
+</style>
+<link rel="stylesheet" href="css/inline-extracted.css"><link rel="stylesheet" href="css/theme.css"><link rel="stylesheet" href="css/redesign.css"><link rel="stylesheet" href="css/edu.css"><link rel="stylesheet" href="css/app.css"><link rel="stylesheet" href="css/icons.css"></head>
+<body class="teacher-page">
+  <header class="teacher-top">
+    <div class="brand-row">
+      <span class="auth-mark">GH</span>
+      <div>
+        <h1>Panel Học sinh</h1>
+        <small style="color:#5a7390;font-size:11px" id="stuLabel">—</small>
+      </div>
+    </div>
+    <div class="top-actions">
+      <a class="t-btn" href="/">← Trang chủ</a>
+      <button type="button" class="t-btn danger" id="logoutBtn">Đăng xuất</button>
+    </div>
+  </header>
+
+  <div class="panel-shell">
+    <nav class="panel-nav" id="stuNav">
+      <div class="panel-nav-label">Menu</div>
+      <button type="button" class="active" data-stu-view="home"><i class="cil-home"></i> Tổng quan</button>
+      <button type="button" data-stu-view="calendar"><i class="cil-calendar"></i> Lịch học</button>
+      <button type="button" data-stu-view="activity"><i class="cil-history"></i> Hoạt động</button>
+      <button type="button" data-stu-view="notifs"><i class="cil-bell"></i> Thông báo</button>
+      <button type="button" data-stu-view="materials"><i class="cil-file"></i> Tài liệu mới</button>
+    </nav>
+    <div class="panel-main">
+      <main class="teacher-body">
+        <section class="t-card stu-view" data-view="home">
+          <div class="stu-welcome">
+            <div>
+              <h2 id="welcomeTitle">Xin chào!</h2>
+              <p>Theo dõi lịch học, thông báo và tài liệu mới tại đây.</p>
+            </div>
+            <div class="stu-quick">
+              <a href="plugins"><i class="cil-book"></i> Bài giảng</a>
+              <a href="mods"><i class="cil-task"></i> Bài tập</a>
+              <a href="my-library"><i class="cil-heart"></i> Kho cá nhân</a>
+              <a href="#" data-open-ticket-nav><i class="cil-speech"></i> Hỏi đáp</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="t-card stu-view" data-view="calendar" hidden>
+          <div class="cal-head">
+            <h3>Lịch học tuần này</h3>
+            <div class="cal-nav">
+              <button type="button" id="calPrev" title="Tháng trước"><i class="cil-chevron-left"></i></button>
+              <button type="button" id="calNext" title="Tháng sau"><i class="cil-chevron-right"></i></button>
+            </div>
+          </div>
+          <div class="cal-month" id="calMonth">—</div>
+          <div class="cal-grid" id="calGrid"></div>
+          <div class="cal-legend">
+            <span><i class="dot-online"></i> Lớp học trực tuyến</span>
+            <span><i class="dot-study"></i> Học bài / Làm bài tập</span>
+            <span><i class="dot-exam"></i> Kiểm tra / Đánh giá</span>
+          </div>
+          <p class="sub" style="margin-top:12px;margin-bottom:0">
+            Lịch trống cho đến khi giáo viên / admin gắn sự kiện cho lớp hoặc cho bạn.
+          </p>
+        </section>
+
+        <section class="t-card stu-view" data-view="activity" hidden>
+          <div class="section-top">
+            <h3>Hoạt động gần đây</h3>
+            <a href="my-library">Xem tất cả →</a>
+          </div>
+          <div class="act-list" id="actList"></div>
+        </section>
+
+        <section class="t-card stu-view" data-view="notifs" hidden>
+          <div class="section-top">
+            <h3>Thông báo mới</h3>
+            <a href="#" id="markNotifRead">Đã đọc hết</a>
+          </div>
+          <div class="nf-list" id="nfList"></div>
+        </section>
+
+        <section class="t-card stu-view" data-view="materials" hidden>
+          <div class="section-top">
+            <h3>Tài liệu mới</h3>
+            <a href="resources">Xem tất cả →</a>
+          </div>
+          <div class="mat-list" id="matList"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="auth-toast" id="authToast" hidden></div>
+  <script src="js/api-config.js"></script><script src="js/auth.js"></script><script src="js/user-settings.js"></script>
+  <script>
+    const session = Auth.getSession();
+    if (!session || session.role !== 'student') {
+      location.replace(session && (session.role === 'admin' || session.role === 'teacher' || session.role === 'manager')
+        ? 'teacher' : 'login');
+      throw new Error('redirect');
+    }
+
+    const uname = session.username || 'học sinh';
+    document.getElementById('stuLabel').textContent = 'Xin chào, ' + uname;
+    document.getElementById('welcomeTitle').textContent = 'Xin chào, ' + uname + '!';
+    document.getElementById('logoutBtn').addEventListener('click', () => Auth.logout());
+
+    /* —— Calendar —— */
+    let calCursor = new Date();
+    calCursor.setDate(1);
+
+    // Real schedule from Auth (empty until teacher/admin adds)
+    function loadMyEvents() {
+      try {
+        const st = Auth.getStudents().find(x => x.id === session.id);
+        const classId = st && st.classId;
+        return Auth.getScheduleForStudent(session.id, classId) || [];
+      } catch { return []; }
+    }
+    function eventDotsFor(year, month, day) {
+      const key = year + '-' + String(month).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+      const events = loadMyEvents().filter(e => e.date === key);
+      const types = [];
+      events.forEach(e => { if (types.indexOf(e.type) < 0) types.push(e.type); });
+      return types;
+    }
+
+    function renderCal() {
+      const y = calCursor.getFullYear();
+      const m = calCursor.getMonth();
+      document.getElementById('calMonth').textContent =
+        'Tháng ' + (m + 1) + ', ' + y;
+
+      const firstDow = new Date(y, m, 1).getDay();
+      const startPad = (firstDow + 6) % 7;
+      const daysInMonth = new Date(y, m + 1, 0).getDate();
+      const today = new Date();
+      const grid = document.getElementById('calGrid');
+      const dows = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+      let html = dows.map(d => '<div class="cal-dow">' + d + '</div>').join('');
+
+      for (let i = 0; i < startPad; i++) html += '<div class="cal-day mute"></div>';
+      for (let d = 1; d <= daysInMonth; d++) {
+        const isToday = today.getFullYear() === y && today.getMonth() === m && today.getDate() === d;
+        const dots = eventDotsFor(y, m + 1, d);
+        const dotsHtml = dots.length
+          ? '<span class="cal-dots">' + dots.map(t => '<i class="dot-' + t + '"></i>').join('') + '</span>'
+          : '';
+        html += '<div class="cal-day' + (isToday ? ' today' : '') + '">' + d + dotsHtml + '</div>';
+      }
+      grid.innerHTML = html;
+    }
+    document.getElementById('calPrev').onclick = () => {
+      calCursor.setMonth(calCursor.getMonth() - 1);
+      renderCal();
+    };
+    document.getElementById('calNext').onclick = () => {
+      calCursor.setMonth(calCursor.getMonth() + 1);
+      renderCal();
+    };
+    renderCal();
+
+    /* —— Recent activity from download/fav history —— */
+    function timeAgo(ts) {
+      const diff = Date.now() - (ts || 0);
+      const m = Math.floor(diff / 60000);
+      if (m < 1) return 'Vừa xong';
+      if (m < 60) return m + ' phút trước';
+      const h = Math.floor(m / 60);
+      if (h < 24) return h + ' giờ trước';
+      const d = Math.floor(h / 24);
+      return d + ' ngày trước';
+    }
+
+    function renderActivity() {
+      const box = document.getElementById('actList');
+      const hist = (() => {
+        try { return JSON.parse(localStorage.getItem('giahuy-history') || '[]'); } catch { return []; }
+      })();
+      if (!hist.length) {
+        box.innerHTML = '<div class="empty-mini">Chưa có hoạt động. Hãy tải tài liệu trên trang chủ.</div>';
+        return;
+      }
+      // Need file names from IndexedDB if available
+      const openDb = () => new Promise((res, rej) => {
+        const r = indexedDB.open('giahuy-db', 1);
+        r.onsuccess = () => res(r.result);
+        r.onerror = () => rej(r.error);
+      });
+      const getFiles = async () => {
+        try {
+          const db = await openDb();
+          return await new Promise((res, rej) => {
+            const tx = db.transaction('files', 'readonly');
+            const req = tx.objectStore('files').getAll();
+            req.onsuccess = () => res(req.result || []);
+            req.onerror = () => rej(req.error);
+          });
+        } catch {
+          return [];
+        }
+      };
+      getFiles().then(files => {
+        const map = new Map(files.map(f => [String(f.id), f]));
+        const items = hist.slice(0, 8).map(h => {
+          const f = map.get(String(h.id));
+          const name = f ? (f.name || f.fileName || 'Tài liệu') : ('Tài liệu #' + h.id);
+          return { name, at: h.at || Date.now() };
+        });
+        box.innerHTML = items.map(it =>
+          '<div class="act-item"><div class="act-ico dl"><i class="cil-cloud-download"></i></div>' +
+          '<div class="act-body"><b>Bạn đã tải tài liệu “' + esc(it.name) + '”</b>' +
+          '<span>' + timeAgo(it.at) + '</span></div></div>'
+        ).join('');
+      });
+    }
+
+    /* —— Notifications —— */
+    function renderNotifs() {
+      const box = document.getElementById('nfList');
+      let list = [];
+      try {
+        if (window.GiahuyNotif && window.GiahuyNotif.list) list = window.GiahuyNotif.list();
+        else {
+          const raw = JSON.parse(localStorage.getItem('giahuy-notifications-v1') || '[]');
+          list = raw.filter(n => n.to === 'all' || n.to === uname || n.toRole === 'student')
+            .sort((a, b) => (b.at || 0) - (a.at || 0));
+        }
+      } catch { list = []; }
+      list = list.slice(0, 8);
+      if (!list.length) {
+        box.innerHTML = '<div class="empty-mini">Chưa có thông báo mới.</div>';
+        return;
+      }
+      box.innerHTML = list.map(n =>
+        '<div class="nf-item"><div class="nf-ico"><i class="cil-bell"></i></div>' +
+        '<div class="nf-body"><b>' + esc(n.title || 'Thông báo') + '</b>' +
+        '<span>' + esc((n.body || '').slice(0, 100)) + '</span>' +
+        '<span>' + timeAgo(n.at) + (n.from ? ' · ' + esc(n.from) : '') + '</span></div></div>'
+      ).join('');
+    }
+    document.getElementById('markNotifRead').addEventListener('click', e => {
+      e.preventDefault();
+      if (window.GiahuyNotif) window.GiahuyNotif.markAllRead();
+      renderNotifs();
+    });
+
+    /* —— New materials —— */
+    function renderMaterials() {
+      const box = document.getElementById('matList');
+      const openDb = () => new Promise((res, rej) => {
+        const r = indexedDB.open('giahuy-db', 1);
+        r.onsuccess = () => res(r.result);
+        r.onerror = () => rej(r.error);
+      });
+      (async () => {
+        let files = [];
+        try {
+          const db = await openDb();
+          files = await new Promise((res, rej) => {
+            const tx = db.transaction('files', 'readonly');
+            const req = tx.objectStore('files').getAll();
+            req.onsuccess = () => res(req.result || []);
+            req.onerror = () => rej(req.error);
+          });
+        } catch { files = []; }
+        files = files.filter(f => !f.builtin).sort((a, b) => (b.created || 0) - (a.created || 0)).slice(0, 6);
+        if (!files.length) {
+          box.innerHTML = '<div class="empty-mini">Chưa có tài liệu mới.</div>';
+          return;
+        }
+        const cats = { plugins: 'Bài giảng', config: 'Giáo án', mods: 'Bài tập', assets: 'Học liệu', tools: 'Công cụ', resources: 'Tài nguyên', guide: 'Hướng dẫn' };
+        box.innerHTML = files.map(f => {
+          const cre = f.creatorName ? (' · by ' + f.creatorName) : '';
+          const size = f.size ? (f.size > 1048576 ? (f.size / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(f.size / 1024)) + ' KB') : '—';
+          return '<div class="mat-item"><div class="mat-ico"><i class="cil-file"></i></div>' +
+            '<div class="mat-body"><b>' + esc(f.name || f.fileName || 'Tài liệu') + '</b>' +
+            '<span>' + esc(cats[f.cat] || f.cat || '') + ' · ' + size + cre + '</span>' +
+            '<span>' + timeAgo(f.created) + '</span></div></div>';
+        }).join('');
+      })();
+    }
+
+    function esc(t) {
+      return String(t || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    renderActivity();
+    renderNotifs();
+    renderMaterials();
+
+    document.getElementById('stuNav')?.addEventListener('click', e => {
+      const btn = e.target.closest('[data-stu-view]');
+      if (!btn) return;
+      const v = btn.dataset.stuView;
+      document.querySelectorAll('#stuNav button').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.stu-view').forEach(sec => {
+        const views = (sec.dataset.view || '').split(/\s+/);
+        // home shows welcome only; calendar etc hide others
+        if (v === 'home') {
+          sec.hidden = sec.dataset.view !== 'home';
+        } else {
+          sec.hidden = sec.dataset.view !== v;
+        }
+      });
+    });
+
+    // Re-render notifs after GiahuyNotif boots from script if loaded
+    setTimeout(renderNotifs, 400);
+  </script>
+  <script src="js/ticket-center.js"></script>
+  <script src="js/script.js"></script>
+<script src="js/edu.js"></script><script src="js/redesign.js"></script><script src="js/icons.js"></script></body>
+</html>

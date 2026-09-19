@@ -1,0 +1,249 @@
+/* Icon library — Lucide SVG + CoreUI fallback sizing */
+.gh-icon,
+i[class*="cil-"],
+[data-lucide],
+svg.lucide {
+  display: inline-block;
+  vertical-align: -0.125em;
+  width: 1.15em;
+  height: 1.15em;
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  color: inherit;
+}
+
+.side-icon .gh-icon,
+.side-icon svg.lucide,
+.side-icon i[class*="cil-"] {
+  width: 1.1em;
+  height: 1.1em;
+}
+
+.topnav a .gh-icon,
+.topnav a svg.lucide,
+.topnav a i[class*="cil-"] {
+  width: 1.05em;
+  height: 1.05em;
+  opacity: 0.92;
+}
+
+.tile-ico .gh-icon,
+.tile-ico svg,
+.up-preview-ico .gh-icon,
+.up-preview-ico svg {
+  width: 1.25em;
+  height: 1.25em;
+}
+
+/* When Lucide replaces <i>, keep button alignment */
+button .gh-icon,
+.primary-btn .gh-icon,
+.edu-btn .gh-icon,
+.t-btn .gh-icon {
+  margin-right: 0.15em;
+}
+
+/* Soften CoreUI font icons until replaced */
+i[class*="cil-"] {
+  font-style: normal;
+  line-height: 1;
+}
+
+
+/* Final hero overrides — must win over redesign white stats */
+.hero {
+  background:
+    linear-gradient(120deg, rgba(15, 40, 45, 0.82), rgba(13, 100, 95, 0.55)),
+    linear-gradient(135deg, #134e4a, #0d9488) !important;
+  color: #fff !important;
+}
+.hero-stats {
+  background: rgba(255, 255, 255, 0.14) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 14px !important;
+}
+.hero-stats > div {
+  background: transparent !important;
+}
+.hero-stats strong { color: #fff !important; }
+.hero-stats span { color: rgba(255, 255, 255, 0.75) !important; }
+.clock-card {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+}
+.clock-main .time,
+.clock-card .time { color: #fff !important; }
+.clock-label, .clock-label span { color: rgba(255, 255, 255, 0.85) !important; }
+.hero-name .script, .hero .script { color: #fff !important; }
+.hero-role, .hero-copy p { color: rgba(255, 255, 255, 0.88) !important; }
+.socials a { color: rgba(255, 255, 255, 0.85) !important; }
+
+
+/* Avatar tròn đúng tỉ lệ + đồng hồ đầy đủ như fix */
+.hero .avatar-ring {
+  width: 140px !important;
+  height: 140px !important;
+  flex: 0 0 140px !important;
+  border-radius: 50% !important;
+  border: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  overflow: hidden !important;
+  box-shadow:
+    0 0 0 4px rgba(167, 243, 208, 0.85),
+    0 0 0 7px rgba(15, 40, 45, 0.9),
+    0 0 28px rgba(13, 148, 136, 0.35) !important;
+}
+.hero .avatar-ring img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block !important;
+  border-radius: 50% !important;
+}
+.hero .weather,
+.hero .visit-counter {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+.hero .jp-tag {
+  display: block !important;
+  position: static !important;
+  writing-mode: horizontal-tb !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  margin-top: 10px !important;
+  font-size: 11px !important;
+}
+.hero .clock-card .weather { margin-top: 12px !important; }
+.hero .clock-card .visit-counter { margin-top: 8px !important; }
+.hero .clock-card .date { color: rgba(255, 255, 255, 0.8) !important; }
+
+/* clock-card min full */
+.clock-card .weather,
+.clock-card .visit-counter { display: flex !important; }
+.clock-card .jp-tag { display: block !important; }
+
+/* ticket-panel white final */
+.ticket-panel { background:#fff!important; color:#12263a!important; border-color:#e2e8f0!important; }
+.ticket-card, .ticket-list { background:#f8fafc!important; border-color:#e2e8f0!important; color:#12263a!important; }
+.ticket-field input, .ticket-field select, .ticket-field textarea { background:#fff!important; color:#12263a!important; border-color:#c5d4e6!important; }
+.ticket-tab { background:#f1f5f9!important; color:#475569!important; border-color:#e2e8f0!important; }
+.ticket-tab.active { background:#e8f0fe!important; color:#1d4ed8!important; border-color:#93c5fd!important; }
+.ticket-title, .ticket-panel h2, .ticket-panel h3 { color:#0f2d52!important; }
+.ticket-subtitle, .ticket-helper, .ticket-field span { color:#64748b!important; }
+.ticket-close { background:#f8fafc!important; color:#334155!important; border-color:#d5dee8!important; }
+
+
+/* Admin form fields — trắng 100% */
+.admin-page .ap-field input,
+.admin-page .ap-field select,
+.admin-page .ap-field textarea,
+.admin-page input[type="text"],
+.admin-page input[type="search"],
+.admin-page select,
+.admin-page textarea,
+body.admin-page .ap-box input,
+body.admin-page .ap-box select,
+body.admin-page .ap-box textarea {
+  background: #ffffff !important;
+  color: #12263a !important;
+  border: 1px solid #c5d4e6 !important;
+  border-radius: 10px !important;
+  caret-color: #12263a !important;
+  color-scheme: light !important;
+}
+.admin-page .ap-field input::placeholder,
+.admin-page .ap-field textarea::placeholder {
+  color: #94a3b8 !important;
+}
+.admin-page .ap-drop {
+  background: #ffffff !important;
+  border: 1.5px dashed #9bb4cc !important;
+  color: #3a5168 !important;
+}
+
+/* nav-more force show */
+@media (min-width: 901px) {
+  .nav-more-wrap { display: inline-flex !important; align-items: center !important; }
+  .nav-more-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+.nav-overflow-hidden { display: none !important; }
+
+/* Pacifico force script */
+.script,
+.hero-name .script,
+.hero .script,
+.footer-brand .script,
+.brand-word {
+  font-family: 'Pacifico', cursive !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+}
+
+/* live-stats text dark */
+.live-stats b,
+.live-stats strong {
+  color: #0f2d52 !important;
+}
+.live-stats span,
+.live-stats > div span {
+  color: #64748b !important;
+}
+.live-stats > div {
+  color: #12263a !important;
+  background: #f8fafc !important;
+}
+.cat-card b,
+.cat-card small {
+  color: #12263a !important;
+}
+.cat-card small {
+  color: #64748b !important;
+}
+
+
+/* weather block force visible */
+.clock-card .weather,
+.hero .weather {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-top: 10px !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+.clock-card .weather strong,
+.clock-card .weather #weatherTemp {
+  color: #fff !important;
+  font-size: 16px !important;
+}
+.clock-card .weather small {
+  color: rgba(255, 255, 255, 0.78) !important;
+  font-size: 12px !important;
+}
+.clock-card .visit-counter {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin-top: 8px !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+.clock-card .jp-tag {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}

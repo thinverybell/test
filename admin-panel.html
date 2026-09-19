@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quản trị website — Thầy Gia Huy</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@coreui/icons/css/free.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/auth.css">
+<style>
+  body.admin-page{margin:0;min-height:100vh;background:#f3f6fb;font-family:'Be Vietnam Pro',sans-serif;color:#12263a}
+  .ap-top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 22px;background:#fff;border-bottom:1px solid #dce5ef;position:sticky;top:0;z-index:20}
+  .ap-top h1{margin:0;font-size:18px;color:#0f2d52}
+  .ap-top small{color:#5c738a;font-size:12px}
+  .ap-body{max-width:1100px;margin:0 auto;padding:22px 16px 48px}
+  .admin-page .admin-modal{position:static!important;inset:auto!important;display:block!important;background:transparent!important;backdrop-filter:none!important;padding:0!important}
+  .admin-page .admin-box{width:100%!important;max-width:none!important;max-height:none!important;margin:0!important;border-radius:18px!important;box-shadow:0 10px 36px rgba(18,38,58,.08)!important;border:1px solid #dce5ef!important;background:#fff!important;padding:22px!important;overflow:visible!important}
+  .admin-page .admin-box>.close,.admin-page #adminForm,.admin-page #adminLoader{display:none!important}
+  .admin-page #adminPanel{display:block!important}
+  .admin-page #adminWorkspace{min-height:280px;margin-top:16px}
+  .admin-page .fab-dock,.admin-page .donate-fab,.admin-page .ticket-launcher,.admin-page .back-top{display:none!important}
+  .t-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid #c5d4e6;background:#fff;color:#12263a;border-radius:10px;padding:9px 14px;font:600 13px/1 'Be Vietnam Pro',sans-serif;text-decoration:none;cursor:pointer}
+  .t-btn.primary{background:#163a66;border-color:#163a66;color:#fff}
+  .ap-upload-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+  @media(max-width:800px){.ap-upload-grid{grid-template-columns:1fr}}
+  .ap-box{border:1px solid #dce5ef;border-radius:14px;padding:16px;background:#fafcfe}
+  .ap-box h2,.ap-box h3{margin:0 0 10px;font-size:16px;color:#0f2d52}
+  .ap-field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;font-size:13px;color:#3a5168}
+  .ap-field input,.ap-field select,.ap-field textarea{border:1px solid #c5d4e6;border-radius:10px;padding:10px 12px;font:inherit;background:#fff!important;color:#12263a!important;width:100%;box-sizing:border-box;outline:none}.ap-field input::placeholder,.ap-field textarea::placeholder{color:#94a3b8}.ap-field input:focus,.ap-field select:focus,.ap-field textarea:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+  .ap-drop{border:1.5px dashed #9bb4cc;border-radius:12px;padding:22px;text-align:center;cursor:pointer;background:#fff}
+  .ap-drop strong{display:block;margin-bottom:4px}
+  .ap-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+  .ap-stat{background:#fff;border:1px solid #dce5ef;border-radius:12px;padding:12px;text-align:center}
+  .ap-stat b{display:block;font-size:20px;color:#0f2d52}
+  .ap-stat span{font-size:11px;color:#5c738a}
+  .ap-table{width:100%;border-collapse:collapse;font-size:13px}
+  .ap-table th,.ap-table td{padding:10px 8px;border-bottom:1px solid #e8eef5;text-align:left}
+  .ap-table th{color:#5c738a;font-weight:600;font-size:11px;text-transform:uppercase}
+  .ap-actions{display:flex;gap:6px;flex-wrap:wrap}
+  .ap-actions button{border:1px solid #c5d4e6;background:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;font:600 12px 'Be Vietnam Pro',sans-serif}
+  .ap-actions button.danger{color:#9b2c2c;border-color:#f0c4c4}
+  .ap-access-pick{margin:4px 0 14px;padding:12px 14px;border:1px solid #dce5ef;border-radius:12px;background:#fff}
+  .ap-access-title{font-size:12px;font-weight:800;color:#0f2d52;margin-bottom:8px}
+  .ap-access-opt{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#12263a;margin:0 0 8px;cursor:pointer}
+  .ap-access-opt input{margin-top:3px}
+  .ap-access-hint{margin:4px 0 0;font-size:11px;color:#5c738a}
+  .ap-badge-free{display:inline-block;padding:3px 8px;border-radius:999px;background:#e8f8f0;color:#0d7a4f;font-size:11px;font-weight:800}
+  .ap-badge-paid{display:inline-block;padding:3px 8px;border-radius:999px;background:#fff4e5;color:#b45309;font-size:11px;font-weight:800}
+</style>
+<link rel="stylesheet" href="css/inline-extracted.css"><link rel="stylesheet" href="css/theme.css"><link rel="stylesheet" href="css/redesign.css"><link rel="stylesheet" href="css/edu.css"><link rel="stylesheet" href="css/app.css"><link rel="stylesheet" href="css/icons.css"></head>
+<body class="admin-page">
+  <header class="ap-top">
+    <div>
+      <h1 id="apTitle">Quản trị website</h1>
+      <small id="apSub">Upload · Thư viện · Thống kê</small>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="t-btn" href="teacher"><i class="cil-arrow-left"></i> Panel tài khoản</a>
+      <a class="t-btn" href="/"><i class="cil-home"></i> Trang chủ</a>
+      <button type="button" class="t-btn" id="apLogout" style="border-color:#f0c4c4;color:#9b2c2c"><i class="cil-account-logout"></i> Đăng xuất</button>
+    </div>
+  </header>
+
+  <main class="ap-body">
+    <div class="admin-modal open" id="adminModal">
+      <div class="admin-box">
+        <div class="modal-heading">
+          <span class="modal-kicker">ADMIN CENTER</span>
+          <b>Quản trị website</b>
+          <small id="apDesc">Upload tài nguyên, quản lý thư viện và thống kê.</small>
+        </div>
+        <div id="adminPanel">
+          <div class="admin-profile-card">
+            <div class="admin-avatar-preview"><img id="apAvatarImg" src="assets/images/avatar.gif" alt="Avatar"></div>
+            <div>
+              <b id="apProfileName">Thầy Gia Huy</b>
+              <small id="apProfileSub">Quản lý profile & thư viện</small>
+            </div>
+            <span class="admin-badge" id="apBadge">ADMIN</span>
+          </div>
+          <div class="admin-actions" id="apAvatarActions">
+            <button class="primary-btn" id="changeAvatarBtn" type="button"><i class="cil-camera"></i> Đổi ảnh đại diện</button>
+            <button class="secondary-btn" id="resetAvatarBtn" type="button">Khôi phục avatar</button>
+            <input id="avatarInput" type="file" accept="image/*" hidden>
+          </div>
+          <div class="admin-tabs" id="apTabs">
+            <button type="button" class="admin-tab active" data-tab="upload"><i class="cil-cloud-upload"></i> Upload</button>
+            <button type="button" class="admin-tab" data-tab="library"><i class="cil-library"></i> Thư viện</button>
+            <button type="button" class="admin-tab" data-tab="music" id="tabMusic"><i class="cil-music-note"></i> Nhạc</button>
+            <button type="button" class="admin-tab" data-tab="stats"><i class="cil-chart"></i> Thống kê</button>
+          </div>
+          <div id="adminWorkspace"><p style="color:#5c738a;padding:12px 0">Đang tải công cụ…</p></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <script src="js/api-config.js"></script><script src="js/auth.js"></script><script src="js/user-settings.js"></script>
+    <script>
+  (function () {
+    const session = Auth.requireAuth({ staffOnly: true });
+    if (!session) return;
+    const isAdmin = session.role === 'admin';
+    const isManager = session.role === 'manager';
+    function can(p) { return Auth.hasPerm(p, session); }
+    localStorage.setItem('giahuy-admin', '1');
+    try { localStorage.removeItem('giahuy-fab-dock-pos'); } catch (_) {}
+
+    document.getElementById('apTitle').textContent = isAdmin
+      ? 'Panel Quản trị viên'
+      : (isManager ? 'Panel Quản lí — Công cụ' : 'Panel Giáo viên — Công cụ');
+    document.getElementById('apSub').textContent = isAdmin
+      ? 'Upload · Thư viện · Nhạc · Thống kê · Avatar'
+      : 'Theo quyền được cấp';
+    document.getElementById('apBadge').textContent = isAdmin ? 'ADMIN' : (isManager ? 'QUẢN LÍ' : 'GIÁO VIÊN');
+    // Avatar + tên theo tài khoản đang đăng nhập
+    (function fillProfile() {
+      const img = document.getElementById('apAvatarImg');
+      const nameEl = document.getElementById('apProfileName');
+      const subEl = document.getElementById('apProfileSub');
+      if (isAdmin) {
+        nameEl.textContent = 'Thầy Gia Huy';
+        subEl.textContent = 'Quản lý profile & thư viện';
+        try {
+          const a = localStorage.getItem('giahuy-avatar');
+          if (a) img.src = a;
+        } catch (_) {}
+      } else {
+        const uname = session.username || (isManager ? 'Quản lí' : 'Giáo viên');
+        nameEl.textContent = uname;
+        subEl.textContent = isManager
+          ? 'Tài khoản quản lí · theo quyền được cấp'
+          : 'Tài khoản giáo viên · Upload · Thư viện · Thống kê';
+        let av = null;
+        try {
+          if (session.role === 'teacher' && session.id && typeof Auth.getTeacherAvatar === 'function') {
+            av = Auth.getTeacherAvatar(session.id);
+          }
+        } catch (_) {}
+        img.src = av || 'assets/images/avatar.gif';
+      }
+    })();
+    if (!isAdmin && !can('music')) {
+      document.getElementById('tabMusic').style.display = 'none';
+    }
+    if (!isAdmin && !can('avatar')) {
+      document.getElementById('apAvatarActions').style.display = 'none';
+    }
+    document.getElementById('apLogout').onclick = () => Auth.logout();
+
+    const CATS = {
+      plugins: 'Bài giảng', config: 'Giáo án', mods: 'Bài tập',
+      assets: 'Học liệu', tools: 'Công cụ', resources: 'Tài nguyên', guide: 'Hướng dẫn'
+    };
+    const DB = 'giahuy-hub', VER = 2;
+
+    function db() {
+      return new Promise((res, rej) => {
+        const r = indexedDB.open(DB, VER);
+        r.onupgradeneeded = () => {
+          const d = r.result;
+          if (!d.objectStoreNames.contains('files')) d.createObjectStore('files', { keyPath: 'id', autoIncrement: true });
+          if (!d.objectStoreNames.contains('music')) d.createObjectStore('music', { keyPath: 'id', autoIncrement: true });
+          if (!d.objectStoreNames.contains('meta')) d.createObjectStore('meta', { keyPath: 'key' });
+        };
+        r.onsuccess = () => res(r.result);
+        r.onerror = () => rej(r.error);
+      });
+    }
+    function tx(store, mode, cb) {
+      return db().then(d => new Promise((res, rej) => {
+        const t = d.transaction(store, mode);
+        const s = t.objectStore(store);
+        const out = cb(s);
+        t.oncomplete = () => res(out);
+        t.onerror = () => rej(t.error);
+      }));
+    }
+    function getAll(store) {
+      return tx(store, 'readonly', s => new Promise(resolve => {
+        const r = s.getAll();
+        r.onsuccess = () => resolve(r.result || []);
+      }));
+    }
+    function add(store, obj) {
+      return tx(store, 'readwrite', s => s.add(obj));
+    }
+    function del(store, id) {
+      return tx(store, 'readwrite', s => s.delete(id));
+    }
+    function esc(s) {
+      return String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+    function fmtSize(n) {
+      n = Number(n) || 0;
+      if (n < 1024) return n + ' B';
+      if (n < 1048576) return (n / 1024).toFixed(1) + ' KB';
+      return (n / 1048576).toFixed(1) + ' MB';
+    }
+    function toast(msg, err) {
+      const t = document.getElementById('toast');
+      if (!t) return alert(msg);
+      t.textContent = msg;
+      t.dataset.type = err ? 'error' : 'ok';
+      t.classList.add('show');
+      clearTimeout(window.__apT);
+      window.__apT = setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    const ws = document.getElementById('adminWorkspace');
+
+    async function renderUpload() {
+      const files = await getAll('files');
+      ws.innerHTML = `
+        <div class="ap-upload-grid">
+          <div class="ap-box">
+            <h2><i class="cil-cloud-upload"></i> Upload tài nguyên</h2>
+            <form id="apUploadForm">
+              <label class="ap-field">Tên hiển thị<input name="name" placeholder="Ví dụ: Bài giảng chương 1"></label>
+              <label class="ap-field">Phân loại
+                <select name="cat">${Object.entries(CATS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select>
+              </label>
+              <label class="ap-field">Mô tả<textarea name="desc" rows="3" placeholder="Mô tả ngắn"></textarea></label>
+              <label class="ap-field" style="flex-direction:row;align-items:center;gap:8px">
+                <input name="featured" type="checkbox"> Đánh dấu nổi bật
+              </label>
+              <div class="ap-access-pick" id="apAccessPick">
+                <div class="ap-access-title">Loại tài liệu</div>
+                <label class="ap-access-opt" id="apOptFree">
+                  <input type="radio" name="access" value="free" checked>
+                  <span><b>Free</b> — mọi người xem / tải</span>
+                </label>
+                <label class="ap-access-opt" id="apOptPaid">
+                  <input type="radio" name="access" value="paid">
+                  <span><b>Paid</b> — cần gói học (GV miễn phí toàn bộ)</span>
+                </label>
+                <p class="ap-access-hint" id="apAccessHint"></p>
+              </div>
+              <div class="ap-drop" id="apDrop">
+                <input name="file" type="file" multiple hidden id="apFile">
+                <strong>Chọn file / kéo thả</strong>
+                <span id="apFileLabel">pdf, docx, pptx, zip, ảnh…</span>
+              </div>
+              <button class="primary-btn" type="submit" style="margin-top:12px;width:100%">
+                <i class="cil-cloud-upload"></i> Upload & lưu
+              </button>
+            </form>
+          </div>
+          <div class="ap-box">
+            <h3>Phân loại hiện có</h3>
+            <div class="ap-stats">
+              ${Object.entries(CATS).map(([k,v])=>`<div class="ap-stat"><b>${files.filter(x=>x.cat===k).length}</b><span>${v}</span></div>`).join('')}
+            </div>
+          </div>
+        </div>`;
+      const form = document.getElementById('apUploadForm');
+      const input = document.getElementById('apFile');
+      const drop = document.getElementById('apDrop');
+      // Hiện Free/Paid theo quyền
+      (function applyAccessPerms() {
+        const allowFree = isAdmin || can('upload') || can('upload_free') || can('settings');
+        const allowPaid = isAdmin || can('upload_paid') || can('settings');
+        const optFree = document.getElementById('apOptFree');
+        const optPaid = document.getElementById('apOptPaid');
+        const hint = document.getElementById('apAccessHint');
+        if (optFree) optFree.style.display = allowFree ? '' : 'none';
+        if (optPaid) optPaid.style.display = allowPaid ? '' : 'none';
+        if (!allowFree && allowPaid) {
+          const r = form.querySelector('input[name=access][value=paid]');
+          if (r) r.checked = true;
+        }
+        if (hint) {
+          if (!allowFree && !allowPaid) hint.textContent = 'Bạn chưa được cấp quyền Upload Free/Paid.';
+          else if (!allowPaid) hint.textContent = 'Chưa có quyền Upload Paid — cấp trong Phân quyền.';
+          else if (!allowFree) hint.textContent = 'Chưa có quyền Upload Free.';
+          else hint.textContent = 'Quyền: Free' + (allowPaid ? ' + Paid' : '') + '.';
+        }
+      })();
+      drop.addEventListener('click', () => input.click());
+      input.addEventListener('change', () => {
+        document.getElementById('apFileLabel').textContent =
+          input.files.length ? `${input.files.length} file đã chọn` : 'pdf, docx, pptx, zip, ảnh…';
+      });
+      ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.style.borderColor = '#163a66'; }));
+      ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.style.borderColor = ''; }));
+      drop.addEventListener('drop', e => {
+        const dt = new DataTransfer();
+        [...e.dataTransfer.files].forEach(f => dt.items.add(f));
+        input.files = dt.files;
+        input.dispatchEvent(new Event('change'));
+      });
+      form.addEventListener('submit', async e => {
+        e.preventDefault();
+        const fs = [...input.files];
+        if (!fs.length) return toast('Chưa chọn file.', true);
+        const fd = new FormData(form);
+        const access = fd.get('access') === 'paid' ? 'paid' : 'free';
+        const allowFree = isAdmin || can('upload') || can('upload_free') || can('settings');
+        const allowPaid = isAdmin || can('upload_paid') || can('settings');
+        if (access === 'paid' && !allowPaid) return toast('Không có quyền upload tài liệu Paid.', true);
+        if (access === 'free' && !allowFree) return toast('Không có quyền upload tài liệu Free.', true);
+        const sess = session;
+        let creName = sess.username || 'Admin';
+        let creRole = 'quản trị';
+        let creId = sess.id || null;
+        if (sess.role === 'teacher') {
+          creRole = 'giáo viên';
+          creId = sess.id || null;
+        } else if (sess.role === 'manager') {
+          creRole = 'quản lí';
+          creId = sess.id || null;
+        } else {
+          try { creName = (Auth.getAdminProfile && Auth.getAdminProfile().username) || sess.username || 'Quản trị viên'; } catch (_) {}
+          creRole = 'quản trị';
+          creId = 'admin';
+        }
+        for (const f of fs) {
+          await add('files', {
+            name: fs.length === 1 ? (fd.get('name') || f.name.replace(/\.[^.]+$/, '')) : f.name.replace(/\.[^.]+$/, ''),
+            cat: fd.get('cat'),
+            desc: fd.get('desc') || '',
+            fileName: f.name,
+            mime: f.type,
+            size: f.size,
+            blob: f,
+            created: Date.now(),
+            builtin: false,
+            featured: fd.get('featured') === 'on',
+            access: access,
+            creatorName: creName,
+            creatorRole: creRole,
+            creatorId: creId
+          });
+        }
+        toast(`Đã upload ${fs.length} file.`);
+        form.reset();
+        renderUpload();
+      });
+    }
+
+    async function renderLibrary() {
+      const files = await getAll('files');
+      files.sort((a,b) => (b.created||0) - (a.created||0));
+      if (!files.length) {
+        ws.innerHTML = '<div class="ap-box"><p>Chưa có tài nguyên. Hãy Upload trước.</p></div>';
+        return;
+      }
+      ws.innerHTML = `
+        <div class="ap-box">
+          <h2><i class="cil-library"></i> Thư viện (${files.length})</h2>
+          <div style="overflow:auto">
+            <table class="ap-table">
+              <thead><tr><th>Tên</th><th>Loại</th><th>Free/Paid</th><th>File</th><th>Size</th><th>Nổi bật</th><th></th></tr></thead>
+              <tbody>
+                ${files.map(x => `
+                  <tr>
+                    <td><strong>${esc(x.name)}</strong><br><small style="color:#64748b">${esc(x.desc||'')}</small>${x.creatorName?`<br><small style="color:#475569;font-weight:600">by: ${esc(x.creatorName)} (${esc(x.creatorRole||'')})</small>`:''}</td>
+                    <td>${esc(CATS[x.cat]||x.cat)}</td>
+                    <td>${(x.access==='paid')?'<span class="ap-badge-paid">Paid</span>':'<span class="ap-badge-free">Free</span>'}</td>
+                    <td><span class="ap-file-name">${esc(x.fileName||'—')}</span></td>
+                    <td>${fmtSize(x.size)}</td>
+                    <td>${x.featured ? '<i class="cil-star"></i>' : '—'}</td>
+                    <td class="ap-actions">
+                      <button type="button" data-del="${x.id}" class="danger">Xóa</button>
+                    </td>
+                  </tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>`;
+      ws.querySelectorAll('[data-del]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('Xóa mục này?')) return;
+          const id = isNaN(btn.dataset.del) ? btn.dataset.del : Number(btn.dataset.del);
+          await del('files', id);
+          toast('Đã xóa');
+          renderLibrary();
+        });
+      });
+    }
+
+    async function renderMusic() {
+      if (!isAdmin) return renderUpload();
+      const mus = await getAll('music');
+      ws.innerHTML = `
+        <div class="ap-upload-grid">
+          <div class="ap-box">
+            <h2><i class="cil-music-note"></i> Thêm nhạc</h2>
+            <form id="apMusicForm">
+              <label class="ap-field">Tên bài<input name="title" placeholder="Tên bài hát" required></label>
+              <label class="ap-field">File audio<input name="file" type="file" accept="audio/*" required></label>
+              <button class="primary-btn" type="submit" style="width:100%"><i class="cil-cloud-upload"></i> Upload nhạc</button>
+            </form>
+          </div>
+          <div class="ap-box">
+            <h3>Playlist (${mus.length})</h3>
+            ${mus.length ? `<table class="ap-table"><thead><tr><th>Tên</th><th></th></tr></thead><tbody>
+              ${mus.map(m=>`<tr><td>${esc(m.title||m.name||'—')}</td>
+              <td class="ap-actions"><button type="button" data-del-m="${m.id}" class="danger">Xóa</button></td></tr>`).join('')}
+            </tbody></table>` : '<p>Chưa có nhạc.</p>'}
+          </div>
+        </div>`;
+      document.getElementById('apMusicForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const f = fd.get('file');
+        if (!f || !f.size) return toast('Chọn file audio', true);
+        await add('music', { title: fd.get('title') || f.name, name: f.name, mime: f.type, size: f.size, blob: f, created: Date.now() });
+        toast('Đã thêm nhạc');
+        renderMusic();
+      });
+      ws.querySelectorAll('[data-del-m]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('Xóa bài này?')) return;
+          await del('music', isNaN(btn.dataset.delM) ? btn.dataset.delM : Number(btn.dataset.delM));
+          toast('Đã xóa');
+          renderMusic();
+        });
+      });
+    }
+
+    async function renderStats() {
+      const files = await getAll('files');
+      const mus = await getAll('music');
+      const totalBytes = files.reduce((a,x)=>a+(x.size||0),0) + mus.reduce((a,x)=>a+(x.size||0),0);
+      ws.innerHTML = `
+        <div class="ap-box">
+          <h2><i class="cil-chart"></i> Thống kê</h2>
+          <div class="ap-stats" style="margin-bottom:16px">
+            <div class="ap-stat"><b>${files.length}</b><span>Tài nguyên</span></div>
+            <div class="ap-stat"><b>${mus.length}</b><span>Bài nhạc</span></div>
+            <div class="ap-stat"><b>${files.filter(x=>x.featured).length}</b><span>Nổi bật</span></div>
+            <div class="ap-stat"><b>${fmtSize(totalBytes)}</b><span>Dung lượng</span></div>
+          </div>
+          <h3>Theo danh mục</h3>
+          <div class="ap-stats">
+            ${Object.entries(CATS).map(([k,v])=>`<div class="ap-stat"><b>${files.filter(x=>x.cat===k).length}</b><span>${v}</span></div>`).join('')}
+          </div>
+        </div>`;
+    }
+
+    async function loadTab(tab) {
+      document.querySelectorAll('.admin-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+      try {
+        if (tab === 'upload') await renderUpload();
+        else if (tab === 'library') await renderLibrary();
+        else if (tab === 'music') await renderMusic();
+        else if (tab === 'stats') await renderStats();
+        else await renderUpload();
+      } catch (err) {
+        console.error(err);
+        ws.innerHTML = `<p style="color:#9b2c2c">Lỗi: ${esc(err.message || err)}</p>`;
+      }
+    }
+
+    document.querySelectorAll('.admin-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const t = btn.dataset.tab;
+        if (!isAdmin && !can('music') && t === 'music') return;
+        loadTab(t);
+      });
+    });
+
+    // Avatar (admin only)
+    if (isAdmin) {
+      document.getElementById('changeAvatarBtn')?.addEventListener('click', () => document.getElementById('avatarInput').click());
+      document.getElementById('avatarInput')?.addEventListener('change', e => {
+        const f = e.target.files && e.target.files[0];
+        if (!f) return;
+        const url = URL.createObjectURL(f);
+        document.querySelectorAll('.admin-avatar-preview img').forEach(i => i.src = url);
+        try { localStorage.setItem('giahuy-avatar', url); } catch (_) {}
+        toast('Đã đổi avatar (phiên này)');
+      });
+      document.getElementById('resetAvatarBtn')?.addEventListener('click', () => {
+        document.querySelectorAll('.admin-avatar-preview img').forEach(i => i.src = 'assets/images/avatar.gif');
+        localStorage.removeItem('giahuy-avatar');
+        toast('Đã khôi phục avatar');
+      });
+    }
+
+    const params = new URLSearchParams(location.search);
+    let want = params.get('tab') || 'upload';
+    if (!isAdmin && !can('music') && want === 'music') want = 'upload';
+    loadTab(want);
+  })();
+  </script>
+<script src="js/edu.js"></script><script src="js/redesign.js"></script><script src="js/icons.js"></script></body>
+</html>

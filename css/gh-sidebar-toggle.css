@@ -1,0 +1,166 @@
+/* Sidebar collapse/expand — unlocked pages only.
+   IMPORTANT: this file must never be loaded by locked auth/panel pages. */
+body.gh-unlocked,
+body.gh-platform.gh-unlocked,
+body.gh-sidebar-page{
+  --gh-sidebar-open:244px;
+  --gh-sidebar-collapsed:78px;
+  --gh-sidebar-gap:24px;
+  --gh-sidebar-main-open:268px;
+  --gh-sidebar-main-collapsed:98px;
+}
+
+.gh-sidebar-toggle,
+.sidebar-toggle-control{
+  position:absolute;
+  top:12px;
+  right:12px;
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border:1px solid #e2e8f0;
+  border-radius:11px;
+  background:rgba(255,255,255,.92);
+  color:#64748b;
+  box-shadow:0 5px 16px rgba(15,23,42,.07);
+  cursor:pointer;
+  z-index:5;
+  transition:background .2s ease,border-color .2s ease,color .2s ease,transform .2s ease;
+}
+.gh-sidebar-toggle:hover,
+.sidebar-toggle-control:hover{
+  color:#4f46e5;
+  background:#eef2ff;
+  border-color:#cfd6ff;
+  transform:translateY(-1px);
+}
+.gh-sidebar-toggle:focus-visible,
+.sidebar-toggle-control:focus-visible{
+  outline:3px solid rgba(99,102,241,.24);
+  outline-offset:2px;
+}
+.gh-sidebar-toggle i,
+.sidebar-toggle-control i{font-size:16px;line-height:1}
+
+/* -------- Modern gh-platform pages -------- */
+body.gh-platform .gh-sidebar .gh-sidebar-toggle{
+  display:grid;
+}
+body.gh-platform .gh-sidebar .gh-side-label:first-child{
+  padding-right:50px;
+}
+body.gh-platform.gh-sidebar-collapsed .gh-layout{
+  grid-template-columns:var(--gh-sidebar-collapsed) minmax(0,1fr) !important;
+}
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar{
+  padding-left:8px;
+  padding-right:8px;
+  overflow-x:hidden;
+}
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-side-label,
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-side-divider,
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-quote{
+  display:none !important;
+}
+body.gh-platform.gh-sidebar-collapsed .gh-side-link{
+  justify-content:center;
+  gap:0;
+  width:100%;
+  padding-left:8px;
+  padding-right:8px;
+  min-height:42px;
+}
+body.gh-platform.gh-sidebar-collapsed .gh-side-link > span:not(.end),
+body.gh-platform.gh-sidebar-collapsed .gh-side-link .end{
+  display:none !important;
+}
+body.gh-platform.gh-sidebar-collapsed .gh-side-link i{
+  width:auto;
+  font-size:18px;
+}
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar-toggle{
+  right:50%;
+  transform:translateX(50%);
+}
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar-toggle:hover{
+  transform:translateX(50%) translateY(-1px);
+}
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-side-link:first-of-type{
+  margin-top:46px;
+}
+
+/* -------- Legacy homepage / pages using .sidebar + .content -------- */
+body.gh-home .sidebar{
+  position:fixed;
+}
+body.gh-home .sidebar .sidebar-toggle-control{
+  display:grid;
+}
+body.gh-home.gh-sidebar-collapsed aside.sidebar,
+body.gh-home.gh-sidebar-collapsed .sidebar{
+  width:var(--gh-sidebar-collapsed) !important;
+  padding-left:8px !important;
+  padding-right:8px !important;
+}
+body.gh-home.gh-sidebar-collapsed .sidebar .side-group-label,
+body.gh-home.gh-sidebar-collapsed .sidebar .side-quote{
+  display:none !important;
+}
+body.gh-home.gh-sidebar-collapsed .sidebar .side-item{
+  justify-content:center !important;
+  gap:0 !important;
+  padding-left:8px !important;
+  padding-right:8px !important;
+  min-height:44px;
+}
+body.gh-home.gh-sidebar-collapsed .sidebar .side-item > span:not(.side-icon){
+  display:none !important;
+}
+body.gh-home.gh-sidebar-collapsed .sidebar .side-item .side-icon{
+  margin:0 !important;
+}
+body.gh-home.gh-sidebar-collapsed .sidebar .side-item .chev{
+  display:none !important;
+}
+body.gh-home.gh-sidebar-collapsed .sidebar .sidebar-toggle-control{
+  right:50%;
+  transform:translateX(50%);
+}
+body.gh-home.gh-sidebar-collapsed .sidebar .sidebar-toggle-control:hover{
+  transform:translateX(50%) translateY(-1px);
+}
+body.gh-unlocked.gh-home main.content,
+body.gh-unlocked.gh-home .content{
+  transition:margin-left .22s ease,padding-right .22s ease;
+}
+body.gh-home.gh-sidebar-collapsed main.content,
+body.gh-home.gh-sidebar-collapsed .content{
+  margin-left:var(--gh-sidebar-main-collapsed) !important;
+}
+body.gh-home.gh-sidebar-collapsed .sidebar .side-item .side-icon i{
+  font-size:18px;
+}
+
+/* Sidebar toggle button has a small offset in the existing floating home sidebar. */
+body.gh-home .sidebar .side-inner{ position:relative; }
+body.gh-home .sidebar .sidebar-toggle-control{ top:10px; }
+
+/* Mobile: collapse mode is replaced by the existing mobile layout/drawer behavior. */
+@media (max-width:820px){
+  .gh-sidebar-toggle,
+  .sidebar-toggle-control{ display:none !important; }
+  body.gh-platform.gh-sidebar-collapsed .gh-layout{ grid-template-columns:1fr !important; }
+}
+@media (max-width:760px){
+  body.gh-home.gh-sidebar-collapsed main.content,
+  body.gh-home.gh-sidebar-collapsed .content{ margin-left:0 !important; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  body.gh-unlocked .gh-sidebar-toggle,
+  body.gh-unlocked .sidebar-toggle-control,
+  body.gh-unlocked.gh-home main.content,
+  body.gh-unlocked.gh-home .content{ transition:none !important; }
+}

@@ -1,0 +1,1072 @@
+/* Auth + Teacher panel — white / deep blue serious theme */
+:root {
+  --auth-bg: #f4f7fb;
+  --auth-card: #ffffff;
+  --auth-ink: #0f2744;
+  --auth-muted: #5a7390;
+  --auth-blue: #1a4f8c;
+  --auth-blue2: #0d3a6e;
+  --auth-blue-soft: #e8f0f9;
+  --auth-line: #c5d4e6;
+  --auth-radius: 14px;
+}
+
+.auth-page {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--auth-bg);
+  color: var(--auth-ink);
+  font-family: 'Be Vietnam Pro', sans-serif;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+}
+
+.auth-wrap {
+  width: min(440px, 100%);
+}
+
+.auth-brand {
+  text-align: center;
+  margin-bottom: 22px;
+}
+.auth-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--auth-blue);
+  color: #fff;
+  font-weight: 900;
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.auth-title {
+  display: block;
+  font-family: 'Pacifico', cursive;
+  font-size: 36px;
+  color: var(--auth-blue2);
+  line-height: 1.2;
+}
+.auth-brand p {
+  margin: 6px 0 0;
+  color: var(--auth-muted);
+  font-size: 13px;
+}
+
+.auth-card {
+  background: var(--auth-card);
+  border: 1px solid var(--auth-line);
+  border-radius: 18px;
+  box-shadow: 0 16px 48px rgba(15, 39, 68, .08);
+  overflow: hidden;
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--auth-line);
+}
+.auth-tab {
+  border: 0;
+  background: var(--auth-blue-soft);
+  color: var(--auth-muted);
+  font: 600 12px/1.35 'Be Vietnam Pro', sans-serif;
+  padding: 14px 10px;
+  cursor: pointer;
+  transition: .2s ease;
+}
+.auth-tab.active {
+  background: #fff;
+  color: var(--auth-blue2);
+  box-shadow: inset 0 -2px 0 var(--auth-blue);
+}
+.auth-tab:hover:not(.active) {
+  color: var(--auth-blue);
+  background: #dfeaf6;
+}
+
+.auth-panels {
+  padding: 28px 28px 18px;
+}
+.auth-panel {
+  display: none;
+  flex-direction: column;
+  gap: 14px;
+  align-items: stretch;
+}
+.auth-panel.active {
+  display: flex;
+  animation: authIn .28s ease;
+}
+@keyframes authIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.auth-field {
+  display: grid;
+  gap: 6px;
+}
+.auth-field span {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--auth-muted);
+  letter-spacing: .02em;
+}
+.auth-field input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px solid var(--auth-line);
+  border-radius: 999px;
+  padding: 12px 18px;
+  font: 500 14px/1.3 'Be Vietnam Pro', sans-serif;
+  color: var(--auth-ink);
+  background: #fff;
+  outline: none;
+  text-align: center;
+  transition: border-color .2s, box-shadow .2s;
+}
+.auth-field input:focus {
+  border-color: var(--auth-blue);
+  box-shadow: 0 0 0 3px rgba(26, 79, 140, .12);
+}
+.auth-field input::placeholder {
+  color: #9aafc4;
+}
+
+.auth-submit {
+  margin-top: 6px;
+  border: 0;
+  border-radius: 999px;
+  padding: 13px 18px;
+  font: 700 14px/1 'Be Vietnam Pro', sans-serif;
+  color: #fff;
+  background: linear-gradient(135deg, var(--auth-blue), var(--auth-blue2));
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(13, 58, 110, .22);
+  transition: transform .18s, box-shadow .18s;
+}
+.auth-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(13, 58, 110, .28);
+}
+
+.auth-forgot {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-top: 1px solid var(--auth-line);
+  background: #fafcfe;
+  color: var(--auth-muted);
+  font: 500 11px/1.4 'Be Vietnam Pro', sans-serif;
+  padding: 14px 16px;
+  cursor: pointer;
+  text-align: center;
+}
+.auth-forgot:hover {
+  color: var(--auth-blue);
+  background: var(--auth-blue-soft);
+}
+
+.auth-foot {
+  text-align: center;
+  margin: 18px 0 0;
+  color: #8aa0b6;
+  font-size: 11px;
+}
+
+.auth-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  background: var(--auth-blue2);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 12px 32px rgba(0,0,0,.18);
+  opacity: 0;
+  pointer-events: none;
+  transition: .25s ease;
+  z-index: 200;
+  max-width: min(360px, 90vw);
+  text-align: center;
+}
+.auth-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.auth-toast[data-type="error"] {
+  background: #8b2e2e;
+}
+
+/* ========== Teacher full page ========== */
+.teacher-page {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--auth-bg);
+  color: var(--auth-ink);
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+.teacher-top {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 28px;
+  background: #fff;
+  border-bottom: 1px solid var(--auth-line);
+  box-shadow: 0 4px 20px rgba(15, 39, 68, .05);
+}
+.teacher-top .brand-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.teacher-top .brand-row .auth-mark {
+  margin: 0;
+  width: 36px;
+  height: 36px;
+  font-size: 13px;
+}
+.teacher-top h1 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--auth-blue2);
+}
+.teacher-top .top-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.t-btn {
+  border: 1px solid var(--auth-line);
+  background: #fff;
+  color: var(--auth-ink);
+  border-radius: 10px;
+  padding: 9px 14px;
+  font: 600 12px/1 'Be Vietnam Pro', sans-serif;
+  cursor: pointer;
+  transition: .18s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.t-btn:hover {
+  border-color: var(--auth-blue);
+  color: var(--auth-blue);
+  background: var(--auth-blue-soft);
+}
+.t-btn.primary {
+  background: var(--auth-blue);
+  border-color: var(--auth-blue);
+  color: #fff;
+}
+.t-btn.primary:hover {
+  background: var(--auth-blue2);
+  color: #fff;
+}
+.t-btn.danger {
+  color: #9b2c2c;
+  border-color: #e8b4b4;
+}
+.t-btn.danger:hover {
+  background: #fdf2f2;
+}
+
+.teacher-body {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+  display: grid;
+  gap: 20px;
+}
+
+.t-card {
+  background: #fff;
+  border: 1px solid var(--auth-line);
+  border-radius: 16px;
+  padding: 22px 24px;
+  box-shadow: 0 8px 28px rgba(15, 39, 68, .05);
+}
+.t-card h2 {
+  margin: 0 0 6px;
+  font-size: 17px;
+  color: var(--auth-blue2);
+}
+.t-card .sub {
+  margin: 0 0 16px;
+  color: var(--auth-muted);
+  font-size: 12px;
+}
+
+.t-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.t-form input {
+  flex: 1 1 220px;
+  align-self: center;
+  height: 42px;
+  min-height: 42px;
+  max-height: 42px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--auth-line);
+  border-radius: 10px;
+  padding: 0 14px;
+  font: 500 13px/42px 'Be Vietnam Pro', sans-serif;
+  outline: none;
+}
+.t-form input:focus {
+  border-color: var(--auth-blue);
+  box-shadow: 0 0 0 3px rgba(26, 79, 140, .1);
+}
+
+.t-table-wrap {
+  overflow: auto;
+  border: 1px solid var(--auth-line);
+  border-radius: 12px;
+}
+.t-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.t-table th {
+  background: var(--auth-blue-soft);
+  color: var(--auth-blue2);
+  text-align: left;
+  padding: 11px 14px;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+.t-table td {
+  padding: 12px 14px;
+  border-top: 1px solid var(--auth-line);
+  vertical-align: middle;
+}
+.t-table tr:hover td {
+  background: #f7fafd;
+}
+.t-table .code {
+  font-family: ui-monospace, monospace;
+  font-weight: 700;
+  color: var(--auth-blue);
+  letter-spacing: .04em;
+}
+.t-table .actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.t-empty {
+  text-align: center;
+  padding: 36px 16px;
+  color: var(--auth-muted);
+  font-size: 13px;
+}
+
+.t-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.t-stat {
+  background: var(--auth-blue-soft);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+.t-stat b {
+  display: block;
+  font-size: 28px;
+  color: var(--auth-blue2);
+}
+.t-stat span {
+  font-size: 11px;
+  color: var(--auth-muted);
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .teacher-top { padding: 12px 14px; flex-wrap: wrap; }
+  .t-stats { grid-template-columns: 1fr; }
+  .auth-tabs { grid-template-columns: 1fr; }
+  .auth-panels { padding: 20px 16px 14px; }
+}
+
+/* ============================================================
+   LOGIN PAGE — clean bg + frame (no stretch / no blur / đúng vùng trắng)
+   Frame PNG: 403×619 → aspect-ratio 403/619
+   Vùng form trắng: top ~42%, left ~14%, right ~7%, bottom ~10%
+   ============================================================ */
+
+.auth-page {
+  position: relative !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  margin: 0 !important;
+  padding: 16px !important;
+  overflow-x: hidden !important;
+  background: #7ec8f0 !important;
+  background-image: none !important;
+  display: grid !important;
+  place-items: center !important;
+  font-family: 'Be Vietnam Pro', sans-serif !important;
+}
+
+/* Background layer — phủ kín toàn màn hình (cover) */
+.auth-bg-layer {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  background-color: #7ec8f0 !important;
+  background-image: url('../assets/login-bg.png') !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  filter: none !important;
+  opacity: 1 !important;
+  -webkit-filter: none !important;
+}
+
+.auth-brand,
+.auth-foot {
+  display: none !important;
+}
+
+/* Corner admin gear */
+.admin-corner {
+  position: fixed !important;
+  top: 18px !important;
+  right: 18px !important;
+  z-index: 20 !important;
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(197, 212, 230, 0.9) !important;
+  box-shadow: 0 8px 24px rgba(15, 39, 68, 0.12) !important;
+  display: grid !important;
+  place-items: center !important;
+  text-decoration: none !important;
+  color: #163a66 !important;
+  font-size: 18px !important;
+  transition: 0.2s ease !important;
+}
+.admin-corner:hover {
+  background: #fff !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 28px rgba(15, 39, 68, 0.16) !important;
+}
+.admin-corner-ico {
+  line-height: 1;
+}
+
+/* Logo góc trái trên */
+.logo-corner {
+  position: fixed !important;
+  top: 10px !important;
+  left: 10px !important;
+  z-index: 20 !important;
+  width: auto !important;
+  height: 90px !important;
+  max-width: 220px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 4px 14px rgba(15, 39, 68, 0.25)) !important;
+  transition: 0.2s ease !important;
+  pointer-events: none !important;
+}
+.logo-corner:hover {
+  transform: scale(1.03) !important;
+}
+@media (max-width: 480px) {
+  .logo-corner {
+    height: 64px !important;
+    max-width: 160px !important;
+    top: 8px !important;
+    left: 8px !important;
+  }
+}
+
+/* Frame container — giữ đúng tỷ lệ PNG, không méo */
+.auth-wrap.auth-frame {
+  position: relative !important;
+  z-index: 2 !important;
+  width: min(320px, 88vw) !important;
+  aspect-ratio: 403 / 619 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: 88vh !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  display: block !important;
+}
+
+/* Khi max-height giới hạn → scale width theo */
+@supports (aspect-ratio: 1) {
+  .auth-wrap.auth-frame {
+    max-width: min(320px, 88vw, calc(88vh * 403 / 619)) !important;
+  }
+}
+
+/* Frame image — 100% 100% vì container đã đúng aspect */
+.auth-wrap.auth-frame::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  background: url('../assets/login-frame.png') center center / 100% 100% no-repeat !important;
+  pointer-events: none !important;
+  filter: none !important;
+  image-rendering: auto !important;
+}
+
+/* Khung riêng cho giáo viên */
+.auth-wrap.auth-frame.auth-frame-teacher::before {
+  background: url('../assets/login-frame-teacher.png') center center / 100% 100% no-repeat !important;
+}
+
+/* Khung riêng cho quản trị */
+.auth-wrap.auth-frame.auth-frame-admin::before {
+  background: url('../assets/login-frame-admin.png') center center / 100% 100% no-repeat !important;
+}
+
+/* Form card — absolute inset đúng vùng trắng, form nhỏ hơn để lộ khung ảnh */
+.auth-wrap.auth-frame .auth-card {
+  position: absolute !important;
+  z-index: 1 !important;
+  top: 38% !important;
+  left: 18% !important;
+  right: 14% !important;
+  bottom: 20% !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 2px 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: stretch !important;
+  box-sizing: border-box !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  overflow: visible !important;
+}
+
+/* Tabs + panels — bỏ khung trắng, form bé hơn */
+.auth-wrap.auth-frame .auth-tabs {
+  background: transparent !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  border: none !important;
+  flex-shrink: 0 !important;
+  gap: 3px !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+}
+.auth-wrap.auth-frame .auth-panels {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 4px 0 2px !important;
+  flex: 0 0 auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.auth-wrap.auth-frame .auth-panel {
+  display: none !important;
+  flex: 0 0 auto !important;
+  gap: 4px !important;
+  flex-direction: column !important;
+}
+.auth-wrap.auth-frame .auth-panel.active {
+  display: flex !important;
+}
+.auth-wrap.auth-frame .auth-tab {
+  font-size: 8.5px !important;
+  padding: 5px 2px !important;
+  line-height: 1.15 !important;
+  border-radius: 7px 7px 0 0 !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(197, 212, 230, 0.7) !important;
+}
+.auth-wrap.auth-frame .auth-tab.active {
+  background: #fff !important;
+  color: var(--auth-blue2) !important;
+  box-shadow: inset 0 -2px 0 var(--auth-blue) !important;
+}
+.auth-wrap.auth-frame .auth-field {
+  gap: 1px !important;
+}
+.auth-wrap.auth-frame .auth-field span {
+  font-size: 8.5px !important;
+  color: #0f2d52 !important;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.8) !important;
+}
+.auth-wrap.auth-frame .auth-field input {
+  background: #fff !important;
+  font-size: 10.5px !important;
+  padding: 5px 8px !important;
+  border: 1.5px solid rgba(197, 212, 230, 0.9) !important;
+  box-shadow: 0 1px 4px rgba(15, 39, 68, 0.08) !important;
+}
+.auth-wrap.auth-frame .auth-submit {
+  margin-top: 2px !important;
+  padding: 6px 10px !important;
+  font-size: 10.5px !important;
+}
+.auth-wrap.auth-frame .auth-forgot {
+  background: transparent !important;
+  margin-top: 2px !important;
+  font-size: 9px !important;
+  padding: 3px 2px !important;
+  border: none !important;
+  color: #5a7390 !important;
+  flex-shrink: 0 !important;
+  line-height: 1.25 !important;
+  text-align: center !important;
+}
+
+/* Admin head on framed page */
+.auth-admin-head {
+  text-align: center;
+  padding: 12px 10px 0;
+}
+.auth-admin-ico {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 8px;
+  border-radius: 10px;
+  background: #e8eef5;
+  color: #163a66;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+.auth-admin-head h1 {
+  margin: 0;
+  font-size: 15px;
+  color: #0f2d52;
+}
+.auth-admin-head p {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: #5c738a;
+}
+
+.auth-wrap.auth-frame .auth-admin-head {
+  padding: 4px 4px 0 !important;
+  background: #fff !important;
+  border-radius: 8px 8px 0 0 !important;
+  border: 1px solid rgba(197, 212, 230, 0.85) !important;
+  border-bottom: none !important;
+  flex-shrink: 0 !important;
+}
+.auth-wrap.auth-frame .auth-admin-head .auth-admin-ico {
+  width: 30px !important;
+  height: 30px !important;
+  margin-bottom: 3px !important;
+  font-size: 14px !important;
+}
+.auth-wrap.auth-frame .auth-admin-head h1 {
+  font-size: 12px !important;
+}
+.auth-wrap.auth-frame .auth-admin-head p {
+  font-size: 9.5px !important;
+  margin-top: 1px !important;
+}
+.auth-wrap.auth-frame .auth-admin-head + .auth-panels {
+  border-radius: 0 0 8px 8px !important;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .auth-wrap.auth-frame {
+    width: min(300px, 90vw) !important;
+    max-width: min(300px, 90vw, calc(85vh * 403 / 619)) !important;
+  }
+  .auth-wrap.auth-frame .auth-card {
+    top: 37% !important;
+    left: 17% !important;
+    right: 13% !important;
+    bottom: 19% !important;
+  }
+  .auth-wrap.auth-frame .auth-tab {
+    font-size: 8px !important;
+    padding: 4px 2px !important;
+  }
+  .auth-wrap.auth-frame .auth-panels {
+    padding: 3px 0 2px !important;
+  }
+  .auth-wrap.auth-frame .auth-field input {
+    padding: 4px 7px !important;
+    font-size: 10px !important;
+  }
+  .auth-wrap.auth-frame .auth-submit {
+    padding: 5px 9px !important;
+    font-size: 10px !important;
+  }
+  .auth-wrap.auth-frame .auth-forgot {
+    font-size: 8px !important;
+  }
+}
+
+
+/* Password show/hide */
+.pass-wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+.pass-wrap input {
+  width: 100%;
+  padding-right: 36px !important;
+  box-sizing: border-box;
+}
+.pass-toggle {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  color: #0d3a6e;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  padding: 0;
+  line-height: 1;
+}
+.pass-toggle:hover {
+  color: #0a2f5a;
+  background: rgba(13, 58, 110, 0.08);
+}
+.pass-toggle i {
+  font-size: 16px;
+  color: #0d3a6e !important;
+}
+.pass-toggle:hover i {
+  color: #0a2f5a !important;
+}
+.auth-wrap.auth-frame .pass-toggle {
+  right: 4px;
+  width: 24px;
+  height: 24px;
+}
+.auth-wrap.auth-frame .pass-toggle i {
+  font-size: 13px;
+}
+.auth-wrap.auth-frame .pass-wrap input {
+  padding-right: 28px !important;
+}
+
+
+/* Cả hai trạng thái mắt — cùng màu xanh đậm */
+.pass-toggle,
+.pass-toggle i,
+.pass-toggle:hover,
+.pass-toggle:hover i,
+.pass-toggle[aria-label*="Ẩn"] i,
+.pass-toggle[aria-label*="Hiện"] i {
+  color: #0d3a6e !important;
+}
+
+
+/* Mắt luôn xanh đậm — cả hiện và ẩn, không trùng nền */
+.pass-wrap .pass-toggle,
+.pass-wrap .pass-toggle i,
+.pass-wrap .pass-toggle:hover,
+.pass-wrap .pass-toggle:hover i {
+  color: #0d3a6e !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #0d3a6e !important;
+}
+.pass-wrap .pass-toggle {
+  background: transparent !important;
+  z-index: 2;
+}
+
+
+/* Nút mắt — SVG xanh đậm + nền xám xanh, không hòa trắng */
+.pass-wrap .pass-toggle {
+  color: #0d3a6e !important;
+  background: #e8eef5 !important;
+  border: 1px solid #c5d4e6 !important;
+  border-radius: 8px !important;
+  width: 28px !important;
+  height: 28px !important;
+  z-index: 5 !important;
+  opacity: 1 !important;
+}
+.pass-wrap .pass-toggle:hover {
+  background: #d6e2f0 !important;
+  color: #0a2f5a !important;
+}
+.pass-wrap .pass-toggle .pass-eye-ico,
+.pass-wrap .pass-toggle svg {
+  display: block !important;
+  width: 16px !important;
+  height: 16px !important;
+  color: #0d3a6e !important;
+}
+.pass-wrap .pass-toggle svg path {
+  fill: #0d3a6e !important;
+}
+.auth-wrap.auth-frame .pass-wrap .pass-toggle {
+  width: 22px !important;
+  height: 22px !important;
+  background: #e8eef5 !important;
+  border: 1px solid #c5d4e6 !important;
+}
+.auth-wrap.auth-frame .pass-wrap .pass-toggle svg {
+  width: 13px !important;
+  height: 13px !important;
+}
+
+
+/* Nút Đăng ký / Đăng nhập phía trên — thu nhỏ còn ~3/5 */
+.auth-top-mode {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(13, 58, 110, 0.12);
+  border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(15, 45, 82, 0.12);
+  backdrop-filter: blur(10px);
+}
+.auth-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font: 700 11px/1.2 'Be Vietnam Pro', sans-serif;
+  text-decoration: none !important;
+  color: #0d3a6e !important;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: .18s background, .18s color, .18s box-shadow;
+}
+.auth-mode-btn:hover {
+  background: #e8eef5;
+  color: #0a2f5a !important;
+}
+.auth-mode-btn.active {
+  background: #0d3a6e !important;
+  color: #fff !important;
+  box-shadow: 0 3px 10px rgba(13, 58, 110, 0.28);
+}
+@media (max-width: 520px) {
+  .auth-top-mode {
+    top: 10px;
+    gap: 4px;
+    padding: 3px;
+  }
+  .auth-mode-btn {
+    min-width: 60px;
+    padding: 5px 10px;
+    font-size: 10px;
+  }
+}
+
+
+/* Top mode buttons — luôn nổi trên nền */
+.auth-top-mode {
+  z-index: 100 !important;
+  top: 14px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(13, 58, 110, 0.18) !important;
+  box-shadow: 0 6px 20px rgba(15, 45, 82, 0.16) !important;
+}
+.auth-mode-btn {
+  min-width: 78px !important;
+  font-weight: 800 !important;
+  font-size: 11px !important;
+  color: #0d3a6e !important;
+}
+.auth-mode-btn.active {
+  background: #0d3a6e !important;
+  color: #ffffff !important;
+}
+
+
+/* Khung tài khoản khách — đúng tỉ lệ ảnh 1154×924, không bóp méo */
+.auth-wrap.auth-frame.auth-frame-register {
+  width: min(560px, 94vw) !important;
+  aspect-ratio: 1154 / 924 !important;
+  height: auto !important;
+  max-height: 90vh !important;
+  max-width: min(560px, 94vw, calc(90vh * 1154 / 924)) !important;
+}
+.auth-wrap.auth-frame.auth-frame-register::before {
+  background: url('../assets/login-frame-register.png') center center / contain no-repeat !important;
+  background-size: 100% 100% !important; /* container đã đúng ratio → không méo */
+  /* Khung ảnh: lên ~9%, sang phải nhẹ */
+  transform: translate(10px, -9%) !important;
+}
+.auth-wrap.auth-frame.auth-frame-register .auth-card {
+  top: 29% !important;
+  left: 24% !important;
+  right: 26% !important;
+  bottom: 21% !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 4px 6px !important;
+  justify-content: center !important;
+}
+.auth-wrap.auth-frame.auth-frame-register .auth-tabs {
+  display: flex !important;
+  gap: 2px !important;
+  margin-bottom: 3px !important;
+}
+.auth-wrap.auth-frame.auth-frame-register .auth-tab {
+  flex: 1 !important;
+  font-size: 8.5px !important;
+  padding: 4px 2px !important;
+}
+.auth-wrap.auth-frame.auth-frame-register .auth-panels {
+  padding: 1px 0 0 !important;
+}
+.auth-wrap.auth-frame.auth-frame-register .auth-panel {
+  gap: 2px !important;
+}
+.auth-wrap.auth-frame.auth-frame-register .auth-field span {
+  font-size: 7.5px !important;
+}
+.auth-wrap.auth-frame.auth-frame-register .auth-field input {
+  font-size: 9px !important;
+  padding: 4px 7px !important;
+}
+.auth-wrap.auth-frame.auth-frame-register .auth-submit {
+  font-size: 9px !important;
+  padding: 5px 9px !important;
+  margin-top: 1px !important;
+}
+.auth-wrap.auth-frame.auth-frame-register .auth-forgot {
+  display: block;
+  text-align: center;
+  margin-top: 3px;
+  font-size: 8px;
+  color: #0d3a6e;
+  text-decoration: none;
+}
+.auth-wrap.auth-frame.auth-frame-register .auth-forgot:hover {
+  text-decoration: underline;
+}
+@media (max-width: 600px) {
+  .auth-wrap.auth-frame.auth-frame-register {
+    width: min(96vw, 420px) !important;
+    max-width: min(96vw, calc(88vh * 1154 / 924)) !important;
+  }
+  .auth-wrap.auth-frame.auth-frame-register::before {
+    transform: translate(6px, -9%) !important;
+  }
+  .auth-wrap.auth-frame.auth-frame-register .auth-card {
+    top: 31% !important;
+    left: 18% !important;
+    right: 20% !important;
+    bottom: 19% !important;
+    padding: 3px 5px !important;
+  }
+}
+
+/* Guest profile modal */
+.guest-profile-modal {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(15, 45, 82, 0.45);
+  display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.guest-profile-modal.open { display: flex; }
+.guest-profile-box {
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px 28px;
+  width: min(420px, 100%);
+  box-shadow: 0 20px 60px rgba(15, 45, 82, 0.2);
+}
+.guest-profile-box h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  color: #0d3a6e;
+}
+.guest-profile-box .sub {
+  margin: 0 0 16px;
+  font-size: 12px;
+  color: #5a7390;
+}
+.guest-profile-box label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e3a5f;
+}
+.guest-profile-box input[type="text"],
+.guest-profile-box input[type="password"] {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  height: 42px;
+  border: 1.5px solid #c5d4e6;
+  border-radius: 10px;
+  padding: 0 14px;
+  font: 500 13px/42px 'Be Vietnam Pro', sans-serif;
+  box-sizing: border-box;
+}
+.guest-av-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.guest-av-row img {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e2eaf3;
+}
+.guest-profile-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}

@@ -1,0 +1,1868 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panel — Thầy Gia Huy</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@coreui/icons/css/free.min.css">
+<link rel="stylesheet" href="css/auth.css">
+<style>
+  .profile-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .profile-avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid #c5d4e6;background:#e8f0f9}
+  .profile-meta{flex:1;min-width:180px}
+  .profile-meta b{display:block;font-size:16px;color:#0f2d52}
+  .profile-meta small{color:#5a7390;font-size:12px}
+  .profile-actions{display:flex;gap:8px;flex-wrap:wrap}
+  .t-form.stack{
+    display:flex!important;
+    flex-direction:column!important;
+    flex-wrap:nowrap!important;
+    align-items:stretch!important;
+    gap:12px!important;
+  }
+  .t-form.stack label{
+    display:block!important;
+    width:100%;
+    font-size:13px;
+    color:#3a5168;
+    margin:0;
+  }
+  .t-form.stack label > input,
+  .t-form.stack input#profileUsername,
+  .t-form.stack input#profileInvite,
+  .t-form.stack input#adminPassword{
+    display:block!important;
+    flex:none!important;
+    flex-grow:0!important;
+    flex-shrink:0!important;
+    width:100%!important;
+    max-width:420px!important;
+    height:42px!important;
+    min-height:42px!important;
+    max-height:42px!important;
+    box-sizing:border-box!important;
+    border:1.5px solid #c5d4e6!important;
+    border-radius:10px!important;
+    padding:0 14px!important;
+    margin-top:6px!important;
+    font:500 13px/42px 'Be Vietnam Pro',sans-serif!important;
+    outline:none!important;
+    line-height:42px!important;
+  }
+  .t-form .pass-wrap {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin-top: 6px;
+  }
+  .t-form .pass-wrap input {
+    margin-top: 0 !important;
+    padding-right: 42px !important;
+  }
+  .t-form .pass-toggle {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border: 0;
+    background: transparent;
+    color: #0d3a6e !important;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    padding: 0;
+  }
+  .t-form .pass-toggle i,
+  .t-form .pass-toggle:hover i {
+    color: #0d3a6e !important;
+    font-size: 16px;
+    opacity: 1 !important;
+    -webkit-text-fill-color: #0d3a6e !important;
+  }
+  .t-form .pass-toggle:hover { background: #d6e2f0 !important; }
+  .t-form .pass-toggle {
+    background: #e8eef5 !important;
+    border: 1px solid #c5d4e6 !important;
+  }
+  .t-form .pass-toggle svg path { fill: #0d3a6e !important; }
+
+  .t-form.stack input:focus{
+    border-color:#1a4f8c!important;
+    box-shadow:0 0 0 3px rgba(26,79,140,.1)!important;
+  }
+  .t-form.stack .profile-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .owner-tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:#e8f0f9;color:#1a4f8c;font-weight:600}
+  .manage-box{margin-top:14px;padding:14px;border:1px solid #dce5ef;border-radius:12px;background:#fafcfe}
+  .manage-box h3{margin:0 0 10px;font-size:14px;color:#0f2d52}
+
+  .perm-modal{position:fixed;inset:0;background:rgba(15,39,68,.45);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
+  .perm-modal[hidden]{display:none!important}
+  .perm-box{background:#fff;border-radius:16px;border:1px solid #dce5ef;max-width:440px;width:100%;padding:20px;box-shadow:0 16px 48px rgba(15,39,68,.15);max-height:90vh;overflow:auto}
+  .perm-box h3{margin:0 0 8px;font-size:16px;color:#0f2d52}
+  .perm-list{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+  .perm-list label{display:flex;align-items:center;gap:10px;font-size:13px;color:#12263a;cursor:pointer;padding:8px 10px;border:1px solid #e8eef5;border-radius:10px}
+  .perm-list label:hover{background:#f4f8fc}
+  .perm-list input{width:16px;height:16px}
+  .perm-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+
+  .tk-item{border:1px solid #dce5ef;border-radius:12px;padding:14px;margin-bottom:10px;background:#fafcfe}
+  .tk-item-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-start}
+  .tk-id{font-weight:700;color:#0f2d52;font-size:13px}
+  .tk-meta{font-size:12px;color:#5a7390;margin-top:2px}
+  .tk-msg{margin:10px 0;font-size:13px;color:#12263a;line-height:1.5;white-space:pre-wrap}
+  .tk-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .tk-pill{display:inline-block;font-size:11px;font-weight:600;padding:3px 8px;border-radius:999px;background:#e8f0f9;color:#1a4f8c}
+  .tk-pill.pending{background:#fff3d6;color:#9a6b00}
+  .tk-pill.progress{background:#e0efff;color:#0b5cad}
+  .tk-pill.resolved{background:#dff5e8;color:#157a3c}
+  .tk-pill.rejected{background:#fde8e8;color:#9b2c2c}
+  .tk-reply{margin-top:10px;display:none}
+  .tk-reply.open{display:block}
+  .tk-reply textarea{width:100%;min-height:70px;border:1px solid #c5d4e6;border-radius:10px;padding:10px;font:inherit;box-sizing:border-box}
+  .tk-replies{margin-top:8px;padding:8px 10px;background:#eef4fb;border-radius:8px;font-size:12px;color:#3a5168}
+  .tk-replies div{margin-bottom:6px}
+
+  .cls-item{border:1px solid #dce5ef;border-radius:12px;padding:12px 14px;margin-bottom:8px;background:#fafcfe;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+  .cls-item strong{color:#0f2d52}
+  .cls-item .meta{font-size:12px;color:#5a7390}
+  .sch-types{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .sch-type-btn{border:1.5px solid #d5dee8;background:#fff;border-radius:10px;padding:8px 12px;font:600 12px Be Vietnam Pro,sans-serif;cursor:pointer;color:#12263a}
+  .sch-type-btn.active{border-color:#1a4f8c;background:#e8eef5;color:#0f2d52}
+  .sch-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;margin-top:8px}
+  .sch-dow{font-size:11px;font-weight:700;color:#5a7390;padding:6px 0}
+  .sch-day{position:relative;min-height:42px;border-radius:10px;border:1px solid #e8eef5;background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#12263a;cursor:pointer}
+  .sch-day:hover{border-color:#1a4f8c;background:#f0f5fb}
+  .sch-day.mute{opacity:.35;pointer-events:none}
+  .sch-day.today{outline:2px solid #1a4f8c}
+  .sch-day .dots{position:absolute;bottom:4px;left:0;right:0;display:flex;justify-content:center;gap:3px}
+  .sch-day .dots i{width:6px;height:6px;border-radius:50%;display:block}
+  .sch-day .dots .online{background:#3b82f6}
+  .sch-day .dots .study{background:#10b981}
+  .sch-day .dots .exam{background:#ef4444}
+  .sch-event-list{margin-top:12px}
+  .sch-event-row{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 10px;border:1px solid #e8eef5;border-radius:8px;margin-bottom:6px;font-size:12px}
+
+  /* Panel shell — left function bar + right display (như ảnh 2) */
+  .teacher-body.panel-body-reset {
+    max-width: none;
+    margin: 0;
+    padding: 16px 0 24px;
+  }
+  .panel-shell {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: 20px;
+    max-width: 1280px;
+    margin: 0 auto;
+    min-height: calc(100vh - 100px);
+    padding: 0 20px 32px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  @media (max-width: 860px) {
+    .panel-shell {
+      grid-template-columns: 1fr;
+    }
+    .panel-nav {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      max-height: none !important;
+      flex-direction: row !important;
+      flex-wrap: wrap;
+      border-radius: 14px !important;
+      margin-bottom: 4px;
+    }
+    .panel-nav button {
+      flex: 1 1 auto;
+      min-width: 130px;
+    }
+    .panel-nav-label { width: 100%; }
+  }
+  .panel-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 16px 12px;
+    background: #fff;
+    border: 1px solid #e2eaf3;
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(15, 45, 82, 0.06);
+    align-self: start;
+    position: sticky;
+    top: 88px; /* dưới header — cố định khi cuộn trang */
+    max-height: calc(100vh - 104px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    z-index: 5;
+  }
+  .panel-nav::-webkit-scrollbar { width: 0; height: 0; display: none; }
+  .panel-nav-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: #8aa0b8;
+    padding: 12px 12px 6px;
+  }
+  .panel-nav-label:first-child { padding-top: 4px; }
+  .panel-nav button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    border: 0;
+    background: transparent;
+    color: #1e3a5f;
+    font: 600 13px/1.3 'Be Vietnam Pro', sans-serif;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .15s background, .15s color;
+  }
+  .panel-nav button i {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+    color: #5a7390;
+  }
+  .panel-nav button:hover {
+    background: #f0f5fb;
+    color: #0f2d52;
+  }
+  .panel-nav button:hover i { color: #1a4f8c; }
+  .panel-nav button.active {
+    background: #e8f0f9;
+    color: #0f2d52;
+  }
+  .panel-nav button.active i { color: #1a4f8c; }
+  .panel-main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 100%;
+  }
+  .panel-main > .t-card[hidden] { display: none !important; }
+  .panel-nav button[hidden],
+  .panel-nav .panel-nav-label[hidden] { display: none !important; }
+  .panel-view[hidden] { display: none !important; }
+
+  /* —— Mọi phần nội dung panel: cùng khung, cùng vị trí, to hơn —— */
+  .panel-main > .t-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    padding: 28px 32px !important;
+    border-radius: 18px !important;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+  }
+  .panel-main > .t-card h2 {
+    font-size: 20px !important;
+    margin: 0 0 8px !important;
+  }
+  .panel-main > .t-card .sub {
+    font-size: 13px !important;
+    margin: 0 0 20px !important;
+  }
+  .panel-main .t-stats {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+  .panel-main .t-stat {
+    padding: 20px 16px !important;
+    border-radius: 14px !important;
+    text-align: center !important;
+  }
+  .panel-main .t-stat b {
+    font-size: 28px !important;
+    display: block !important;
+  }
+  .panel-main .t-form {
+    width: 100% !important;
+    max-width: 560px !important;
+  }
+  .panel-main .t-form.stack {
+    max-width: 560px !important;
+  }
+  .panel-main .t-form.stack label > input,
+  .panel-main .t-form.stack input,
+  .panel-main .pass-wrap {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  .panel-main .t-table-wrap {
+    width: 100% !important;
+    overflow-x: auto !important;
+  }
+  .panel-main .t-table {
+    width: 100% !important;
+    min-width: 480px;
+  }
+  /* Stats card không cần min-height lớn */
+  #panelStatsCard {
+    min-height: 0 !important;
+    padding: 22px 28px !important;
+  }
+  @media (max-width: 700px) {
+    .panel-main > .t-card {
+      padding: 20px 16px !important;
+      min-height: 240px;
+    }
+    .panel-main .t-stats {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
+<link rel="stylesheet" href="css/inline-extracted.css"><link rel="stylesheet" href="css/theme.css"><link rel="stylesheet" href="css/redesign.css"><link rel="stylesheet" href="css/edu.css"><link rel="stylesheet" href="css/app.css"><link rel="stylesheet" href="css/icons.css"></head>
+<body class="teacher-page">
+  <header class="teacher-top">
+    <div class="brand-row">
+      <span class="auth-mark">GH</span>
+      <div>
+        <h1 id="panelTitle">Panel</h1>
+        <small style="color:#5a7390;font-size:11px" id="roleLabel">—</small>
+      </div>
+    </div>
+    <div class="top-actions">
+      <a class="t-btn" href="/">← Về trang chủ</a>
+      <button type="button" class="t-btn danger" id="logoutBtn">Đăng xuất</button>
+    </div>
+  </header>
+
+  <main class="teacher-body panel-body-reset">
+    <div class="panel-shell">
+      <!-- Thanh panel thống nhất — hiện theo role / quyền -->
+      <nav class="panel-nav" id="panelNav" aria-label="Menu panel">
+        <div class="panel-nav-label" data-nav-group="account">Tài khoản</div>
+        <!-- GV / QL: hồ sơ chính · Admin: không có mục này -->
+        <button type="button" data-view="profile" data-role="staff-profile" class="active">
+          <i class="cil-user"></i> <span id="profileNavLabel">Hồ sơ chính</span>
+        </button>
+        <!-- Chỉ admin -->
+        <button type="button" data-view="adminProfile" data-role="admin">
+          <i class="cil-shield-alt"></i> Hồ sơ quản trị
+        </button>
+
+        <div class="panel-nav-label" data-nav-group="school">Học sinh &amp; Lớp</div>
+        <!-- Gộp 1 mục: học sinh + lớp -->
+        <button type="button" data-view="school" data-role="all-staff">
+          <i class="cil-people"></i> Học sinh &amp; Lớp
+        </button>
+
+        <div class="panel-nav-label" data-nav-group="content">Nội dung</div>
+        <button type="button" data-view="tools" data-role="all-staff">
+          <i class="cil-settings"></i> Công cụ panel
+        </button>
+        <button type="button" data-view="tickets" data-role="all-staff">
+          <i class="cil-chat-bubble"></i> Ticket / Hỏi đáp
+        </button>
+
+        <div class="panel-nav-label" data-nav-group="admin">Quản trị</div>
+        <!-- Theo quyền thêm quyền / admin -->
+        <button type="button" data-view="teachers" data-perm="create_teacher|manage_accounts">
+          <i class="cil-user"></i> Giáo viên
+        </button>
+        <button type="button" data-view="managers" data-perm="manage_managers">
+          <i class="cil-lock-locked"></i> Quản lí
+        </button>
+        <button type="button" data-view="announce" data-perm="notifications|notify_teachers">
+          <i class="cil-bell"></i> Thông báo
+        </button>
+        <button type="button" data-view="teacherNotif" data-role="teacher-manager">
+          <i class="cil-bell"></i> TB Giáo viên
+        </button>
+      </nav>
+
+      <!-- Màn hiển thị (nội dung phải) -->
+      <div class="panel-main" id="panelMain">
+    <section class="t-card" id="panelStatsCard">
+      <div class="t-stats">
+        <div class="t-stat"><b id="statStudents">0</b><span>Học sinh</span></div>
+        <div class="t-stat"><b id="statTeachers">0</b><span>Giáo viên</span></div>
+        <div class="t-stat"><b id="statRole">—</b><span>Vai trò</span></div>
+      </div>
+    </section>
+
+    <section class="t-card" id="profileSection">
+      <h2>Hồ sơ tài khoản</h2>
+      <p class="sub" id="profileHint">Đổi avatar, tên đăng nhập và mã mời của bạn.</p>
+      <div class="profile-row" style="margin-bottom:14px">
+        <img class="profile-avatar" id="profileAvatar" src="assets/images/avatar.gif" alt="Avatar">
+        <div class="profile-meta">
+          <b id="profileName">—</b>
+          <small id="profileCode">Mã mời: —</small>
+        </div>
+        <div class="profile-actions">
+          <button type="button" class="t-btn primary" id="btnChangeAvatar"><i class="cil-camera"></i> Đổi avatar</button>
+          <button type="button" class="t-btn" id="btnResetAvatar">Khôi phục</button>
+          <input type="file" id="avatarFile" accept="image/*" hidden>
+        </div>
+      </div>
+      <form class="t-form stack" id="profileForm">
+        <label>Tên đăng nhập
+          <input type="text" id="profileUsername" maxlength="40" required>
+        </label>
+        <label>Mã mời (mật khẩu đăng nhập)
+          <div class="pass-wrap">
+            <input type="password" id="profileInvite" maxlength="64" pattern="[A-Za-z0-9@\-]+" title="Chỉ chữ hoa, chữ thường, số, @ và -" required autocomplete="new-password">
+            <button type="button" class="pass-toggle" aria-label="Hiện mã mời" title="Hiện / ẩn"><svg class="pass-eye-ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg></button>
+          </div>
+          <small class="sub" style="display:block;margin-top:4px">Chỉ gồm A–Z, a–z, 0–9, @ và - · dạng HS-/GV-/QL- + 20 ký tự</small>
+        </label>
+        <div class="profile-btns">
+          <button type="submit" class="t-btn primary">Lưu thay đổi</button>
+          <button type="button" class="t-btn" id="btnRegenInvite">Tạo mã mời mới</button>
+        </div>
+      </form>
+      <p id="profileResult" class="sub" style="margin-top:12px;margin-bottom:0" hidden></p>
+    </section>
+
+    <section class="t-card" id="toolsSection" hidden>
+      <h2>Công cụ panel</h2>
+      <p class="sub" id="toolsHint">Các chức năng quản lý nội dung.</p>
+      <div class="t-form" style="flex-wrap:wrap" id="toolBtns">
+        <a class="t-btn primary" href="admin-panel.html?tab=upload"><i class="cil-cloud-upload"></i> Upload</a>
+        <a class="t-btn primary" href="admin-panel.html?tab=library"><i class="cil-library"></i> Thư viện</a>
+        <a class="t-btn primary" href="admin-panel.html?tab=stats"><i class="cil-chart"></i> Thống kê</a>
+        <!-- Nhạc + Toàn bộ Cài đặt chỉ thêm bằng JS cho Admin -->
+      </div>
+    </section>
+
+    <section class="t-card" id="studentCreateSection" hidden>
+      <h2>Tạo tài khoản học sinh</h2>
+      <p class="sub" id="stuCreateHint">Tên + mã mời. Học sinh đăng nhập tab Học sinh trên trang login. Mỗi giáo viên có danh sách học sinh riêng.</p>
+      <form class="t-form" id="createStudentForm">
+        <input type="text" id="newStudent" placeholder="Tên đăng nhập học sinh" maxlength="40" required>
+        <button type="submit" class="t-btn primary">+ Tạo học sinh</button>
+      </form>
+      <p id="stuResult" class="sub" style="margin-top:12px;margin-bottom:0" hidden></p>
+    </section>
+
+    <section class="t-card" id="studentListSection" hidden>
+      <h2 id="studentListTitle">Danh sách học sinh</h2>
+      <div class="t-table-wrap">
+        <table class="t-table">
+          <thead>
+            <tr>
+              <th>Tên</th>
+              <th>Mã mời</th>
+              <th id="ownerColHead" hidden>Giáo viên</th>
+              <th>Ngày tạo</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="studentBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    
+    
+    <section class="t-card" id="classSection" hidden>
+      <h2><i class="cil-people"></i> Danh sách lớp</h2>
+      <p class="sub">Tạo lớp trước, nhấn vào lớp để thêm học sinh và gắn lịch học.</p>
+      <form class="t-form" id="createClassForm">
+        <input type="text" id="newClassName" placeholder="Tên lớp (vd: 10A1, Lớp Vật lý 10)" maxlength="40" required>
+        <button type="submit" class="t-btn primary">+ Tạo lớp</button>
+      </form>
+      <p id="classResult" class="sub" style="margin-top:10px;margin-bottom:0" hidden></p>
+      <div id="classList" style="margin-top:14px"></div>
+    </section>
+
+    <section class="t-card" id="classDetailSection" hidden>
+      <h2 id="classDetailTitle">Lớp</h2>
+      <p class="sub" id="classDetailSub">Thêm học sinh và lịch cho lớp này.</p>
+      <form class="t-form" id="classCreateStudentForm">
+        <input type="text" id="classNewStudent" placeholder="Tên đăng nhập học sinh" maxlength="40" required>
+        <button type="submit" class="t-btn primary">+ Thêm HS vào lớp</button>
+      </form>
+      <p id="classStuResult" class="sub" style="margin-top:10px" hidden></p>
+      <div class="t-table-wrap" style="margin-top:12px">
+        <table class="t-table">
+          <thead><tr><th>Tên</th><th>Mã mời</th><th>Thao tác</th></tr></thead>
+          <tbody id="classStudentBody"></tbody>
+        </table>
+      </div>
+      <hr style="border:none;border-top:1px solid #e8eef5;margin:18px 0">
+      <h3 style="margin:0 0 8px;font-size:15px;color:#0f2d52">Lịch học của lớp</h3>
+      <p class="sub">Chọn loại → bấm ngày để gắn. Một ngày có thể nhiều loại, mỗi loại chỉ 1 lần/ngày.</p>
+      <div class="sch-types" id="schTypes">
+        <button type="button" class="sch-type-btn active" data-type="online">● Trực tuyến</button>
+        <button type="button" class="sch-type-btn" data-type="study">● Học bài / BT</button>
+        <button type="button" class="sch-type-btn" data-type="exam">● Kiểm tra</button>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0">
+        <strong id="schMonthLabel" style="color:#0f2d52"></strong>
+        <div style="display:flex;gap:6px">
+          <button type="button" class="t-btn" id="schPrev">‹</button>
+          <button type="button" class="t-btn" id="schNext">›</button>
+        </div>
+      </div>
+      <div class="sch-cal" id="schCal"></div>
+      <div class="sch-event-list" id="schEventList"></div>
+      <button type="button" class="t-btn" id="closeClassDetail" style="margin-top:12px">← Về danh sách lớp</button>
+    </section>
+
+    <section class="t-card" id="studentScheduleSection" hidden>
+      <h2>Lịch riêng học sinh</h2>
+      <p class="sub" id="stuSchSub">Chỉnh lịch riêng (cộng thêm / khác lịch lớp).</p>
+      <div class="sch-types" id="stuSchTypes">
+        <button type="button" class="sch-type-btn active" data-type="online">● Trực tuyến</button>
+        <button type="button" class="sch-type-btn" data-type="study">● Học bài / BT</button>
+        <button type="button" class="sch-type-btn" data-type="exam">● Kiểm tra</button>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0">
+        <strong id="stuSchMonthLabel" style="color:#0f2d52"></strong>
+        <div style="display:flex;gap:6px">
+          <button type="button" class="t-btn" id="stuSchPrev">‹</button>
+          <button type="button" class="t-btn" id="stuSchNext">›</button>
+        </div>
+      </div>
+      <div class="sch-cal" id="stuSchCal"></div>
+      <div class="sch-event-list" id="stuSchEventList"></div>
+      <button type="button" class="t-btn" id="closeStuSch" style="margin-top:12px">Đóng</button>
+    </section>
+
+    <section class="t-card" id="adminProfileSection" hidden>
+      <h2>Hồ sơ quản trị viên</h2>
+      <p class="sub">Đổi tên hiển thị và mật khẩu tài khoản quản trị (đăng nhập bằng mật khẩu).</p>
+      <form class="t-form stack" id="adminProfileForm">
+        <label>Tên quản trị
+          <input type="text" id="adminUsername" maxlength="40" required>
+        </label>
+        <label>Mật khẩu đăng nhập
+          <div class="pass-wrap">
+            <input type="password" id="adminPassword" maxlength="64" pattern="[A-Za-z0-9@\-]+" title="Chỉ chữ hoa, chữ thường, số, @ và -" required autocomplete="new-password">
+            <button type="button" class="pass-toggle" aria-label="Hiện mật khẩu" title="Hiện / ẩn"><svg class="pass-eye-ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg></button>
+          </div>
+          <small class="sub" style="display:block;margin-top:4px">Chỉ gồm A–Z, a–z, 0–9, @ và -</small>
+        </label>
+        <div class="profile-btns">
+          <button type="submit" class="t-btn primary">Lưu hồ sơ admin</button>
+        </div>
+      </form>
+      <p id="adminProfileResult" class="sub" style="margin-top:12px;margin-bottom:0" hidden></p>
+    </section>
+
+    <section class="t-card" id="managerSection" hidden>
+      <h2>Tài khoản quản lí</h2>
+      <p class="sub">Tạo tài khoản quản lí với quyền tùy chọn. Đăng nhập tại trang Quản trị → tab <strong>Quản lí</strong> (tên + mã mời).</p>
+      <form class="t-form" id="createManagerForm">
+        <input type="text" id="newManager" placeholder="Tên đăng nhập quản lí" maxlength="40" required>
+        <button type="submit" class="t-btn primary">+ Tạo quản lí</button>
+      </form>
+      <p id="mgrResult" class="sub" style="margin-top:12px;margin-bottom:0" hidden></p>
+      <div class="t-table-wrap" style="margin-top:14px">
+        <table class="t-table">
+          <thead><tr><th>Tên</th><th>Mã mời</th><th>Quyền</th><th>Ngày tạo</th><th>Thao tác</th></tr></thead>
+          <tbody id="managerBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="t-card" id="teacherCreateSection" hidden>
+      <h2>Tạo tài khoản giáo viên</h2>
+      <p class="sub">Chỉ quản trị viên. Giáo viên đăng nhập tab Giáo viên (tên + mã mời).</p>
+      <form class="t-form" id="createTeacherForm">
+        <input type="text" id="newTeacher" placeholder="Tên đăng nhập giáo viên" maxlength="40" required>
+        <button type="submit" class="t-btn primary">+ Tạo giáo viên</button>
+      </form>
+      <p id="teaResult" class="sub" style="margin-top:12px;margin-bottom:0" hidden></p>
+    </section>
+
+    <section class="t-card" id="teacherListSection" hidden>
+      <h2>Danh sách giáo viên</h2>
+      <p class="sub">Nhấn <strong>Quản lý HS</strong> để xem / sửa danh sách học sinh của từng giáo viên.</p>
+      <div class="t-table-wrap">
+        <table class="t-table">
+          <thead><tr><th>Tên</th><th>Mã mời</th><th>Ngày tạo</th><th>Thao tác</th></tr></thead>
+          <tbody id="teacherBody"></tbody>
+        </table>
+      </div>
+      <div id="manageTeacherBox" class="manage-box" hidden>
+        <h3 id="manageTeacherTitle">Học sinh của giáo viên</h3>
+        <form class="t-form" id="manageCreateStudentForm" style="margin-bottom:12px">
+          <input type="text" id="manageNewStudent" placeholder="Tên đăng nhập học sinh" maxlength="40" required>
+          <button type="submit" class="t-btn primary">+ Tạo HS cho GV này</button>
+        </form>
+        <div class="t-table-wrap">
+          <table class="t-table">
+            <thead><tr><th>Tên</th><th>Mã mời</th><th>Ngày tạo</th><th>Thao tác</th></tr></thead>
+            <tbody id="manageStudentBody"></tbody>
+          </table>
+        </div>
+        <button type="button" class="t-btn" id="closeManageBtn" style="margin-top:10px">Đóng</button>
+      </div>
+    </section>
+
+
+    <section class="t-card" id="announceSection" hidden>
+      <h2><i class="cil-bell"></i> Đăng thông báo</h2>
+      <p class="sub">Gửi thông báo tới toàn bộ người dùng (hiện trên chuông thông báo).</p>
+      <form class="t-form stack" id="announceForm">
+        <label>Tiêu đề
+          <input type="text" id="annTitle" maxlength="80" placeholder="Ví dụ: Bảo trì tối nay" required>
+        </label>
+        <label>Nội dung
+          <input type="text" id="annBody" maxlength="240" placeholder="Nội dung ngắn..." required>
+        </label>
+        <label>Gửi tới
+          <select id="annTo" style="border:1.5px solid #c5d4e6;border-radius:10px;height:42px;padding:0 14px;font:inherit">
+            <option value="all">Tất cả mọi người</option>
+            <option value="student">Chỉ học sinh</option>
+            <option value="teacher">Chỉ giáo viên</option>
+          </select>
+        </label>
+        <div class="profile-btns">
+          <button type="submit" class="t-btn primary"><i class="cil-send"></i> Đăng thông báo</button>
+        </div>
+      </form>
+      <p id="annResult" class="sub" style="margin-top:12px;margin-bottom:0" hidden></p>
+    </section>
+
+    <section class="t-card" id="ticketStaffSection" hidden>
+      <h2><i class="cil-speech"></i> Xử lý ticket / Hỏi đáp</h2>
+      <p class="sub">Nhận ticket, trả lời học sinh và cập nhật trạng thái.</p>
+      <div class="t-stats" style="margin-bottom:14px">
+        <div class="t-stat"><b id="tkPending">0</b><span>Đang chờ</span></div>
+        <div class="t-stat"><b id="tkProgress">0</b><span>Đang xử lý</span></div>
+        <div class="t-stat"><b id="tkResolved">0</b><span>Đã duyệt</span></div>
+        <div class="t-stat"><b id="tkTotal">0</b><span>Tổng</span></div>
+      </div>
+      <div class="t-form" style="margin-bottom:12px;flex-wrap:wrap">
+        <select id="tkFilter" style="border:1px solid #c5d4e6;border-radius:10px;padding:9px 12px;font:inherit">
+          <option value="open">Đang mở (chờ + xử lý)</option>
+          <option value="pending">Chỉ đang chờ</option>
+          <option value="progress">Chỉ đang xử lý</option>
+          <option value="resolved">Đã duyệt</option>
+          <option value="all">Tất cả</option>
+        </select>
+        <button type="button" class="t-btn" id="tkRefresh"><i class="cil-reload"></i> Làm mới</button>
+      </div>
+      <div id="tkList" class="t-table-wrap"></div>
+    </section>
+
+
+    <section class="t-card" id="teacherNotifSection" hidden>
+      <h2><i class="cil-bell"></i> Thông báo giáo viên</h2>
+      <p class="sub">Thông báo chung và thông báo riêng gửi tới giáo viên.</p>
+      <div id="teacherNotifList" style="margin-top:8px"></div>
+    </section>
+
+    <section class="t-card" id="adminNotifyTeachersSection" hidden>
+      <h2><i class="cil-envelope-closed"></i> Gửi thông báo cho giáo viên</h2>
+      <p class="sub">Chỉ admin (hoặc người có quyền). Giáo viên nhận trong mục Thông báo giáo viên.</p>
+      <form class="t-form stack" id="notifyTeachersForm">
+        <label>Tiêu đề<input type="text" id="ntTitle" maxlength="80" required placeholder="Tiêu đề"></label>
+        <label>Nội dung<input type="text" id="ntBody" maxlength="240" required placeholder="Nội dung"></label>
+        <label>Gửi tới
+          <select id="ntTo" style="border:1.5px solid #c5d4e6;border-radius:10px;height:42px;padding:0 14px;font:inherit">
+            <option value="all_teachers">Tất cả giáo viên</option>
+          </select>
+        </label>
+        <div class="profile-btns"><button type="submit" class="t-btn primary">Gửi</button></div>
+      </form>
+    </section>
+      </div><!-- /.panel-main -->
+    </div><!-- /.panel-shell -->
+  </main>
+
+  
+  <div class="perm-modal" id="permModal" hidden>
+    <div class="perm-box">
+      <h3 id="permModalTitle">Phân quyền</h3>
+      <p class="sub" id="permModalSub" style="margin:0">Chọn các quyền được cấp.</p>
+      <div class="perm-list" id="permList"></div>
+      <div class="perm-actions">
+        <button type="button" class="t-btn" id="permCancel">Hủy</button>
+        <button type="button" class="t-btn primary" id="permSave">Lưu quyền</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-toast" id="authToast" hidden></div>
+  <script src="js/api-config.js"></script><script src="js/auth.js"></script><script src="js/user-settings.js"></script>
+  <script>
+    const session = Auth.requireAuth({ staffOnly: true });
+    if (!session) throw new Error('redirect');
+    const isAdmin = session.role === 'admin';
+    const isManager = session.role === 'manager';
+    const isTeacher = session.role === 'teacher';
+    const myId = session.id || null;
+    const myPerms = isAdmin ? Auth.ALL_PERM_KEYS.slice() : (session.permissions || []);
+    function can(p) { return Auth.hasPerm(p, session); }
+
+    document.getElementById('panelTitle').textContent =
+      isAdmin ? 'Panel Quản trị viên' : (isManager ? 'Panel Quản lí' : 'Panel Giáo viên');
+    document.getElementById('roleLabel').textContent = isAdmin
+      ? 'Toàn quyền cài đặt website'
+      : (isManager ? 'Theo quyền được cấp' : 'Upload · Thư viện · Thống kê');
+    document.getElementById('statRole').textContent = isAdmin ? 'Admin' : (isManager ? 'QL' : 'GV');
+    document.getElementById('toolsHint').textContent = isAdmin
+      ? 'Đầy đủ chức năng Cài đặt: Upload, Thư viện, Nhạc, Thống kê, avatar…'
+      : (isManager ? 'Các công cụ theo quyền được cấp.' : 'Chỉ Upload, Thư viện và Thống kê (không có Nhạc / cài đặt toàn bộ).');
+    document.getElementById('stuCreateHint').textContent = isAdmin
+      ? 'Admin tạo học sinh (gán vào Admin). Mỗi giáo viên có danh sách HS riêng — dùng Quản lý HS ở bảng giáo viên.'
+      : 'Học sinh bạn tạo chỉ hiện trong danh sách của bạn. Học sinh đăng nhập tab Học sinh trên trang login.';
+
+    const toolBtns = document.getElementById('toolBtns');
+    function addTool(href, html, cls) {
+      const a = document.createElement('a');
+      a.className = cls || 't-btn primary';
+      a.href = href;
+      a.innerHTML = html;
+      toolBtns.appendChild(a);
+    }
+    if (isAdmin || can('music')) addTool('admin-panel.html?tab=music', '<i class="cil-music-note"></i> Nhạc');
+    if (isAdmin || can('settings')) addTool('admin-panel.html?tab=upload', '<i class="cil-cog"></i> Toàn bộ Cài đặt', 't-btn');
+
+    if (isAdmin || can('manage_accounts')) {
+      document.getElementById('ownerColHead').hidden = false;
+      document.getElementById('studentListTitle').textContent = 'Danh sách học sinh (tất cả)';
+    }
+    if (!isAdmin && !can('create_teacher') && !can('manage_accounts')) {
+      document.getElementById('teacherCreateSection').style.display = 'none';
+      document.getElementById('teacherListSection').style.display = 'none';
+    } else if (!isAdmin && !can('create_teacher')) {
+      document.getElementById('teacherCreateSection').style.display = 'none';
+    }
+    if (isAdmin) {
+      const ap = Auth.getAdminProfile();
+      document.getElementById('adminUsername').value = ap.username;
+      document.getElementById('adminPassword').value = ap.password;
+    }
+
+    // Hồ sơ chính: GV + QL (admin dùng Hồ sơ quản trị riêng)
+    if (isTeacher || isManager) {
+      try { loadProfile(); } catch (_) {}
+    }
+
+    function loadProfile() {
+      const t = isManager
+        ? (Auth.getManagerById(myId) || null)
+        : (Auth.getTeacherById(myId) || null);
+      if (!t) return;
+      const av = (Auth.getTeacherAvatar && Auth.getTeacherAvatar(myId)) || 'assets/images/avatar.gif';
+      document.getElementById('profileAvatar').src = av;
+      document.getElementById('profileName').textContent = t.username;
+      document.getElementById('profileCode').textContent = 'Mã mời: ' + (t.inviteCode || '—');
+      document.getElementById('profileUsername').value = t.username;
+      document.getElementById('profileInvite').value = t.inviteCode || '';
+    }
+
+    document.getElementById('btnChangeAvatar').addEventListener('click', () => {
+      document.getElementById('avatarFile').click();
+    });
+    document.getElementById('avatarFile').addEventListener('change', e => {
+      const f = e.target.files && e.target.files[0];
+      if (!f || isAdmin) return;
+      if (f.size > 1.5 * 1024 * 1024) {
+        Auth.toast('Ảnh quá lớn (tối đa ~1.5MB)', true);
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        const r = Auth.setTeacherAvatar(myId, reader.result);
+        if (r.ok) {
+          document.getElementById('profileAvatar').src = reader.result;
+          Auth.toast('Đã đổi avatar');
+        }
+      };
+      reader.readAsDataURL(f);
+      e.target.value = '';
+    });
+    document.getElementById('btnResetAvatar').addEventListener('click', () => {
+      if (isAdmin) return;
+      Auth.setTeacherAvatar(myId, null);
+      document.getElementById('profileAvatar').src = 'assets/images/avatar.gif';
+      Auth.toast('Đã khôi phục avatar');
+    });
+    // Chỉ cho phép A–Z a–z 0–9 @ khi gõ mật khẩu / mã mời
+    function bindPassInput(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('input', () => {
+        const cleaned = el.value.replace(/[^A-Za-z0-9@\-]/g, '');
+        if (cleaned !== el.value) el.value = cleaned;
+      });
+      el.addEventListener('paste', e => {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData('text') || '';
+        const cleaned = text.replace(/[^A-Za-z0-9@\-]/g, '');
+        const start = el.selectionStart || 0;
+        const end = el.selectionEnd || 0;
+        el.value = el.value.slice(0, start) + cleaned + el.value.slice(end);
+      });
+    }
+    bindPassInput('profileInvite');
+    bindPassInput('adminPassword');
+
+    // Hiện / ẩn mã mời & mật khẩu (cùng màu mắt xanh đậm)
+    document.querySelectorAll('.pass-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const wrap = btn.closest('.pass-wrap');
+        const input = wrap && wrap.querySelector('input');
+        if (!input) return;
+        const show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+        btn.setAttribute('aria-label', show ? 'Ẩn' : 'Hiện');
+        btn.innerHTML = show ? '<svg class="pass-eye-ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M2.1 3.5 3.5 2.1l18.4 18.4-1.4 1.4-3.1-3.1A11.5 11.5 0 0 1 12 19c-7 0-10-7-10-7a18.6 18.6 0 0 1 5.2-5.6L2.1 3.5zM12 7a5 5 0 0 1 5 5c0 .7-.1 1.3-.4 1.9l-6.5-6.5c.6-.3 1.2-.4 1.9-.4zm-7.5 5s2.2 4.5 7.5 4.5c.8 0 1.5-.1 2.2-.3l-1.6-1.6A5 5 0 0 1 7.8 9.4L6.1 7.7C4.3 9 3.2 10.7 2.5 12z"/></svg>' : '<svg class="pass-eye-ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>';
+      });
+    });
+
+    document.getElementById('profileForm').addEventListener('submit', e => {
+      e.preventDefault();
+      if (isAdmin) return;
+      const kind = isManager ? 'manager' : 'teacher';
+      const inv = document.getElementById('profileInvite').value.trim();
+      if (Auth.validatePassChars) {
+        const bad = Auth.validatePassChars(inv, 'Mã mời');
+        if (bad) return Auth.toast(bad, true);
+      }
+      const r = Auth.updateAccount(kind, myId, {
+        username: document.getElementById('profileUsername').value,
+        inviteCode: inv
+      });
+      const out = document.getElementById('profileResult');
+      out.hidden = false;
+      if (!r.ok) {
+        out.style.color = '#9b2c2c';
+        out.textContent = r.msg;
+        Auth.toast(r.msg, true);
+        return;
+      }
+      out.style.color = '#0d3a6e';
+      out.textContent = 'Đã lưu hồ sơ.';
+      Auth.toast('Đã lưu hồ sơ');
+      loadProfile();
+    });
+    document.getElementById('btnRegenInvite').addEventListener('click', () => {
+      if (isAdmin) return;
+      if (!confirm('Tạo mã mời mới? Mã cũ sẽ không dùng được.')) return;
+      const kind = isManager ? 'manager' : 'teacher';
+      const r = Auth.resetInvite(kind, myId);
+      if (r.ok) {
+        document.getElementById('profileInvite').value = r.account.inviteCode;
+        loadProfile();
+        Auth.toast('Mã mới: ' + r.account.inviteCode);
+      }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => Auth.logout());
+
+    function fmtDate(ts){ try{return new Date(ts).toLocaleString('vi-VN')}catch{return '—'} }
+    function escapeHtml(str){return String(str||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+    function ownerLabel(ownerId) {
+      if (!ownerId || ownerId === 'admin') return 'Admin';
+      const t = Auth.getTeacherById(ownerId);
+      return t ? t.username : ownerId;
+    }
+
+    function studentListForView() {
+      if (isAdmin) return Auth.getStudents();
+      return Auth.getStudentsByOwner(myId);
+    }
+
+    function renderStudents() {
+      const list = studentListForView().slice().sort((a,b)=>(b.created||0)-(a.created||0));
+      document.getElementById('statStudents').textContent = list.length;
+      const body = document.getElementById('studentBody');
+      const colSpan = isAdmin ? 5 : 4;
+      if (!list.length) {
+        body.innerHTML = '<tr><td colspan="' + colSpan + '" class="t-empty">Chưa có tài khoản.</td></tr>';
+        return;
+      }
+      body.innerHTML = list.map(s => '<tr data-id="' + s.id + '" data-kind="student">' +
+        '<td><strong>' + escapeHtml(s.username) + '</strong></td>' +
+        '<td><span class="code">' + escapeHtml(s.inviteCode) + '</span></td>' +
+        (isAdmin ? '<td><span class="owner-tag">' + escapeHtml(ownerLabel(s.ownerId)) + '</span></td>' : '') +
+        '<td>' + fmtDate(s.created) + '</td>' +
+        '<td class="actions">' +
+          '<button type="button" class="t-btn" data-act="copy" data-user="' + escapeHtml(s.username) + '" data-code="' + escapeHtml(s.inviteCode) + '">Sao chép</button> ' +
+          '<button type="button" class="t-btn" data-act="reset">Đổi mã</button> ' +
+          '<button type="button" class="t-btn danger" data-act="del">Xóa</button>' +
+        '</td></tr>').join('');
+    }
+
+    let manageTeacherId = null;
+
+    function renderTeachers() {
+      if (!isAdmin) {
+        document.getElementById('statTeachers').textContent = '—';
+        return;
+      }
+      const list = Auth.getTeachers().slice().sort((a,b)=>(b.created||0)-(a.created||0));
+      document.getElementById('statTeachers').textContent = list.length;
+      const body = document.getElementById('teacherBody');
+      if (!list.length) {
+        body.innerHTML = '<tr><td colspan="4" class="t-empty">Chưa có tài khoản.</td></tr>';
+        return;
+      }
+      body.innerHTML = list.map(s => {
+        const hsCount = Auth.getStudentsByOwner(s.id).length;
+        const pc = (s.permissions || []).length;
+        return '<tr data-id="' + s.id + '" data-kind="teacher">' +
+          '<td><strong>' + escapeHtml(s.username) + '</strong> <span class="owner-tag">' + hsCount + ' HS</span>' +
+          (pc ? ' <span class="owner-tag">' + pc + ' quyền</span>' : '') + '</td>' +
+          '<td><span class="code">' + escapeHtml(s.inviteCode) + '</span></td>' +
+          '<td>' + fmtDate(s.created) + '</td>' +
+          '<td class="actions">' +
+            '<button type="button" class="t-btn primary" data-act="manage">Quản lý HS</button> ' +
+            (isAdmin ? '<button type="button" class="t-btn" data-act="perms">Quyền</button> ' : '') +
+            '<button type="button" class="t-btn" data-act="copy" data-user="' + escapeHtml(s.username) + '" data-code="' + escapeHtml(s.inviteCode) + '">Sao chép</button> ' +
+            '<button type="button" class="t-btn" data-act="reset">Đổi mã</button> ' +
+            '<button type="button" class="t-btn danger" data-act="del">Xóa</button>' +
+          '</td></tr>';
+      }).join('');
+    }
+
+    function renderManageStudents() {
+      const box = document.getElementById('manageTeacherBox');
+      if (!manageTeacherId) {
+        box.hidden = true;
+        return;
+      }
+      const t = Auth.getTeacherById(manageTeacherId);
+      if (!t) {
+        box.hidden = true;
+        manageTeacherId = null;
+        return;
+      }
+      box.hidden = false;
+      document.getElementById('manageTeacherTitle').textContent =
+        'Học sinh của giáo viên: ' + t.username;
+      const list = Auth.getStudentsByOwner(manageTeacherId).slice().sort((a,b)=>(b.created||0)-(a.created||0));
+      const body = document.getElementById('manageStudentBody');
+      if (!list.length) {
+        body.innerHTML = '<tr><td colspan="4" class="t-empty">Chưa có học sinh.</td></tr>';
+        return;
+      }
+      body.innerHTML = list.map(s => '<tr data-id="' + s.id + '" data-kind="student" data-manage="1">' +
+        '<td><strong>' + escapeHtml(s.username) + '</strong></td>' +
+        '<td><span class="code">' + escapeHtml(s.inviteCode) + '</span></td>' +
+        '<td>' + fmtDate(s.created) + '</td>' +
+        '<td class="actions">' +
+          '<button type="button" class="t-btn" data-act="copy" data-user="' + escapeHtml(s.username) + '" data-code="' + escapeHtml(s.inviteCode) + '">Sao chép</button> ' +
+          '<button type="button" class="t-btn" data-act="reset">Đổi mã</button> ' +
+          '<button type="button" class="t-btn danger" data-act="del">Xóa</button>' +
+        '</td></tr>').join('');
+    }
+
+    function renderManagers() {
+      const body = document.getElementById('managerBody');
+      if (!body) return;
+      if (!isAdmin) return;
+      const list = Auth.getManagers().slice().sort((a,b)=>(b.created||0)-(a.created||0));
+      if (!list.length) {
+        body.innerHTML = '<tr><td colspan="5" class="t-empty">Chưa có tài khoản quản lí.</td></tr>';
+        return;
+      }
+      body.innerHTML = list.map(m => {
+        const pc = (m.permissions || []).length;
+        return '<tr data-id="' + m.id + '" data-kind="manager">' +
+          '<td><strong>' + escapeHtml(m.username) + '</strong></td>' +
+          '<td><span class="code">' + escapeHtml(m.inviteCode) + '</span></td>' +
+          '<td><span class="owner-tag">' + pc + ' quyền</span></td>' +
+          '<td>' + fmtDate(m.created) + '</td>' +
+          '<td class="actions">' +
+            '<button type="button" class="t-btn" data-act="perms">Quyền</button> ' +
+            '<button type="button" class="t-btn" data-act="copy" data-user="' + escapeHtml(m.username) + '" data-code="' + escapeHtml(m.inviteCode) + '">Sao chép</button> ' +
+            '<button type="button" class="t-btn" data-act="reset">Đổi mã</button> ' +
+            '<button type="button" class="t-btn danger" data-act="del">Xóa</button>' +
+          '</td></tr>';
+      }).join('');
+    }
+
+    function renderAll() {
+      renderStudents();
+      renderTeachers();
+      renderManageStudents();
+      renderManagers();
+    }
+
+    /* —— Permission modal —— */
+    let permTarget = null; // { kind, id }
+    function openPermModal(kind, id) {
+      permTarget = { kind, id };
+      const acc = kind === 'manager' ? Auth.getManagerById(id) : Auth.getTeacherById(id);
+      if (!acc) return;
+      document.getElementById('permModalTitle').textContent =
+        'Phân quyền: ' + acc.username;
+      document.getElementById('permModalSub').textContent =
+        kind === 'manager'
+          ? 'Chọn quyền cho tài khoản quản lí này.'
+          : 'Chọn quyền quản trị bổ sung cho giáo viên này.';
+      const cur = acc.permissions || [];
+      const list = document.getElementById('permList');
+      list.innerHTML = Auth.ALL_PERM_KEYS.map(k => {
+        const checked = cur.indexOf(k) >= 0 ? ' checked' : '';
+        return '<label><input type="checkbox" data-perm="' + k + '"' + checked + '> ' +
+          escapeHtml(Auth.PERMS[k] || k) + '</label>';
+      }).join('');
+      document.getElementById('permModal').hidden = false;
+    }
+    document.getElementById('permCancel').addEventListener('click', () => {
+      document.getElementById('permModal').hidden = true;
+      permTarget = null;
+    });
+    document.getElementById('permSave').addEventListener('click', () => {
+      if (!permTarget || !isAdmin) return;
+      const selected = [...document.querySelectorAll('#permList input:checked')].map(i => i.dataset.perm);
+      const r = Auth.setPermissions(permTarget.kind, permTarget.id, selected);
+      if (!r.ok) return Auth.toast(r.msg, true);
+      Auth.toast('Đã lưu quyền');
+      document.getElementById('permModal').hidden = true;
+      permTarget = null;
+      renderAll();
+    });
+
+    /* —— Admin profile —— */
+    const adminProfileForm = document.getElementById('adminProfileForm');
+    if (adminProfileForm) {
+      adminProfileForm.addEventListener('submit', e => {
+        e.preventDefault();
+        if (!isAdmin) return;
+        const r = Auth.setAdminProfile({
+          username: document.getElementById('adminUsername').value,
+          password: document.getElementById('adminPassword').value
+        });
+        const out = document.getElementById('adminProfileResult');
+        out.hidden = false;
+        if (!r.ok) {
+          out.style.color = '#9b2c2c';
+          out.textContent = r.msg;
+          Auth.toast(r.msg, true);
+          return;
+        }
+        out.style.color = '#0d3a6e';
+        out.textContent = 'Đã lưu hồ sơ quản trị.';
+        Auth.toast('Đã lưu hồ sơ admin');
+        document.getElementById('panelTitle').textContent = 'Panel Quản trị viên';
+      });
+    }
+
+    /* —— Create manager —— */
+    const createManagerForm = document.getElementById('createManagerForm');
+    if (createManagerForm) {
+      createManagerForm.addEventListener('submit', e => {
+        e.preventDefault();
+        if (!isAdmin) return;
+        const r = Auth.createAccount('manager', document.getElementById('newManager').value, null, []);
+        const out = document.getElementById('mgrResult');
+        out.hidden = false;
+        if (!r.ok) {
+          out.style.color = '#9b2c2c';
+          out.textContent = r.msg;
+          Auth.toast(r.msg, true);
+          return;
+        }
+        out.style.color = '#0d3a6e';
+        out.innerHTML = 'QL: <strong>' + escapeHtml(r.account.username) + '</strong> — <span class="code">' +
+          escapeHtml(r.account.inviteCode) + '</span> (nhấn Quyền để cấp quyền)';
+        document.getElementById('newManager').value = '';
+        Auth.toast('Đã tạo quản lí — hãy cấp quyền');
+        openPermModal('manager', r.account.id);
+        renderAll();
+      });
+    }
+
+    document.getElementById('createStudentForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const ownerId = isAdmin ? 'admin' : myId;
+      const r = Auth.createAccount('student', document.getElementById('newStudent').value, ownerId);
+      const out = document.getElementById('stuResult');
+      out.hidden = false;
+      if (!r.ok) {
+        out.style.color = '#9b2c2c';
+        out.textContent = r.msg;
+        Auth.toast(r.msg, true);
+        return;
+      }
+      out.style.color = '#0d3a6e';
+      out.innerHTML = 'HS: <strong>' + escapeHtml(r.account.username) + '</strong> — <span class="code">' + escapeHtml(r.account.inviteCode) + '</span>';
+      document.getElementById('newStudent').value = '';
+      Auth.toast('Đã tạo học sinh');
+      renderAll();
+    });
+
+    document.getElementById('createTeacherForm').addEventListener('submit', e => {
+      e.preventDefault();
+      if (!isAdmin) return Auth.toast('Chỉ admin được tạo giáo viên', true);
+      const r = Auth.createAccount('teacher', document.getElementById('newTeacher').value);
+      const out = document.getElementById('teaResult');
+      out.hidden = false;
+      if (!r.ok) {
+        out.style.color = '#9b2c2c';
+        out.textContent = r.msg;
+        Auth.toast(r.msg, true);
+        return;
+      }
+      out.style.color = '#0d3a6e';
+      out.innerHTML = 'GV: <strong>' + escapeHtml(r.account.username) + '</strong> — <span class="code">' + escapeHtml(r.account.inviteCode) + '</span>';
+      document.getElementById('newTeacher').value = '';
+      Auth.toast('Đã tạo giáo viên');
+      renderAll();
+    });
+
+    document.getElementById('manageCreateStudentForm').addEventListener('submit', e => {
+      e.preventDefault();
+      if (!isAdmin || !manageTeacherId) return;
+      const r = Auth.createAccount('student', document.getElementById('manageNewStudent').value, manageTeacherId);
+      if (!r.ok) {
+        Auth.toast(r.msg, true);
+        return;
+      }
+      document.getElementById('manageNewStudent').value = '';
+      Auth.toast('Đã tạo học sinh cho GV');
+      renderAll();
+    });
+
+    document.getElementById('closeManageBtn').addEventListener('click', () => {
+      manageTeacherId = null;
+      renderManageStudents();
+    });
+
+    document.body.addEventListener('click', e => {
+      const btn = e.target.closest('[data-act]');
+      if (!btn) return;
+      const tr = btn.closest('tr');
+      const id = tr && tr.dataset.id;
+      const kind = tr && tr.dataset.kind;
+      const act = btn.dataset.act;
+
+      if (act === 'copy') {
+        const t = 'Tên: ' + btn.dataset.user + String.fromCharCode(10) + 'Mã mời: ' + btn.dataset.code;
+        if (navigator.clipboard) navigator.clipboard.writeText(t).then(() => Auth.toast('Đã sao chép')).catch(() => Auth.toast(t));
+        else Auth.toast(t);
+        return;
+      }
+      if (act === 'perms' && id && (kind === 'teacher' || kind === 'manager')) {
+        if (!isAdmin) return Auth.toast('Chỉ admin được phân quyền', true);
+        openPermModal(kind, id);
+        return;
+      }
+      if (act === 'manage' && kind === 'teacher' && id) {
+        manageTeacherId = id;
+        renderManageStudents();
+        document.getElementById('manageTeacherBox').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return;
+      }
+      if (act === 'reset' && id) {
+        if (!confirm('Đổi mã mời?')) return;
+        const r = Auth.resetInvite(kind, id);
+        if (r.ok) {
+          Auth.toast('Mã mới: ' + r.account.inviteCode);
+          renderAll();
+        }
+        return;
+      }
+      if (act === 'del' && id) {
+        if (!confirm(kind === 'teacher'
+          ? 'Xóa giáo viên? Toàn bộ học sinh của GV này cũng sẽ bị xóa.'
+          : 'Xóa tài khoản?')) return;
+        Auth.deleteAccount(kind, id);
+        if (kind === 'teacher' && manageTeacherId === id) manageTeacherId = null;
+        Auth.toast('Đã xóa');
+        renderAll();
+      }
+    });
+
+    renderAll();
+
+    /* —— Ticket staff panel —— */
+    const TK_KEY = 'giahuy-tickets-v1';
+    const statusMap = { pending: 'Đang chờ', progress: 'Đang xử lý', resolved: 'Đã duyệt', rejected: 'Từ chối' };
+    function tkGet() {
+      try { return JSON.parse(localStorage.getItem(TK_KEY) || '[]'); } catch { return []; }
+    }
+    function tkSet(list) { localStorage.setItem(TK_KEY, JSON.stringify(list)); }
+    function tkFmt(t) {
+      try { return new Date(t).toLocaleString('vi-VN'); } catch { return '—'; }
+    }
+    function renderTickets() {
+      const listEl = document.getElementById('tkList');
+      if (!listEl) return;
+      const all = tkGet();
+      document.getElementById('tkPending').textContent = all.filter(x => x.status === 'pending').length;
+      document.getElementById('tkProgress').textContent = all.filter(x => x.status === 'progress').length;
+      document.getElementById('tkResolved').textContent = all.filter(x => x.status === 'resolved').length;
+      document.getElementById('tkTotal').textContent = all.length;
+      const filter = (document.getElementById('tkFilter') || {}).value || 'open';
+      let rows = all.slice().sort((a, b) => (b.updated || b.created || 0) - (a.updated || a.created || 0));
+      if (filter === 'open') rows = rows.filter(x => x.status === 'pending' || x.status === 'progress');
+      else if (filter !== 'all') rows = rows.filter(x => x.status === filter);
+      if (!rows.length) {
+        listEl.innerHTML = '<p class="t-empty" style="padding:16px;text-align:center;color:#5a7390">Không có ticket.</p>';
+        return;
+      }
+      listEl.innerHTML = rows.map(x => {
+        const replies = x.replies || [];
+        const replyHtml = replies.length
+          ? '<div class="tk-replies">' + replies.map(r =>
+              '<div><strong>Phản hồi</strong> · ' + tkFmt(r.time) + '<br>' + escapeHtml(r.text) + '</div>'
+            ).join('') + '</div>'
+          : '';
+        return '<div class="tk-item" data-tk="' + escapeHtml(x.id) + '">' +
+          '<div class="tk-item-top">' +
+            '<div><div class="tk-id">' + escapeHtml(x.id) + '</div>' +
+            '<div class="tk-meta">' + escapeHtml(x.title) + ' · ' + escapeHtml(x.name || 'Ẩn danh') + ' · ' + tkFmt(x.created) + '</div></div>' +
+            '<span class="tk-pill ' + escapeHtml(x.status) + '">' + escapeHtml(statusMap[x.status] || x.status) + '</span>' +
+          '</div>' +
+          '<div class="tk-msg">' + escapeHtml(x.message) + '</div>' +
+          replyHtml +
+          '<div class="tk-actions">' +
+            (x.status === 'pending' ? '<button type="button" class="t-btn primary" data-tk-act="progress">Nhận xử lý</button>' : '') +
+            (x.status !== 'resolved' ? '<button type="button" class="t-btn primary" data-tk-act="resolved">Đã duyệt</button>' : '') +
+            (x.status !== 'pending' ? '<button type="button" class="t-btn" data-tk-act="pending">Đặt lại chờ</button>' : '') +
+            '<button type="button" class="t-btn" data-tk-act="reply">Trả lời</button>' +
+            (isAdmin ? '<button type="button" class="t-btn danger" data-tk-act="del">Xóa</button>' : '') +
+          '</div>' +
+          '<div class="tk-reply" id="tkReply-' + escapeHtml(x.id) + '">' +
+            '<textarea placeholder="Nhập phản hồi..."></textarea>' +
+            '<div class="tk-actions"><button type="button" class="t-btn primary" data-tk-act="send">Gửi phản hồi</button>' +
+            '<button type="button" class="t-btn" data-tk-act="cancel">Hủy</button></div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+    document.getElementById('tkRefresh')?.addEventListener('click', renderTickets);
+    document.getElementById('tkFilter')?.addEventListener('change', renderTickets);
+    document.getElementById('tkList')?.addEventListener('click', e => {
+      const btn = e.target.closest('[data-tk-act]');
+      if (!btn) return;
+      const item = btn.closest('.tk-item');
+      const id = item && item.dataset.tk;
+      if (!id) return;
+      const act = btn.dataset.tkAct;
+      const all = tkGet();
+      const i = all.findIndex(t => t.id === id);
+      if (i < 0) return;
+      if (act === 'progress' || act === 'resolved' || act === 'pending') {
+        all[i].status = act;
+        all[i].updated = Date.now();
+        tkSet(all);
+        Auth.toast(statusMap[act] || act);
+        renderTickets();
+        return;
+      }
+      if (act === 'reply') {
+        const box = document.getElementById('tkReply-' + id);
+        if (box) box.classList.toggle('open');
+        return;
+      }
+      if (act === 'cancel') {
+        const box = document.getElementById('tkReply-' + id);
+        if (box) { box.classList.remove('open'); const ta = box.querySelector('textarea'); if (ta) ta.value = ''; }
+        return;
+      }
+      if (act === 'send') {
+        const box = document.getElementById('tkReply-' + id);
+        const ta = box && box.querySelector('textarea');
+        const text = (ta && ta.value || '').trim();
+        if (!text) return Auth.toast('Nhập nội dung phản hồi', true);
+        all[i].replies = all[i].replies || [];
+        all[i].replies.push({ text, time: Date.now(), by: session.username || 'Staff' });
+        all[i].updated = Date.now();
+        if (all[i].status === 'pending') all[i].status = 'progress';
+        tkSet(all);
+        try {
+          const targetName = all[i].name;
+          if (window.GiahuyNotif && targetName && targetName !== 'Ẩn danh') {
+            window.GiahuyNotif.push({
+              title: 'Ticket được trả lời: ' + (all[i].title || all[i].id),
+              body: text.slice(0, 160),
+              type: 'ticket',
+              to: targetName,
+              from: session.username || 'Hỗ trợ'
+            });
+          }
+        } catch (_) {}
+        Auth.toast('Đã gửi phản hồi');
+        renderTickets();
+        return;
+      }
+      if (act === 'del' && isAdmin) {
+        if (!confirm('Xóa ticket này?')) return;
+        all.splice(i, 1);
+        tkSet(all);
+        Auth.toast('Đã xóa ticket');
+        renderTickets();
+      }
+    });
+    renderTickets();
+
+    /* —— Classes + Schedule —— */
+    let activeClassId = null;
+    let schCursor = new Date(); schCursor.setDate(1);
+    let schType = 'online';
+    let stuSchId = null;
+    let stuSchCursor = new Date(); stuSchCursor.setDate(1);
+    let stuSchType = 'online';
+
+    function canSchedule() {
+      return isAdmin || isTeacher || can('schedule');
+    }
+
+    function teacherOwnerId() {
+      if (isAdmin) return 'admin';
+      return myId || session.id;
+    }
+
+    function renderClasses() {
+      const box = document.getElementById('classList');
+      if (!box) return;
+      if (!canSchedule() && !isTeacher && !isAdmin && !isManager) {
+        document.getElementById('classSection').style.display = 'none';
+        return;
+      }
+      let list = isAdmin
+        ? Auth.getClasses()
+        : Auth.getClassesByTeacher(teacherOwnerId());
+      // managers with schedule can see all or by permission - show all for admin-like manage
+      if (isManager && can('schedule') && !isAdmin) {
+        list = Auth.getClasses();
+      }
+      list = list.slice().sort((a,b)=>(b.created||0)-(a.created||0));
+      if (!list.length) {
+        box.innerHTML = '<p class="t-empty" style="padding:12px;color:#5a7390">Chưa có lớp. Hãy tạo lớp trước.</p>';
+        return;
+      }
+      box.innerHTML = list.map(c => {
+        const n = Auth.getStudentsByClass(c.id).length;
+        const tea = c.teacherId === 'admin' ? 'Admin' : ((Auth.getTeacherById(c.teacherId)||{}).username || c.teacherId);
+        return '<div class="cls-item" data-cid="' + escapeHtml(c.id) + '">' +
+          '<div><strong>' + escapeHtml(c.name) + '</strong>' +
+          '<div class="meta">' + n + ' học sinh' + (isAdmin ? ' · GV: ' + escapeHtml(tea) : '') + '</div></div>' +
+          '<div class="tk-actions">' +
+          '<button type="button" class="t-btn primary" data-cls-act="open">Mở lớp</button> ' +
+          '<button type="button" class="t-btn danger" data-cls-act="del">Xóa</button>' +
+          '</div></div>';
+      }).join('');
+    }
+
+    document.getElementById('createClassForm')?.addEventListener('submit', e => {
+      e.preventDefault();
+      if (!canSchedule() && !isTeacher && !isAdmin) return Auth.toast('Không có quyền', true);
+      const owner = isAdmin ? 'admin' : (isManager ? 'admin' : teacherOwnerId());
+      // teachers create under their id
+      const tid = (isTeacher || (!isAdmin && !isManager)) ? teacherOwnerId() : 'admin';
+      const realOwner = isTeacher ? myId : (isAdmin || isManager ? 'admin' : myId);
+      // Better: teacher uses myId; admin uses admin; manager uses admin for classes they create
+      let teacherId = 'admin';
+      if (session.role === 'teacher') teacherId = myId;
+      else if (isAdmin) teacherId = 'admin';
+      else if (isManager) teacherId = 'admin';
+
+      const r = Auth.createClass(document.getElementById('newClassName').value, teacherId);
+      const out = document.getElementById('classResult');
+      out.hidden = false;
+      if (!r.ok) { out.style.color = '#9b2c2c'; out.textContent = r.msg; return Auth.toast(r.msg, true); }
+      out.style.color = '#0d3a6e';
+      out.textContent = 'Đã tạo lớp ' + r.class.name;
+      document.getElementById('newClassName').value = '';
+      Auth.toast('Đã tạo lớp');
+      renderClasses();
+    });
+
+    /* —— Panel internal navigation (thống nhất 1 panel) —— */
+    const viewMap = {
+      // GV/QL: stats + hồ sơ chính · Admin không dùng
+      profile: ['panelStatsCard', 'profileSection'],
+      // Chỉ admin
+      adminProfile: ['panelStatsCard', 'adminProfileSection'],
+      // Gộp học sinh + lớp
+      school: ['studentCreateSection', 'studentListSection', 'classSection'],
+      tools: ['toolsSection'],
+      tickets: ['ticketStaffSection'],
+      teachers: ['teacherCreateSection', 'teacherListSection'],
+      managers: ['managerSection'],
+      announce: ['announceSection', 'adminNotifyTeachersSection'],
+      teacherNotif: ['teacherNotifSection'],
+      // legacy aliases
+      students: ['studentCreateSection', 'studentListSection', 'classSection'],
+      classes: ['studentCreateSection', 'studentListSection', 'classSection'],
+      overview: ['panelStatsCard', 'profileSection']
+    };
+
+    function setNavVisible(el, show) {
+      if (!el) return;
+      if (show) {
+        el.hidden = false;
+        el.style.display = '';
+      } else {
+        el.hidden = true;
+        el.style.display = 'none';
+      }
+    }
+
+    function hasAnyPerm(list) {
+      return list.some(p => can(p));
+    }
+
+    // Ẩn/hiện menu theo role + quyền (phần thêm quyền)
+    (function filterNavByRole() {
+      // Nhãn hồ sơ chính
+      const pl = document.getElementById('profileNavLabel');
+      if (pl) {
+        if (isTeacher) pl.textContent = 'Hồ sơ chính (Giáo viên)';
+        else if (isManager) pl.textContent = 'Hồ sơ chính (Quản lí)';
+        else pl.textContent = 'Hồ sơ chính';
+      }
+
+      document.querySelectorAll('#panelNav button[data-view]').forEach(btn => {
+        const role = btn.getAttribute('data-role') || '';
+        const permAttr = btn.getAttribute('data-perm') || '';
+        let show = true;
+
+        if (role === 'admin') {
+          show = isAdmin;
+        } else if (role === 'staff-profile') {
+          // Admin không có hồ sơ chính — chỉ GV / QL
+          show = isTeacher || isManager;
+        } else if (role === 'all-staff') {
+          show = isAdmin || isTeacher || isManager;
+        } else if (role === 'teacher-manager') {
+          show = isTeacher || isManager;
+        }
+
+        if (permAttr) {
+          const perms = permAttr.split('|').map(s => s.trim()).filter(Boolean);
+          // Admin luôn thấy; manager/teacher cần đúng quyền
+          show = isAdmin || hasAnyPerm(perms);
+        }
+
+        setNavVisible(btn, show);
+      });
+
+      // Ẩn nhãn nhóm nếu không còn nút nào
+      document.querySelectorAll('#panelNav .panel-nav-label').forEach(label => {
+        let sib = label.nextElementSibling;
+        let any = false;
+        while (sib && !sib.classList.contains('panel-nav-label')) {
+          if (sib.tagName === 'BUTTON' && !sib.hidden) any = true;
+          sib = sib.nextElementSibling;
+        }
+        setNavVisible(label, any);
+      });
+    })();
+
+    function hideAllPanelCards() {
+      document.querySelectorAll('#panelMain > .t-card').forEach(el => {
+        el.hidden = true;
+        if (el.style.display === 'none') el.style.display = '';
+      });
+      const detail = document.getElementById('classDetailSection');
+      const stuSch = document.getElementById('studentScheduleSection');
+      if (detail) detail.hidden = true;
+      if (stuSch) stuSch.hidden = true;
+    }
+
+    function showPanelView(name) {
+      if (name === 'overview') name = isAdmin ? 'adminProfile' : 'profile';
+      if (name === 'students' || name === 'classes') name = 'school';
+      if (!viewMap[name]) name = isAdmin ? 'adminProfile' : 'profile';
+
+      hideAllPanelCards();
+
+      (viewMap[name] || []).forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        // Admin không hiện form hồ sơ GV
+        if (id === 'profileSection' && isAdmin) return;
+        // GV/QL không hiện form admin
+        if (id === 'adminProfileSection' && !isAdmin) return;
+        el.hidden = false;
+        el.style.display = '';
+      });
+
+      document.querySelectorAll('#panelNav button[data-view]').forEach(b => {
+        const v = b.getAttribute('data-view');
+        b.classList.toggle('active', v === name || (name === 'school' && (v === 'students' || v === 'classes')));
+      });
+
+      // Chỉ cuộn vùng nội dung — không kéo cả trang (tránh sidebar nhảy)
+      const main = document.getElementById('panelMain');
+      if (main) main.scrollTop = 0;
+
+      try { localStorage.setItem('giahuy-panel-view', name); } catch (_) {}
+    }
+
+    document.getElementById('panelNav')?.addEventListener('click', function (e) {
+      const btn = e.target.closest('button[data-view]');
+      if (!btn || btn.hidden || btn.style.display === 'none') return;
+      e.preventDefault();
+      showPanelView(btn.getAttribute('data-view'));
+    });
+
+    // Trang mặc định theo role
+    let startView = isAdmin ? 'adminProfile' : 'profile';
+    try {
+      const saved = localStorage.getItem('giahuy-panel-view');
+      if (saved && viewMap[saved]) {
+        startView = saved;
+        if (saved === 'overview' || saved === 'profile') startView = isAdmin ? 'adminProfile' : 'profile';
+        if (saved === 'students' || saved === 'classes') startView = 'school';
+      }
+    } catch (_) {}
+    hideAllPanelCards();
+    showPanelView(startView);
+
+    document.getElementById('classList')?.addEventListener('click', e => {
+      const btn = e.target.closest('[data-cls-act]');
+      if (!btn) return;
+      const item = btn.closest('.cls-item');
+      const id = item && item.dataset.cid;
+      if (!id) return;
+      if (btn.dataset.clsAct === 'del') {
+        if (!confirm('Xóa lớp này? Học sinh trong lớp vẫn còn nhưng mất liên kết lớp.')) return;
+        Auth.deleteClass(id);
+        if (activeClassId === id) {
+          activeClassId = null;
+          document.getElementById('classDetailSection').hidden = true;
+        }
+        renderClasses();
+        Auth.toast('Đã xóa lớp');
+        return;
+      }
+      if (btn.dataset.clsAct === 'open') openClassDetail(id);
+    });
+
+    function openClassDetail(id) {
+      activeClassId = id;
+      const c = Auth.getClasses().find(x => x.id === id);
+      if (!c) return;
+      document.getElementById('classDetailSection').hidden = false;
+      document.getElementById('classDetailTitle').textContent = 'Lớp: ' + c.name;
+      document.getElementById('classDetailSub').textContent = 'Thêm học sinh vào lớp và gắn lịch chung.';
+      renderClassStudents();
+      renderSchCal();
+      document.getElementById('classDetailSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function renderClassStudents() {
+      const body = document.getElementById('classStudentBody');
+      if (!body || !activeClassId) return;
+      const list = Auth.getStudentsByClass(activeClassId);
+      if (!list.length) {
+        body.innerHTML = '<tr><td colspan="3" class="t-empty">Chưa có học sinh trong lớp.</td></tr>';
+        return;
+      }
+      body.innerHTML = list.map(s =>
+        '<tr data-sid="' + s.id + '"><td><strong>' + escapeHtml(s.username) + '</strong></td>' +
+        '<td><span class="code">' + escapeHtml(s.inviteCode) + '</span></td>' +
+        '<td class="actions">' +
+        '<button type="button" class="t-btn" data-stu-sch="' + s.id + '">Lịch riêng</button> ' +
+        '<button type="button" class="t-btn" data-act="copy" data-user="' + escapeHtml(s.username) + '" data-code="' + escapeHtml(s.inviteCode) + '">Sao chép</button> ' +
+        '<button type="button" class="t-btn danger" data-act="del" data-kind="student">Xóa</button>' +
+        '</td></tr>'
+      ).join('');
+    }
+
+    document.getElementById('classCreateStudentForm')?.addEventListener('submit', e => {
+      e.preventDefault();
+      if (!activeClassId) return;
+      const c = Auth.getClasses().find(x => x.id === activeClassId);
+      const ownerId = c ? c.teacherId : (isAdmin ? 'admin' : myId);
+      const r = Auth.createAccount('student', document.getElementById('classNewStudent').value, ownerId, null, activeClassId);
+      const out = document.getElementById('classStuResult');
+      out.hidden = false;
+      if (!r.ok) { out.style.color = '#9b2c2c'; out.textContent = r.msg; return Auth.toast(r.msg, true); }
+      out.style.color = '#0d3a6e';
+      out.innerHTML = 'HS: <strong>' + escapeHtml(r.account.username) + '</strong> — <span class="code">' + escapeHtml(r.account.inviteCode) + '</span>';
+      document.getElementById('classNewStudent').value = '';
+      Auth.toast('Đã thêm học sinh vào lớp');
+      renderClassStudents();
+      renderClasses();
+      renderAll();
+    });
+
+    document.getElementById('closeClassDetail')?.addEventListener('click', () => {
+      document.getElementById('classDetailSection').hidden = true;
+      activeClassId = null;
+    });
+
+    // Schedule type pickers
+    document.getElementById('schTypes')?.addEventListener('click', e => {
+      const b = e.target.closest('[data-type]');
+      if (!b) return;
+      schType = b.dataset.type;
+      document.querySelectorAll('#schTypes .sch-type-btn').forEach(x => x.classList.toggle('active', x === b));
+    });
+    document.getElementById('stuSchTypes')?.addEventListener('click', e => {
+      const b = e.target.closest('[data-type]');
+      if (!b) return;
+      stuSchType = b.dataset.type;
+      document.querySelectorAll('#stuSchTypes .sch-type-btn').forEach(x => x.classList.toggle('active', x === b));
+    });
+
+    function ymd(y, m, d) {
+      return y + '-' + String(m + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+    }
+
+    function renderSchCal() {
+      if (!activeClassId) return;
+      const y = schCursor.getFullYear(), m = schCursor.getMonth();
+      document.getElementById('schMonthLabel').textContent = 'Tháng ' + (m + 1) + '/' + y;
+      const events = Auth.getScheduleForClass(activeClassId);
+      const byDate = {};
+      events.forEach(ev => {
+        byDate[ev.date] = byDate[ev.date] || [];
+        byDate[ev.date].push(ev);
+      });
+      const firstDow = new Date(y, m, 1).getDay();
+      const startPad = (firstDow + 6) % 7;
+      const daysInMonth = new Date(y, m + 1, 0).getDate();
+      const today = new Date();
+      const dows = ['T2','T3','T4','T5','T6','T7','CN'];
+      let html = dows.map(d => '<div class="sch-dow">' + d + '</div>').join('');
+      for (let i = 0; i < startPad; i++) html += '<div class="sch-day mute"></div>';
+      for (let d = 1; d <= daysInMonth; d++) {
+        const key = ymd(y, m, d);
+        const isToday = today.getFullYear()===y && today.getMonth()===m && today.getDate()===d;
+        const list = byDate[key] || [];
+        const dots = list.map(e => '<i class="' + e.type + '"></i>').join('');
+        html += '<div class="sch-day' + (isToday?' today':'') + '" data-date="' + key + '">' + d +
+          (dots ? '<span class="dots">' + dots + '</span>' : '') + '</div>';
+      }
+      document.getElementById('schCal').innerHTML = html;
+      // event list for month
+      const monthEvents = events.filter(e => e.date.startsWith(y + '-' + String(m+1).padStart(2,'0')));
+      const el = document.getElementById('schEventList');
+      el.innerHTML = monthEvents.length ? monthEvents.sort((a,b)=>a.date.localeCompare(b.date)).map(e =>
+        '<div class="sch-event-row"><span>' + e.date + ' · <b>' + escapeHtml((Auth.SCHEDULE_TYPES||{})[e.type]||e.type) + '</b></span>' +
+        '<button type="button" class="t-btn danger" data-rm-sch="' + e.id + '">Xóa</button></div>'
+      ).join('') : '<p class="sub">Chưa có sự kiện tháng này.</p>';
+    }
+
+    document.getElementById('schPrev')?.addEventListener('click', () => { schCursor.setMonth(schCursor.getMonth()-1); renderSchCal(); });
+    document.getElementById('schNext')?.addEventListener('click', () => { schCursor.setMonth(schCursor.getMonth()+1); renderSchCal(); });
+
+    document.getElementById('schCal')?.addEventListener('click', e => {
+      const day = e.target.closest('.sch-day[data-date]');
+      if (!day || !activeClassId) return;
+      const r = Auth.addScheduleEvent({
+        date: day.dataset.date,
+        type: schType,
+        classId: activeClassId,
+        by: session.username
+      });
+      if (!r.ok) return Auth.toast(r.msg, true);
+      Auth.toast('Đã gắn lịch lớp');
+      renderSchCal();
+    });
+    document.getElementById('schEventList')?.addEventListener('click', e => {
+      const b = e.target.closest('[data-rm-sch]');
+      if (!b) return;
+      Auth.removeScheduleEvent(b.dataset.rmSch);
+      renderSchCal();
+      Auth.toast('Đã xóa');
+    });
+
+    // Per-student schedule
+    document.getElementById('classStudentBody')?.addEventListener('click', e => {
+      const b = e.target.closest('[data-stu-sch]');
+      if (b) {
+        openStuSch(b.dataset.stuSch);
+        return;
+      }
+    });
+
+    function openStuSch(sid) {
+      stuSchId = sid;
+      const st = Auth.getStudents().find(x => x.id === sid);
+      document.getElementById('studentScheduleSection').hidden = false;
+      document.getElementById('stuSchSub').textContent = 'Lịch riêng: ' + (st ? st.username : sid);
+      renderStuSchCal();
+      document.getElementById('studentScheduleSection').scrollIntoView({ behavior: 'smooth' });
+    }
+    document.getElementById('closeStuSch')?.addEventListener('click', () => {
+      document.getElementById('studentScheduleSection').hidden = true;
+      stuSchId = null;
+    });
+    document.getElementById('stuSchPrev')?.addEventListener('click', () => { stuSchCursor.setMonth(stuSchCursor.getMonth()-1); renderStuSchCal(); });
+    document.getElementById('stuSchNext')?.addEventListener('click', () => { stuSchCursor.setMonth(stuSchCursor.getMonth()+1); renderStuSchCal(); });
+
+    function renderStuSchCal() {
+      if (!stuSchId) return;
+      const st = Auth.getStudents().find(x => x.id === stuSchId);
+      const classId = st && st.classId;
+      const y = stuSchCursor.getFullYear(), m = stuSchCursor.getMonth();
+      document.getElementById('stuSchMonthLabel').textContent = 'Tháng ' + (m+1) + '/' + y;
+      const events = Auth.getScheduleForStudent(stuSchId, classId);
+      const byDate = {};
+      events.forEach(ev => {
+        byDate[ev.date] = byDate[ev.date] || [];
+        byDate[ev.date].push(ev);
+      });
+      const firstDow = new Date(y, m, 1).getDay();
+      const startPad = (firstDow + 6) % 7;
+      const daysInMonth = new Date(y, m + 1, 0).getDate();
+      const today = new Date();
+      const dows = ['T2','T3','T4','T5','T6','T7','CN'];
+      let html = dows.map(d => '<div class="sch-dow">' + d + '</div>').join('');
+      for (let i = 0; i < startPad; i++) html += '<div class="sch-day mute"></div>';
+      for (let d = 1; d <= daysInMonth; d++) {
+        const key = ymd(y, m, d);
+        const isToday = today.getFullYear()===y && today.getMonth()===m && today.getDate()===d;
+        const list = byDate[key] || [];
+        const dots = list.map(e => '<i class="' + e.type + '"></i>').join('');
+        html += '<div class="sch-day' + (isToday?' today':'') + '" data-date="' + key + '">' + d +
+          (dots ? '<span class="dots">' + dots + '</span>' : '') + '</div>';
+      }
+      document.getElementById('stuSchCal').innerHTML = html;
+      const personal = events.filter(e => e.studentId === stuSchId);
+      const el = document.getElementById('stuSchEventList');
+      el.innerHTML = personal.length ? personal.map(e =>
+        '<div class="sch-event-row"><span>' + e.date + ' · <b>' + escapeHtml((Auth.SCHEDULE_TYPES||{})[e.type]||e.type) + '</b> (riêng)</span>' +
+        '<button type="button" class="t-btn danger" data-rm-stusch="' + e.id + '">Xóa</button></div>'
+      ).join('') : '<p class="sub">Chưa có lịch riêng (vẫn hiện lịch lớp trên lịch).</p>';
+    }
+    document.getElementById('stuSchCal')?.addEventListener('click', e => {
+      const day = e.target.closest('.sch-day[data-date]');
+      if (!day || !stuSchId) return;
+      const r = Auth.addScheduleEvent({
+        date: day.dataset.date,
+        type: stuSchType,
+        studentId: stuSchId,
+        by: session.username
+      });
+      if (!r.ok) return Auth.toast(r.msg, true);
+      Auth.toast('Đã gắn lịch riêng');
+      renderStuSchCal();
+    });
+    document.getElementById('stuSchEventList')?.addEventListener('click', e => {
+      const b = e.target.closest('[data-rm-stusch]');
+      if (!b) return;
+      Auth.removeScheduleEvent(b.dataset.rmStusch);
+      renderStuSchCal();
+    });
+
+    // Teacher notifications panel
+    function renderTeacherNotifs() {
+      const box = document.getElementById('teacherNotifList');
+      const sec = document.getElementById('teacherNotifSection');
+      if (!box || !sec) return;
+      if (!(isTeacher || isManager)) { sec.hidden = true; return; }
+      sec.hidden = false;
+      let list = [];
+      try {
+        const raw = JSON.parse(localStorage.getItem('giahuy-notifications-v1') || '[]');
+        list = raw.filter(n =>
+          n.toRole === 'teacher' || n.to === 'all_teachers' || n.to === session.username ||
+          (n.toRole === 'manager' && isManager)
+        ).sort((a,b)=>(b.at||0)-(a.at||0)).slice(0, 30);
+      } catch { list = []; }
+      if (!list.length) {
+        box.innerHTML = '<p class="sub">Chưa có thông báo.</p>';
+        return;
+      }
+      box.innerHTML = list.map(n =>
+        '<div class="tk-item"><div class="tk-id">' + escapeHtml(n.title||'Thông báo') + '</div>' +
+        '<div class="tk-meta">' + escapeHtml(n.body||'') + '</div>' +
+        '<div class="tk-meta">' + escapeHtml(n.from||'') + ' · ' + new Date(n.at||Date.now()).toLocaleString('vi-VN') +
+        (n.toRole === 'teacher' || n.to === 'all_teachers' ? ' · Chung' : ' · Riêng') + '</div></div>'
+      ).join('');
+    }
+
+    if (isAdmin || can('notify_teachers')) {
+      const sec = document.getElementById('adminNotifyTeachersSection');
+      if (sec) sec.hidden = false;
+      // fill teacher options
+      const sel = document.getElementById('ntTo');
+      if (sel) {
+        Auth.getTeachers().forEach(t => {
+          const o = document.createElement('option');
+          o.value = t.username;
+          o.textContent = 'Riêng: ' + t.username;
+          sel.appendChild(o);
+        });
+      }
+    }
+    document.getElementById('notifyTeachersForm')?.addEventListener('submit', e => {
+      e.preventDefault();
+      if (!isAdmin && !can('notify_teachers')) return Auth.toast('Không có quyền', true);
+      const title = document.getElementById('ntTitle').value.trim();
+      const body = document.getElementById('ntBody').value.trim();
+      const to = document.getElementById('ntTo').value;
+      const payload = {
+        title, body, type: 'teacher_notice', from: session.username || 'Admin'
+      };
+      if (to === 'all_teachers') {
+        payload.to = 'all_teachers';
+        payload.toRole = 'teacher';
+      } else {
+        payload.to = to;
+      }
+      if (window.GiahuyNotif) window.GiahuyNotif.push(payload);
+      else {
+        const k = 'giahuy-notifications-v1';
+        const list = JSON.parse(localStorage.getItem(k) || '[]');
+        list.push({ id: 'nf_' + Date.now(), ...payload, at: Date.now(), read: false });
+        localStorage.setItem(k, JSON.stringify(list));
+      }
+      Auth.toast('Đã gửi thông báo giáo viên');
+      document.getElementById('ntTitle').value = '';
+      document.getElementById('ntBody').value = '';
+    });
+
+    renderClasses();
+    renderTeacherNotifs();
+
+    /* —— Broadcast announcements —— */
+    document.getElementById('announceForm')?.addEventListener('submit', e => {
+      e.preventDefault();
+      if (!isAdmin && !can('notifications')) return Auth.toast('Không có quyền đăng thông báo', true);
+      const title = document.getElementById('annTitle').value.trim();
+      const body = document.getElementById('annBody').value.trim();
+      const toSel = document.getElementById('annTo').value;
+      if (!title || !body) return;
+      const payload = {
+        title,
+        body,
+        type: 'announce',
+        from: session.username || 'Admin',
+        to: toSel === 'all' ? 'all' : null,
+        toRole: toSel === 'all' ? null : toSel
+      };
+      if (window.GiahuyNotif) {
+        window.GiahuyNotif.push(payload);
+      } else {
+        // fallback store
+        try {
+          const k = 'giahuy-notifications-v1';
+          const list = JSON.parse(localStorage.getItem(k) || '[]');
+          list.push({ id: 'nf_' + Date.now(), ...payload, at: Date.now(), read: false });
+          localStorage.setItem(k, JSON.stringify(list));
+        } catch (_) {}
+      }
+      document.getElementById('annTitle').value = '';
+      document.getElementById('annBody').value = '';
+      const out = document.getElementById('annResult');
+      out.hidden = false;
+      out.style.color = '#0d3a6e';
+      out.textContent = 'Đã đăng thông báo.';
+      Auth.toast('Đã gửi thông báo');
+    });
+  </script>
+<script src="js/edu.js"></script><script src="js/redesign.js"></script><script src="js/icons.js"></script></body>
+</html>

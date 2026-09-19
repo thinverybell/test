@@ -1,0 +1,29 @@
+/* Scoped modern visual layer for non-locked legacy catalog pages.
+   Panel/Login/Auth files are intentionally not linked to this stylesheet. */
+:root{--gxm-bg:#f5f7fb;--gxm-card:#fff;--gxm-text:#172033;--gxm-muted:#64748b;--gxm-soft:#94a3b8;--gxm-border:#e6ebf2;--gxm-primary:#4f46e5;--gxm-primary-light:#eef2ff;--gxm-shadow:0 6px 24px rgba(15,23,42,.06)}
+body:has(.page-shell){background:var(--gxm-bg)!important;color:var(--gxm-text)!important;font-family:"Be Vietnam Pro",system-ui,sans-serif!important}
+body:has(.page-shell) .page-bg,body:has(.page-shell) .page-overlay,body:has(.page-shell) .petal-layer{display:none}
+body:has(.page-shell) .topbar{position:sticky;top:0;z-index:80;height:74px!important;background:rgba(255,255,255,.94)!important;backdrop-filter:blur(14px);border-bottom:1px solid var(--gxm-border)!important;box-shadow:none!important}
+body:has(.page-shell) .brand{gap:10px!important}.brand-logo{object-fit:contain}
+body:has(.page-shell) .topnav{gap:3px!important}.topnav a{font-size:13px!important;border-radius:10px!important}.topnav a:hover{background:var(--gxm-primary-light)!important;color:var(--gxm-primary)!important}
+body:has(.page-shell) .sidebar{position:sticky;top:74px;height:calc(100vh - 74px);background:#fff!important;border-right:1px solid var(--gxm-border)!important;box-shadow:none!important;padding:14px 11px!important}
+body:has(.page-shell) .side-item{border-radius:12px!important;color:#667085!important}.side-item:hover,.side-item.active{background:var(--gxm-primary-light)!important;color:var(--gxm-primary)!important}
+body:has(.page-shell) .content{background:transparent!important}
+body:has(.page-shell) .page-shell{width:min(1440px,calc(100% - 48px))!important;margin:0 auto!important;padding:28px 0 50px!important}
+body:has(.page-shell) .page-hero{border-radius:22px!important;background:linear-gradient(135deg,#eef2ff,#f5f3ff 52%,#eff6ff)!important;border:1px solid #e2e6ff!important;box-shadow:var(--gxm-shadow)!important;padding:28px!important}
+body:has(.page-shell) .page-hero-kicker{text-transform:uppercase;letter-spacing:.1em;font-size:10px!important;color:#7c6cf3!important;font-weight:800!important}
+body:has(.page-shell) .page-hero h1{font-size:30px!important;margin:8px 0 6px!important;color:var(--gxm-text)!important}.page-hero p{color:var(--gxm-muted)!important;line-height:1.65!important}
+body:has(.page-shell) .page-toolbar{background:#fff;border:1px solid var(--gxm-border);border-radius:16px;box-shadow:var(--gxm-shadow);padding:13px 14px!important;margin:16px 0!important}
+body:has(.page-shell) .resource-cards{gap:16px!important}
+body:has(.page-shell) .resource-card{background:#fff!important;border:1px solid var(--gxm-border)!important;border-radius:18px!important;box-shadow:0 4px 16px rgba(15,23,42,.04)!important;transition:.2s ease!important}
+body:has(.page-shell) .resource-card:hover{transform:translateY(-3px);border-color:#dce2ff!important;box-shadow:0 12px 26px rgba(15,23,42,.08)!important}
+body:has(.page-shell) .catalog-search input,body:has(.page-shell) .catalog-select{border:1px solid var(--gxm-border)!important;background:#fff!important;border-radius:11px!important}
+body:has(.page-shell) .filter-btn{border-radius:11px!important;border:1px solid var(--gxm-border)!important;background:#fff!important}
+body:has(.page-shell) .footer{background:transparent!important;border-top:1px solid var(--gxm-border)!important;margin-top:10px!important}
+body:has(.page-shell) .footer a:hover{color:var(--gxm-primary)!important}
+@media (max-width:1000px){body:has(.page-shell) .page-shell{width:min(100% - 28px,900px)!important}.topnav{display:none!important}}
+@media (max-width:760px){body:has(.page-shell) .topbar{height:62px!important}.sidebar{display:none!important}.content{margin-left:0!important}.page-shell{padding-top:18px!important}.page-hero h1{font-size:25px!important}.catalog-tools{flex-wrap:wrap!important}.page-toolbar{padding:10px!important}}
+
+/* CoreUI compatibility alias: old content may request cil-flask; map it to the real CoreUI beaker glyph.
+   Scoped to unlocked/modernized pages; locked auth/panel files are untouched. */
+body:not(.locked-zone) .cil-flask::before { content: "\f2ea"; }

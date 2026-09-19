@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Đăng nhập quản trị — Thầy Gia Huy</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@coreui/icons/css/free.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/auth.css">
+<link rel="stylesheet" href="css/icons.css"></head>
+<body class="auth-page">
+  <div class="auth-bg-layer" aria-hidden="true"></div>
+  <img class="logo-corner" src="assets/logo-giahuy.png" alt="Logo Gia Huy" width="220" height="90">
+  <a class="admin-corner" href="login" title="Về đăng nhập chính"><i class="cil-arrow-left"></i></a>
+
+  <div class="auth-wrap auth-frame auth-frame-admin">
+    <div class="auth-card">
+      <div class="auth-tabs" role="tablist">
+        <button type="button" class="auth-tab active" data-tab="admin" role="tab" aria-selected="true">Quản trị</button>
+        <button type="button" class="auth-tab" data-tab="manager" role="tab" aria-selected="false">Quản lí</button>
+      </div>
+      <div class="auth-panels">
+        <form class="auth-panel active" id="adminForm" data-panel="admin" autocomplete="on">
+          <label class="auth-field">
+            <span>Mật khẩu quản trị</span>
+            <div class="pass-wrap">
+              <input type="password" id="adminPass" placeholder="Mật khẩu quản trị viên" required maxlength="64" autocomplete="current-password">
+              <button type="button" class="pass-toggle" aria-label="Hiện mật khẩu" title="Hiện / ẩn">
+                <svg class="pass-eye-ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+              </button>
+            </div>
+          </label>
+          <button type="submit" class="auth-submit">Đăng nhập</button>
+        </form>
+        <form class="auth-panel" id="managerForm" data-panel="manager" autocomplete="on" hidden>
+          <label class="auth-field">
+            <span>Tên đăng nhập</span>
+            <input type="text" id="mgrUser" placeholder="Tên tài khoản quản lí" maxlength="40" required>
+          </label>
+          <label class="auth-field">
+            <span>Mã mời</span>
+            <div class="pass-wrap">
+              <input type="password" id="mgrInvite" placeholder="Mã mời quản lí" maxlength="64" required autocomplete="current-password">
+              <button type="button" class="pass-toggle" aria-label="Hiện mã mời" title="Hiện / ẩn">
+                <svg class="pass-eye-ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+              </button>
+            </div>
+          </label>
+          <button type="submit" class="auth-submit">Đăng nhập quản lí</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-toast" id="authToast" hidden></div>
+  <script src="js/api-config.js"></script><script src="js/auth.js"></script>
+  <script>
+    (function(){
+      const s = Auth.getSession();
+      if (s && Auth.isStaffRole(s.role)) location.replace('teacher');
+
+      const tabs = document.querySelectorAll('.auth-tab[data-tab]');
+      const adminForm = document.getElementById('adminForm');
+      const managerForm = document.getElementById('managerForm');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => {
+            t.classList.toggle('active', t === tab);
+            t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+          });
+          const isAdmin = tab.dataset.tab === 'admin';
+          adminForm.classList.toggle('active', isAdmin);
+          adminForm.hidden = !isAdmin;
+          managerForm.classList.toggle('active', !isAdmin);
+          managerForm.hidden = isAdmin;
+        });
+      });
+
+      adminForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const r = await Promise.resolve(Auth.loginAdmin(document.getElementById('adminPass').value));
+        if (!r || !r.ok) return Auth.toast((r && r.msg) || 'Lỗi đăng nhập', true);
+        Auth.toast('Đăng nhập quản trị thành công');
+        setTimeout(() => location.href = 'teacher', 400);
+      });
+
+      managerForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const r = await Promise.resolve(Auth.loginManager(
+          document.getElementById('mgrUser').value,
+          document.getElementById('mgrInvite').value
+        ));
+        if (!r || !r.ok) return Auth.toast((r && r.msg) || 'Lỗi đăng nhập', true);
+        Auth.toast('Đăng nhập quản lí thành công');
+        setTimeout(() => location.href = 'teacher', 400);
+      });
+    })();
+  
+    // Hiện / ẩn mật khẩu (nút mắt)
+    document.querySelectorAll('.pass-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const wrap = btn.closest('.pass-wrap');
+        const input = wrap && wrap.querySelector('input');
+        if (!input) return;
+        const show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+        btn.setAttribute('aria-label', show ? 'Ẩn mật khẩu' : 'Hiện mật khẩu');
+        btn.innerHTML = show ? '<svg class="pass-eye-ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M2.1 3.5 3.5 2.1l18.4 18.4-1.4 1.4-3.1-3.1A11.5 11.5 0 0 1 12 19c-7 0-10-7-10-7a18.6 18.6 0 0 1 5.2-5.6L2.1 3.5zM12 7a5 5 0 0 1 5 5c0 .7-.1 1.3-.4 1.9l-6.5-6.5c.6-.3 1.2-.4 1.9-.4zm-7.5 5s2.2 4.5 7.5 4.5c.8 0 1.5-.1 2.2-.3l-1.6-1.6A5 5 0 0 1 7.8 9.4L6.1 7.7C4.3 9 3.2 10.7 2.5 12z"/></svg>' : '<svg class="pass-eye-ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>';
+      });
+    });
+
+  </script>
+<script src="js/icons.js"></script></body>
+</html>

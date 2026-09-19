@@ -1,0 +1,373 @@
+/*
+  THAY GIA HUY — Sidebar v2 polish
+  Scope: unlocked platform pages only.
+  Purpose: keep collapsed sidebar in the layout flow, remove nested scrollbar chrome,
+  improve the toggle control, and prevent the sidebar from covering main content.
+  Locked Panel/Login/Auth pages do not load this file.
+*/
+
+body.gh-platform {
+  --gh-sidebar-width: 236px;
+  --gh-sidebar-collapsed-width: 84px;
+  --gh-layout-gap: 0px;
+}
+
+body.gh-platform.gh-sidebar-collapsed {
+  --gh-sidebar-width: var(--gh-sidebar-collapsed-width);
+}
+
+.gh-layout {
+  grid-template-columns: var(--gh-sidebar-width) minmax(0, 1fr) !important;
+  align-items: start;
+  min-width: 0;
+}
+
+.gh-sidebar {
+  width: 100%;
+  min-width: 0;
+  height: calc(100vh - 76px);
+  padding: 66px 10px 18px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  border-right: 1px solid rgba(226, 232, 240, .9);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(99,102,241,.06), transparent 34%),
+    rgba(255,255,255,.96);
+}
+
+.gh-sidebar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.gh-main {
+  min-width: 0;
+  width: 100%;
+  max-width: none;
+  overflow-x: clip;
+}
+
+.gh-container {
+  width: 100%;
+  max-width: 1540px;
+  margin-inline: auto;
+}
+
+/* Toggle sits inside a dedicated visual rail at the top of the sidebar. */
+.gh-sidebar .gh-sidebar-toggle {
+  top: 14px;
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #dbe4f0;
+  border-radius: 13px;
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
+  color: #53627a;
+  box-shadow: 0 8px 22px rgba(30, 41, 59, .08), 0 0 0 1px rgba(99,102,241,.03);
+  transition: background .2s ease, border-color .2s ease, color .2s ease,
+              transform .2s ease, box-shadow .2s ease;
+}
+
+.gh-sidebar .gh-sidebar-toggle:hover {
+  background: linear-gradient(180deg, #eef2ff, #ffffff);
+  border-color: #c7d2fe;
+  color: #4f46e5;
+  box-shadow: 0 10px 24px rgba(79, 70, 229, .14);
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-sidebar-toggle {
+  right: 50%;
+  transform: translateX(50%);
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-sidebar-toggle:hover {
+  transform: translateX(50%) translateY(-1px);
+}
+
+.gh-side-label {
+  white-space: nowrap;
+}
+
+.gh-side-link {
+  min-height: 44px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  transition: background .2s ease, color .2s ease, border-color .2s ease,
+              transform .2s ease, box-shadow .2s ease;
+}
+
+.gh-side-link:hover {
+  transform: translateX(1px);
+  box-shadow: 0 4px 12px rgba(79,70,229,.05);
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-side-label,
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-side-divider,
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-quote {
+  display: none !important;
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-side-link {
+  justify-content: center;
+  gap: 0;
+  min-height: 48px;
+  padding: 8px;
+  margin: 3px 0;
+  border-radius: 14px;
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-side-link > span,
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-side-link .end {
+  display: none !important;
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-side-link i {
+  width: auto;
+  margin: 0;
+  font-size: 19px;
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-side-link.active {
+  background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+  color: #4f46e5;
+  border-color: #dfe4ff;
+  box-shadow: 0 8px 18px rgba(79,70,229,.08);
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-side-link:hover {
+  transform: none;
+}
+
+@media (max-width: 1180px) {
+  body.gh-platform {
+    --gh-sidebar-width: 220px;
+  }
+  body.gh-platform.gh-sidebar-collapsed {
+    --gh-sidebar-width: 84px;
+  }
+  .gh-main {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 820px) {
+  .gh-layout {
+    display: block !important;
+  }
+  .gh-sidebar {
+    display: none !important;
+  }
+  .gh-main {
+    width: 100%;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gh-sidebar .gh-sidebar-toggle,
+  .gh-side-link {
+    transition: none !important;
+  }
+}
+
+.gh-toggle-sr {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* ---------- Sidebar toggle redesign v3: clean control, separate from menu ---------- */
+.gh-sidebar,
+body.gh-home .sidebar {
+  position: relative;
+}
+
+.gh-sidebar .gh-sidebar-toggle,
+body.gh-home .sidebar .sidebar-toggle-control {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: auto;
+  width: calc(100% - 28px);
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 0 10px;
+  border: 1px solid rgba(203, 213, 225, .92);
+  border-radius: 15px;
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(248,250,252,.96));
+  color: #334155;
+  box-shadow: 0 8px 22px rgba(15,23,42,.07), inset 0 1px 0 rgba(255,255,255,.9);
+  z-index: 20;
+}
+
+.gh-sidebar .gh-sidebar-toggle::after,
+body.gh-home .sidebar .sidebar-toggle-control::after {
+  content: '';
+  position: absolute;
+  left: 11px;
+  right: 11px;
+  bottom: 5px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(79,70,229,.25), transparent);
+  pointer-events: none;
+}
+
+.gh-toggle-icon {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+  color: #4f46e5;
+  border: 1px solid #e0e7ff;
+  box-shadow: 0 4px 10px rgba(79,70,229,.08);
+}
+
+.gh-toggle-icon i {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.gh-toggle-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .01em;
+  color: #334155;
+}
+
+.gh-toggle-shortcut {
+  margin-left: auto;
+  padding: 4px 7px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  background: #fff;
+  color: #94a3b8;
+  font: 700 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  box-shadow: 0 2px 5px rgba(15,23,42,.03);
+}
+
+.gh-sidebar .gh-sidebar-toggle:hover,
+body.gh-home .sidebar .sidebar-toggle-control:hover {
+  background: linear-gradient(180deg, #ffffff, #eef2ff);
+  border-color: #c7d2fe;
+  color: #3730a3;
+  box-shadow: 0 12px 28px rgba(79,70,229,.12), inset 0 1px 0 rgba(255,255,255,.95);
+  transform: translateY(-1px);
+}
+
+.gh-sidebar .gh-sidebar-toggle:active,
+body.gh-home .sidebar .sidebar-toggle-control:active {
+  transform: translateY(0);
+}
+
+/* Keep the menu visually below the control instead of underneath it. */
+.gh-sidebar {
+  padding-top: 70px !important;
+}
+body.gh-home .sidebar {
+  padding-top: 74px !important;
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-sidebar-toggle,
+body.gh-home.gh-sidebar-collapsed .sidebar .sidebar-toggle-control {
+  left: 50%;
+  right: auto;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  justify-content: center;
+  gap: 0;
+  transform: translateX(-50%);
+  border-radius: 14px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border-color: rgba(255,255,255,.35);
+  box-shadow: 0 12px 26px rgba(79,70,229,.25), 0 0 0 4px rgba(99,102,241,.08);
+  color: #fff;
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-sidebar-toggle::after,
+body.gh-home.gh-sidebar-collapsed .sidebar .sidebar-toggle-control::after {
+  display: none;
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-sidebar-toggle:hover,
+body.gh-home.gh-sidebar-collapsed .sidebar .sidebar-toggle-control:hover {
+  transform: translateX(-50%) translateY(-1px);
+  background: linear-gradient(135deg, #4338ca, #6d28d9);
+  color: #fff;
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-toggle-icon,
+body.gh-home.gh-sidebar-collapsed .sidebar .gh-toggle-icon {
+  width: 30px;
+  height: 30px;
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.24);
+  color: #fff;
+  box-shadow: none;
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-toggle-text,
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-toggle-shortcut,
+body.gh-home.gh-sidebar-collapsed .sidebar .gh-toggle-text,
+body.gh-home.gh-sidebar-collapsed .sidebar .gh-toggle-shortcut {
+  display: none;
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar .gh-sidebar-toggle .gh-toggle-icon i,
+body.gh-home.gh-sidebar-collapsed .sidebar .sidebar-toggle-control .gh-toggle-icon i {
+  font-size: 16px;
+}
+
+/* Open state: gentle status accent so the control feels intentional rather than floating. */
+body.gh-platform:not(.gh-sidebar-collapsed) .gh-sidebar .gh-sidebar-toggle,
+body.gh-home:not(.gh-sidebar-collapsed) .sidebar .sidebar-toggle-control {
+  box-shadow: 0 8px 22px rgba(15,23,42,.07), 0 0 0 1px rgba(99,102,241,.03), inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+/* Sidebar scrollbars stay invisible, but wheel/touch scrolling remains available. */
+.gh-sidebar::-webkit-scrollbar,
+body.gh-home .sidebar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+@media (max-width: 820px) {
+  .gh-sidebar .gh-sidebar-toggle,
+  body.gh-home .sidebar .sidebar-toggle-control {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gh-sidebar .gh-sidebar-toggle,
+  body.gh-home .sidebar .sidebar-toggle-control {
+    transition: none !important;
+  }
+}
