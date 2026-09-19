@@ -127,7 +127,8 @@
         html +=
           '<a class="side-item gh-side-link' + act + '" href="' + block.href + '" data-nav-key="' + block.key + '">' +
           '<span class="side-icon">' + ico(block.icon) + '</span>' +
-          '<span class="side-label">' + block.label + '</span></a>';
+          '<span class="side-label">' + block.label + '</span>' +
+          '<span class="chev" aria-hidden="true">›</span></a>';
         return;
       }
 
