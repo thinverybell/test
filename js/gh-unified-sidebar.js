@@ -259,21 +259,30 @@
     if (!side) return false;
     var role = getRole();
     var activeKey = detectActiveKey();
-    var inner = side.querySelector('.side-inner') || side;
     var html =
       mode === 'platform'
         ? renderPlatformHTML(activeKey, role)
         : renderLegacyHTML(activeKey, role);
 
-    if (inner.classList && inner.classList.contains('side-inner')) {
-      // Keep toggle button if present outside side-inner
-      inner.innerHTML = html;
-    } else {
-      // Preserve toggle control if already attached as child of aside
-      var toggle = side.querySelector('.sidebar-toggle-control, .gh-sidebar-toggle');
-      side.innerHTML = '<div class="side-inner">' + html + '</div>';
-      if (toggle) side.appendChild(toggle);
+    // Always rebuild side-inner from scratch to avoid duplicate items
+    var toggle = side.querySelector('.sidebar-toggle-control, .gh-sidebar-toggle');
+    var inner = side.querySelector('.side-inner');
+    if (!inner) {
+      inner = document.createElement('div');
+      inner.className = 'side-inner';
+      side.insertBefore(inner, side.firstChild);
     }
+    inner.innerHTML = html;
+
+    // Remove any leftover side-item / group outside side-inner (prevents Panel Admin x2)
+    Array.prototype.slice.call(side.children).forEach(function (ch) {
+      if (ch === inner || ch === toggle) return;
+      if (ch.classList && (ch.classList.contains('side-group') || ch.classList.contains('side-item') || ch.classList.contains('side-quote') || ch.classList.contains('gh-side-link') || ch.classList.contains('gh-quote') || ch.classList.contains('gh-side-label') || ch.classList.contains('gh-side-divider'))) {
+        ch.parentNode.removeChild(ch);
+      }
+    });
+
+    if (toggle && toggle.parentNode !== side) side.appendChild(toggle);
     side.setAttribute('data-gh-unified', '1');
     side.setAttribute('data-gh-role', role);
     if (document.body) document.body.setAttribute('data-gh-role', role);

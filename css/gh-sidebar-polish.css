@@ -530,3 +530,90 @@ body[data-gh-role="admin"] [data-role-only="admin"],
 aside[data-gh-role="admin"] [data-role-only="admin"] {
   display: flex !important;
 }
+
+/* ============================================================
+   PLATFORM = HOMEPAGE sidebar visual parity (Quiz / Game / Video…)
+   ============================================================ */
+
+body.gh-platform .gh-layout {
+  display: grid !important;
+  grid-template-columns: 244px minmax(0, 1fr) !important;
+  gap: 0 20px !important;
+  align-items: start !important;
+  min-height: calc(100vh - 72px) !important;
+}
+
+body.gh-platform .gh-sidebar {
+  position: sticky !important;
+  top: 80px !important;
+  width: 244px !important;
+  max-width: 244px !important;
+  margin: 12px 0 12px 12px !important;
+  padding: 12px 10px !important;
+  background: rgba(255,255,255,.97) !important;
+  border: 1px solid #e6ebf2 !important;
+  border-radius: 22px !important;
+  box-shadow: 0 8px 30px rgba(15,23,42,.07) !important;
+  z-index: 20 !important;
+  max-height: calc(100vh - 100px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+}
+
+body.gh-platform .gh-main {
+  min-width: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+  padding: 18px 24px 40px 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Icon boxes identical to homepage */
+body.gh-platform .gh-sidebar .side-icon,
+body.gh-platform .gh-sidebar .gh-side-link > i:first-child {
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  border-radius: 10px !important;
+  display: grid !important;
+  place-items: center !important;
+  background: #f8fafc !important;
+  color: #64748b !important;
+  font-size: 16px !important;
+  flex: none !important;
+}
+
+body.gh-platform .gh-sidebar .gh-side-link:hover .side-icon,
+body.gh-platform .gh-sidebar .gh-side-link.active .side-icon,
+body.gh-platform .gh-sidebar a.side-item:hover .side-icon,
+body.gh-platform .gh-sidebar a.side-item.active .side-icon {
+  background: #e8eaff !important;
+  color: #4f46e5 !important;
+}
+
+/* Ensure raw <i> icons from old nav also sit in a box look */
+body.gh-platform .gh-sidebar .gh-side-link > i:first-child {
+  margin: 0 !important;
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-layout {
+  grid-template-columns: 78px minmax(0, 1fr) !important;
+}
+
+body.gh-platform.gh-sidebar-collapsed .gh-sidebar {
+  width: 78px !important;
+  max-width: 78px !important;
+}
+
+@media (max-width: 820px) {
+  body.gh-platform .gh-layout {
+    grid-template-columns: 1fr !important;
+  }
+  body.gh-platform .gh-sidebar {
+    display: none !important;
+  }
+  body.gh-platform .gh-main {
+    padding: 14px 12px 96px !important;
+  }
+}

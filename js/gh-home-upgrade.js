@@ -12,7 +12,6 @@
   const esc=v=>String(v??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]));
   const section=(id,title,desc,body,href,label)=>`<section class="ghx-section shell" id="${id}"><div class="ghx-head"><div><span class="ghx-kicker">THẦY GIA HUY</span><h2>${title}</h2><p>${desc}</p></div>${href?`<a class="ghx-link" href="${href}">${label||'Xem tất cả'} ${icon('cil-arrow-right')}</a>`:''}</div>${body}</section>`;
   const track=t=>window.GiaHuyPlatform?.track?.(t)||null;
-  const existingFooter=host.parentElement?.querySelector('footer.footer') || document.querySelector('footer.footer');
   const wrap=document.createElement('div');wrap.id='ghHomeUpgrade';wrap.innerHTML='';
 
   const continueCards=data.courses.slice(0,3).map(c=>`<article class="ghx-card ghx-course-card"><div class="ghx-iconbox">${icon(c.icon)}</div><span class="ghx-tag">${esc(c.tag)}</span><h3>${esc(c.title)}</h3><p>${esc(c.desc)}</p><div class="ghx-progress"><i style="width:${c.progress}%"></i></div><div class="ghx-card-meta"><span>${c.progress}% hoàn thành</span><a href="plugins.html?course=${encodeURIComponent(c.id)}" data-home-track="course_open">Tiếp tục ${icon('cil-arrow-right')}</a></div></article>`).join('');
@@ -42,7 +41,17 @@
   const qna=`<div class="ghx-two-col"><div class="ghx-panel"><div class="ghx-panel-head"><h3>Thông báo mới</h3><a href="notifications.html">Xem tất cả</a></div>${notices}</div><div class="ghx-panel"><div class="ghx-panel-head"><h3>Cộng đồng Hỏi đáp</h3><a href="qna.html">Tham gia</a></div><div class="ghx-community"><div class="ghx-community-icon">${icon('cil-speech')}</div><div><b>Đặt câu hỏi, chia sẻ cách học và trao đổi cùng cộng đồng.</b><p>Mở trang Hỏi đáp để xem câu hỏi mới và gửi câu hỏi của bạn.</p><a class="ghx-btn primary" href="qna.html">Mở Hỏi đáp ${icon('cil-arrow-right')}</a></div></div></div></div>`;
   wrap.insertAdjacentHTML('beforeend',section('ghxCommunity','Thông báo & cộng đồng','Luôn theo dõi nội dung mới của website.',qna,null,null));
 
-  if(existingFooter) existingFooter.parentNode.insertBefore(wrap,existingFooter); else host.appendChild(wrap);
+  /* Always inject inside main.content so sections share the same left offset as hero/insights above. */
+  host.appendChild(wrap);
+
+  // Safety: if anything moved #ghHomeUpgrade outside main, pull it back in.
+  (function ensureInsideMain(){
+    const node = document.getElementById('ghHomeUpgrade');
+    const main = document.querySelector('main.content, main#top, .content');
+    if(node && main && node.parentElement !== main){
+      main.appendChild(node);
+    }
+  })();
 
   document.querySelectorAll('[data-home-track]').forEach(el=>el.addEventListener('click',()=>track(el.dataset.homeTrack,{source:'home'})));
   document.querySelectorAll('[data-home-video]').forEach(btn=>btn.addEventListener('click',async()=>{
