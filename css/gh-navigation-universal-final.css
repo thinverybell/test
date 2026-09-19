@@ -1,0 +1,384 @@
+/* ============================================================
+   GIA HUY — UNIVERSAL NAVIGATION FINAL
+   One exact sidebar row component on every unlocked page.
+   The current page is always rendered as the active/glowing row.
+   ============================================================ */
+:root{
+  --gh-u-side-width:220px;
+  --gh-u-row-height:40px;
+  --gh-u-row-radius:12px;
+  --gh-u-row-gap:3px;
+  --gh-u-side-pad-x:10px;
+  --gh-u-icon-size:28px;
+}
+
+/* Prevent legacy/home/platform rules from changing the rail geometry. */
+body.gh-unlocked aside.sidebar,
+body.gh-unlocked aside.gh-sidebar,
+body.gh-unlocked .sidebar,
+body.gh-unlocked .gh-sidebar{
+  width:var(--gh-u-side-width)!important;
+  min-width:var(--gh-u-side-width)!important;
+  max-width:var(--gh-u-side-width)!important;
+  flex:0 0 var(--gh-u-side-width)!important;
+  box-sizing:border-box!important;
+  background:#fff!important;
+  border-right:1px solid #e9edf4!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+}
+
+/* Platform grid and legacy/home content must reserve exactly the same rail. */
+body.gh-unlocked.gh-platform .gh-layout{
+  grid-template-columns:var(--gh-u-side-width) minmax(0,1fr)!important;
+}
+body.gh-unlocked.gh-platform .gh-sidebar{width:var(--gh-u-side-width)!important;min-width:var(--gh-u-side-width)!important;}
+body.gh-unlocked.gh-home .content,
+body.gh-unlocked.gh-home main.content{min-width:0!important;}
+
+/* One fixed menu stack. */
+body.gh-unlocked aside.sidebar .side-inner,
+body.gh-unlocked aside.gh-sidebar .side-inner,
+body.gh-unlocked .sidebar .side-inner,
+body.gh-unlocked .gh-sidebar .side-inner{
+  width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  min-height:100%!important;
+  padding:56px var(--gh-u-side-pad-x) 14px!important;
+  margin:0!important;
+  display:block!important;
+  box-sizing:border-box!important;
+  background:#fff!important;
+}
+
+/* Every navigation link is IDENTICAL in width, height, radius, padding and layout. */
+body.gh-unlocked aside.sidebar a.side-item,
+body.gh-unlocked aside.gh-sidebar a.side-item,
+body.gh-unlocked .sidebar a.side-item,
+body.gh-unlocked .gh-sidebar a.side-item,
+body.gh-unlocked .sidebar a.gh-side-link,
+body.gh-unlocked .gh-sidebar a.gh-side-link{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  height:var(--gh-u-row-height)!important;
+  min-height:var(--gh-u-row-height)!important;
+  max-height:var(--gh-u-row-height)!important;
+  margin:var(--gh-u-row-gap) 0!important;
+  padding:4px 8px!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  flex:0 0 var(--gh-u-row-height)!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:8px!important;
+  position:relative!important;
+  overflow:hidden!important;
+  border:1px solid transparent!important;
+  border-radius:var(--gh-u-row-radius)!important;
+  background:#fff!important;
+  color:#526077!important;
+  text-decoration:none!important;
+  font-family:'Be Vietnam Pro',sans-serif!important;
+  font-size:11px!important;
+  font-weight:600!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+
+/* Explicitly normalize the first item; it used to be different on Trang chủ. */
+body.gh-unlocked .sidebar > .side-inner > a.side-item:first-child,
+body.gh-unlocked .gh-sidebar > .side-inner > a.side-item:first-child{
+  height:var(--gh-u-row-height)!important;
+  min-height:var(--gh-u-row-height)!important;
+  max-height:var(--gh-u-row-height)!important;
+  margin:var(--gh-u-row-gap) 0!important;
+  padding:4px 8px!important;
+  border-radius:var(--gh-u-row-radius)!important;
+}
+
+/* One exact icon box for every item. */
+body.gh-unlocked .sidebar .side-icon,
+body.gh-unlocked .gh-sidebar .side-icon{
+  width:var(--gh-u-icon-size)!important;
+  height:var(--gh-u-icon-size)!important;
+  min-width:var(--gh-u-icon-size)!important;
+  min-height:var(--gh-u-icon-size)!important;
+  max-width:var(--gh-u-icon-size)!important;
+  max-height:var(--gh-u-icon-size)!important;
+  flex:0 0 var(--gh-u-icon-size)!important;
+  display:grid!important;
+  place-items:center!important;
+  margin:0!important;
+  padding:0!important;
+  box-sizing:border-box!important;
+  border-radius:9px!important;
+  background:#f5f7fb!important;
+  color:#758197!important;
+  line-height:1!important;
+}
+body.gh-unlocked .sidebar .side-icon i,
+body.gh-unlocked .gh-sidebar .side-icon i{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:14px!important;
+  line-height:1!important;
+}
+
+/* Same label/caret sizing everywhere. */
+body.gh-unlocked .sidebar .side-label,
+body.gh-unlocked .gh-sidebar .side-label,
+body.gh-unlocked .sidebar .side-item > span:not(.side-icon),
+body.gh-unlocked .gh-sidebar .side-item > span:not(.side-icon){
+  min-width:0!important;
+}
+body.gh-unlocked .sidebar .side-label,
+body.gh-unlocked .gh-sidebar .side-label{
+  flex:1 1 auto!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  color:inherit!important;
+  line-height:1!important;
+}
+body.gh-unlocked .sidebar .chev,
+body.gh-unlocked .gh-sidebar .chev{
+  margin-left:auto!important;
+  flex:0 0 auto!important;
+  color:#b8c0cf!important;
+  font-size:15px!important;
+  line-height:1!important;
+}
+
+/* Hover = subtle. */
+body.gh-unlocked .sidebar a.side-item:hover,
+body.gh-unlocked .gh-sidebar a.side-item:hover,
+body.gh-unlocked .sidebar a.gh-side-link:hover,
+body.gh-unlocked .gh-sidebar a.gh-side-link:hover{
+  background:#f5f7ff!important;
+  border-color:#dde4ff!important;
+  color:#4250bc!important;
+  box-shadow:0 4px 12px rgba(79,70,229,.06)!important;
+}
+body.gh-unlocked .sidebar .side-item:hover .side-icon,
+body.gh-unlocked .gh-sidebar .side-item:hover .side-icon{
+  background:#ebeefe!important;
+  color:#5147d9!important;
+}
+
+/* ACTIVE = same glowing treatment on EVERY item, including Trang chủ. */
+body.gh-unlocked .sidebar a.side-item.active,
+body.gh-unlocked .sidebar a.side-item.gh-nav-current,
+body.gh-unlocked .gh-sidebar a.side-item.active,
+body.gh-unlocked .gh-sidebar a.side-item.gh-nav-current,
+body.gh-unlocked .sidebar a.gh-side-link.active,
+body.gh-unlocked .sidebar a.gh-side-link.gh-nav-current,
+body.gh-unlocked .gh-sidebar a.gh-side-link.active,
+body.gh-unlocked .gh-sidebar a.gh-side-link.gh-nav-current{
+  background:linear-gradient(90deg,#edf1ff 0%,#f4f5ff 100%)!important;
+  border-color:#cbd5ff!important;
+  color:#2947a8!important;
+  font-weight:700!important;
+  box-shadow:
+    inset 3px 0 0 #5a49ef,
+    0 6px 18px rgba(79,70,229,.15),
+    0 0 0 1px rgba(99,102,241,.04)!important;
+}
+body.gh-unlocked .sidebar a.side-item.active::before,
+body.gh-unlocked .sidebar a.side-item.gh-nav-current::before,
+body.gh-unlocked .gh-sidebar a.side-item.active::before,
+body.gh-unlocked .gh-sidebar a.side-item.gh-nav-current::before{
+  content:''!important;
+  position:absolute!important;
+  left:0!important;
+  top:5px!important;
+  bottom:5px!important;
+  width:3px!important;
+  border-radius:999px!important;
+  background:linear-gradient(180deg,#5947ef,#765dff)!important;
+  box-shadow:0 0 12px rgba(91,69,239,.62)!important;
+  pointer-events:none!important;
+}
+body.gh-unlocked .sidebar a.side-item.active .side-icon,
+body.gh-unlocked .sidebar a.side-item.gh-nav-current .side-icon,
+body.gh-unlocked .gh-sidebar a.side-item.active .side-icon,
+body.gh-unlocked .gh-sidebar a.side-item.gh-nav-current .side-icon{
+  background:#e7eaff!important;
+  color:#5146d9!important;
+}
+body.gh-unlocked .sidebar a.side-item.active .chev,
+body.gh-unlocked .sidebar a.side-item.gh-nav-current .chev,
+body.gh-unlocked .gh-sidebar a.side-item.active .chev,
+body.gh-unlocked .gh-sidebar a.side-item.gh-nav-current .chev{
+  color:#8f8bd7!important;
+}
+
+/* Group headings are not navigation bars and therefore cannot distort row height. */
+body.gh-unlocked .sidebar .side-group,
+body.gh-unlocked .gh-sidebar .side-group{
+  display:block!important;
+  margin:6px 0 0!important;
+  padding:0!important;
+  gap:0!important;
+  box-sizing:border-box!important;
+}
+body.gh-unlocked .sidebar .side-group-label,
+body.gh-unlocked .gh-sidebar .side-group-label{
+  height:18px!important;
+  min-height:18px!important;
+  max-height:18px!important;
+  margin:0!important;
+  padding:3px 8px 0!important;
+  box-sizing:border-box!important;
+  color:#99a5b8!important;
+  font-size:8px!important;
+  font-weight:800!important;
+  line-height:1!important;
+  letter-spacing:.09em!important;
+  text-transform:uppercase!important;
+}
+
+/* Quote never changes navigation item sizing. */
+body.gh-unlocked .sidebar .side-quote,
+body.gh-unlocked .gh-sidebar .side-quote{
+  display:block!important;
+  margin:10px 2px 6px!important;
+  box-sizing:border-box!important;
+}
+
+/* Dedicated collapse bar; it is not part of the menu stack. */
+body.gh-unlocked .sidebar .sidebar-toggle-control,
+body.gh-unlocked .gh-sidebar .gh-sidebar-toggle{
+  position:absolute!important;
+  top:10px!important;
+  left:10px!important;
+  right:10px!important;
+  width:calc(100% - 20px)!important;
+  height:34px!important;
+  min-height:34px!important;
+  max-height:34px!important;
+  margin:0!important;
+  padding:0 8px!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  justify-content:flex-start!important;
+  border:1px solid #e1e6ef!important;
+  border-radius:11px!important;
+  background:#fff!important;
+  color:#59667a!important;
+  box-shadow:none!important;
+  z-index:100!important;
+}
+
+/* Collapsed rail: same row dimensions, only the content changes. */
+body.gh-unlocked.gh-sidebar-collapsed aside.sidebar,
+body.gh-unlocked.gh-sidebar-collapsed aside.gh-sidebar,
+body.gh-unlocked.gh-sidebar-collapsed .sidebar,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar{
+  width:72px!important;
+  min-width:72px!important;
+  max-width:72px!important;
+  flex-basis:72px!important;
+}
+body.gh-unlocked.gh-sidebar-collapsed .sidebar .side-inner,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar .side-inner{
+  padding:56px 8px 12px!important;
+}
+body.gh-unlocked.gh-sidebar-collapsed .sidebar a.side-item,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar a.side-item,
+body.gh-unlocked.gh-sidebar-collapsed .sidebar a.gh-side-link,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar a.gh-side-link{
+  width:100%!important;
+  height:40px!important;
+  min-height:40px!important;
+  max-height:40px!important;
+  justify-content:center!important;
+  padding:4px!important;
+  gap:0!important;
+}
+body.gh-unlocked.gh-sidebar-collapsed .sidebar .side-item > span:not(.side-icon),
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar .side-item > span:not(.side-icon){display:none!important;}
+body.gh-unlocked.gh-sidebar-collapsed .sidebar .side-icon,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar .side-icon{
+  width:28px!important;height:28px!important;min-width:28px!important;min-height:28px!important;
+}
+body.gh-unlocked.gh-sidebar-collapsed .sidebar .side-group-label,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar .side-group-label,
+body.gh-unlocked.gh-sidebar-collapsed .sidebar .side-quote,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar .side-quote{display:none!important;}
+body.gh-unlocked.gh-sidebar-collapsed .sidebar .sidebar-toggle-control,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar .gh-sidebar-toggle{
+  left:8px!important;right:8px!important;width:calc(100% - 16px)!important;justify-content:center!important;
+}
+body.gh-unlocked.gh-sidebar-collapsed .sidebar .gh-toggle-text,
+body.gh-unlocked.gh-sidebar-collapsed .sidebar .gh-toggle-shortcut,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar .gh-toggle-text,
+body.gh-unlocked.gh-sidebar-collapsed .gh-sidebar .gh-toggle-shortcut{display:none!important;}
+
+/* Shared top navigation language. */
+body.gh-unlocked .topbar,
+body.gh-unlocked .gh-header{
+  background:#fff!important;
+  border-bottom:1px solid #e9edf4!important;
+  box-shadow:none!important;
+}
+body.gh-unlocked .topnav,
+body.gh-unlocked .gh-header-nav{
+  display:flex!important;
+  align-items:center!important;
+  gap:5px!important;
+  min-width:0!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  scrollbar-width:none!important;
+  padding:4px!important;
+}
+body.gh-unlocked .topnav::-webkit-scrollbar,
+body.gh-unlocked .gh-header-nav::-webkit-scrollbar{display:none!important;}
+body.gh-unlocked .topnav > a,
+body.gh-unlocked .gh-header-nav > a{
+  height:34px!important;
+  min-height:34px!important;
+  max-height:34px!important;
+  padding:0 10px!important;
+  margin:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  box-sizing:border-box!important;
+  flex:0 0 auto!important;
+  border:1px solid transparent!important;
+  border-radius:10px!important;
+  background:transparent!important;
+  color:#536178!important;
+  font:600 11px/1 'Be Vietnam Pro',sans-serif!important;
+  white-space:nowrap!important;
+}
+body.gh-unlocked .topnav > a.active,
+body.gh-unlocked .gh-header-nav > a.active,
+body.gh-unlocked .topnav > a.gh-nav-current,
+body.gh-unlocked .gh-header-nav > a.gh-nav-current{
+  background:#eef2ff!important;
+  border-color:#cbd5ff!important;
+  color:#3047a3!important;
+  box-shadow:inset 0 -2px 0 #5a49ef,0 4px 12px rgba(79,70,229,.07)!important;
+}
+
+@media (max-width:820px){
+  body.gh-unlocked aside.sidebar,
+  body.gh-unlocked aside.gh-sidebar,
+  body.gh-unlocked .sidebar,
+  body.gh-unlocked .gh-sidebar{
+    width:min(82vw,300px)!important;
+    min-width:min(82vw,300px)!important;
+    max-width:min(82vw,300px)!important;
+    flex-basis:min(82vw,300px)!important;
+  }
+}

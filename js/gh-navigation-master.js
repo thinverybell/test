@@ -105,7 +105,7 @@
       if (block.type === 'link') {
         if (!allowed(block,r)) return;
         const on = block.key === active ? ' gh-nav-current active' : '';
-        out += `<a class="side-item gh-side-link${on}" href="${block.href}" data-nav-key="${block.key}"><span class="side-icon">${icon(block.icon)}</span><span class="side-label">${block.label}</span><span class="chev" aria-hidden="true">›</span></a>`;
+        out += `<a class="side-item gh-side-link${on}" href="${block.href}" data-nav-key="${block.key}" aria-current="${block.key===active?'page':'false'}"><span class="side-icon">${icon(block.icon)}</span><span class="side-label">${block.label}</span><span class="chev" aria-hidden="true">›</span></a>`;
         return;
       }
       const items = block.items.filter(x => allowed(x,r));
@@ -114,7 +114,7 @@
       items.forEach(item => {
         const on = item.key === active ? ' gh-nav-current active' : '';
         const attrs = item.attrs ? ' ' + item.attrs : '';
-        out += `<a class="side-item gh-side-link${on}" href="${item.href}" data-nav-key="${item.key}"${attrs}><span class="side-icon">${icon(item.icon)}</span><span class="side-label">${item.label}</span><span class="chev" aria-hidden="true">›</span></a>`;
+        out += `<a class="side-item gh-side-link${on}" href="${item.href}" data-nav-key="${item.key}"${attrs} aria-current="${item.key===active?'page':'false'}"><span class="side-icon">${icon(item.icon)}</span><span class="side-label">${item.label}</span><span class="chev" aria-hidden="true">›</span></a>`;
       });
       out += '</div>';
     });
@@ -160,7 +160,7 @@
       const item = labels.get(key); if (!item) return '';
       const on = key===active ? ' active gh-nav-current' : '';
       const extra = item.key==='qna' ? ' data-open-ticket-nav=""' : '';
-      return `<a href="${item.href}" class="${on.trim()}" data-nav-key="${key}"${extra}>${icon(item.icon)}<span>${item.label}</span></a>`;
+      return `<a href="${item.href}" class="${on.trim()}" data-nav-key="${key}"${extra} aria-current="${key===active?'page':'false'}">${icon(item.icon)}<span>${item.label}</span></a>`;
     }).join('');
   }
 
@@ -172,11 +172,18 @@
   }
 
   function cleanBodyRoleInterference() {
-    // script.js can inject a role panel after auth. Give it the master geometry and active state.
     const active = currentKey();
-    document.querySelectorAll('.sidebar .side-item, .gh-sidebar .side-item').forEach(a => {
-      a.classList.remove('active','gh-nav-current');
-      if ((a.getAttribute('data-nav-key') || '') === active) a.classList.add('active','gh-nav-current');
+    document.querySelectorAll('.sidebar a[data-nav-key], .gh-sidebar a[data-nav-key]').forEach(a => {
+      const isActive = (a.getAttribute('data-nav-key') || '') === active;
+      a.classList.toggle('active', isActive);
+      a.classList.toggle('gh-nav-current', isActive);
+      a.setAttribute('aria-current', isActive ? 'page' : 'false');
+    });
+    document.querySelectorAll('.topnav a[data-nav-key], .gh-header-nav a[data-nav-key]').forEach(a => {
+      const isActive = (a.getAttribute('data-nav-key') || '') === active;
+      a.classList.toggle('active', isActive);
+      a.classList.toggle('gh-nav-current', isActive);
+      a.setAttribute('aria-current', isActive ? 'page' : 'false');
     });
   }
 

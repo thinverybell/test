@@ -1,0 +1,20 @@
+PASS  Prompt module extraction — found 200
+PASS  Catalog module count — found 200
+PASS  Stable module IDs
+PASS  Catalog matches prompt — names/variants aligned
+PASS  Contract field count — found 41
+PASS  Module contract fields present
+PASS  Unverified modules are honest by default — 198 unverified + 2 source-verified behavioral boards
+PASS  Verified board sources present — verified=2
+PASS  Lab UI controls exist
+PASS  Core lab functions present
+PASS  Netlist does not use pixel coordinates as truth — netlist groups componentId:portId endpoints
+PASS  Wire add creates undo snapshot
+PASS  Port events guard metadata
+PASS  Console responsive drawer CSS
+PASS  Sidebar links to lab
+PASS  Home top navigation links to lab
+PASS  Error taxonomy complete
+PASS  Strict/sandbox flow rules present
+
+Result: 18/18 checks passed
