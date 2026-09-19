@@ -23,6 +23,7 @@
       {href:'quiz.html', icon:'cil-list-numbered', label:'Quiz', key:'quiz'},
       {href:'videos.html', icon:'cil-video', label:'Video', key:'videos'},
       {href:'games.html', icon:'cil-videogame', label:'Game Center', key:'games'},
+      {href:'music.html', icon:'cil-music-note', label:'Nghe nhạc', key:'music'},
       {href:'lab.html', icon:'cil-beaker', label:'Phòng thí nghiệm', key:'lab'}
     ]},
     {type:'group', label:'Cá nhân & Hỗ trợ', items:[
@@ -48,6 +49,7 @@
     'quiz':'quiz','quiz.html':'quiz',
     'videos':'videos','videos.html':'videos',
     'games':'games','games.html':'games',
+    'music':'music','music.html':'music',
     'lab':'lab','lab.html':'lab',
     'my-library':'library','my-library.html':'library','library':'library',
     'qna':'qna','qna.html':'qna',
@@ -59,7 +61,7 @@
     'profile':'profile','profile.html':'profile'
   };
 
-  const TOP_KEYS = ['home','plugins','config','mods','assets','tools','resources','guide','flashcards','quiz','videos','games','lab','library','qna'];
+  const TOP_KEYS = ['home','plugins','config','mods','assets','tools','resources','guide','flashcards','quiz','videos','games','music','lab','library','qna'];
 
   function role() {
     try {

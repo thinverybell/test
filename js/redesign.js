@@ -70,12 +70,8 @@
     found.forEach(a=>{const x=a.cloneNode(true); x.classList.remove('active'); const href=(x.getAttribute('href')||'').split('?')[0]; if(href===currentPage()) x.classList.add('active'); bar.appendChild(x);});
     document.body.appendChild(bar);
   }
-  function injectAdminCleanup(){
-    const music=document.getElementById('tabMusic');
-    if(music) music.remove();
-  }
+  function injectAdminCleanup(){}
   function injectPublicCleanup(){
-    document.querySelectorAll('.music-home,.donate-fab,.donate-modal').forEach(el=>el.remove());
     document.querySelectorAll('.weather,.visit-counter,.jp-tag').forEach(el=>el.remove());
   }
   document.addEventListener('DOMContentLoaded',function(){

@@ -139,7 +139,7 @@
         icon:'cil-video',
         src:'',
         uploaded:true,
-        fileName:file.fileName||file.name||''
+        fileName:file.fileName||file.name||'', coverBlob:file.coverBlob||null, coverMime:file.coverMime||'', coverFileName:file.coverFileName||''
       }));
       runtimeVideos=[...uploads,...DATA.videos];
     }catch{
@@ -276,8 +276,9 @@
   async function renderVideos(root){
     await runtimeReady;
     const videos=runtimeVideos;
-    root.innerHTML=`<section class="gh-toolbar"><label class="gh-search">${ICON('cil-search')}<input data-page-search placeholder="Tìm video bài giảng..."></label><span class="gh-chip active">${ICON('cil-video')}${videos.length} video</span></section><div class="gh-grid gh-grid-3">${videos.map(v=>`<article class="gh-card gh-video gh-hover" data-searchable="${esc(v.title+' '+v.subject+' '+(v.fileName||''))}"><div class="gh-thumb gh-thumb-icon"><span class="gh-video-icon">${ICON(v.icon)}</span><span class="gh-play">${ICON('cil-media-play')}</span><span class="gh-duration">${esc(v.duration)}</span>${v.uploaded?'<span class="gh-upload-badge">Đã tải lên</span>':''}</div><div class="gh-card pad"><div class="gh-title">${esc(v.title)}</div><div class="gh-meta"><span>${esc(v.subject)}</span><span>${esc(v.views)} lượt xem</span></div><div class="gh-card-foot"><span class="muted">${v.uploaded?'Video từ thư viện':'Video bài giảng'}</span><button class="gh-btn primary" data-watch-video="${esc(v.id)}">Xem video</button></div></div></article>`).join('')}</div><div class="gh-empty" data-filter-empty hidden>${ICON('cil-search')}Không tìm thấy video.</div>`;
+    root.innerHTML=`<section class="gh-toolbar"><label class="gh-search">${ICON('cil-search')}<input data-page-search placeholder="Tìm video bài giảng..."></label><span class="gh-chip active">${ICON('cil-video')}${videos.length} video</span></section><div class="gh-grid gh-grid-3">${videos.map(v=>`<article class="gh-card gh-video gh-hover" data-searchable="${esc(v.title+' '+v.subject+' '+(v.fileName||''))}"><div class="gh-thumb gh-thumb-icon">${v.coverBlob?`<img class="gh-video-cover" data-runtime-cover="${esc(v.id)}" alt="Ảnh bìa ${esc(v.title)}">`:`<span class="gh-video-icon">${ICON(v.icon)}</span>`}<span class="gh-play">${ICON('cil-media-play')}</span><span class="gh-duration">${esc(v.duration)}</span>${v.uploaded?'<span class="gh-upload-badge">Đã tải lên</span>':''}</div><div class="gh-card pad"><div class="gh-title">${esc(v.title)}</div><div class="gh-meta"><span>${esc(v.subject)}</span><span>${esc(v.views)} lượt xem</span></div><div class="gh-card-foot"><span class="muted">${v.uploaded?'Video từ thư viện':'Video bài giảng'}</span><button class="gh-btn primary" data-watch-video="${esc(v.id)}">Xem video</button></div></div></article>`).join('')}</div><div class="gh-empty" data-filter-empty hidden>${ICON('cil-search')}Không tìm thấy video.</div>`;
     wireSearch(root);
+    qsa('[data-runtime-cover]',root).forEach(img=>{const v=videos.find(x=>String(x.id)===String(img.dataset.runtimeCover));if(v?.coverBlob){try{img.src=URL.createObjectURL(v.coverBlob);img.onload=()=>setTimeout(()=>{try{URL.revokeObjectURL(img.src)}catch{}},0)}catch{}}});
     qsa('[data-watch-video]',root).forEach(btn=>btn.addEventListener('click',async()=>openVideo(runtimeVideos.find(v=>v.id===btn.dataset.watchVideo))));
     const requested=new URLSearchParams(location.search).get('video');
     if(requested){const v=runtimeVideos.find(x=>x.id===requested);if(v)setTimeout(()=>openVideo(v),0);}
@@ -507,17 +508,18 @@
   async function openVideo(v){
     if(!v)return;
     let src=v.src||'';
-    let objectUrl='';
+    let objectUrl='', coverUrl='';
     if(v.fileId){
       try{
         const files=runtimeFiles.length?runtimeFiles:await getHubAll('files');
         const record=files.find(f=>String(f.id)===String(v.fileId));
         if(record?.blob){objectUrl=URL.createObjectURL(record.blob);src=objectUrl;}
+        if(record?.coverBlob){coverUrl=URL.createObjectURL(record.coverBlob);}
       }catch{}
     }
     track('video_open',{id:v.id});
-    const modal=openModal(`<div class="gh-modal-head"><div><span class="kicker">VIDEO BÀI GIẢNG</span><h2>${esc(v.title)}</h2></div><button class="gh-icon-btn" data-close-modal aria-label="Đóng">${ICON('cil-x')}</button></div><div class="gh-video-player">${src?`<video controls playsinline preload="metadata" src="${esc(src)}"></video>`:`<div class="gh-sim-placeholder"><div class="big">${ICON('cil-video')}</div><h3>Chưa có nguồn video</h3><p>Nội dung này chưa có file video hoặc URL phát. Các video được upload vào thư viện của website sẽ xuất hiện tại đây tự động.</p><a class="gh-btn" href="videos.html">Quay lại thư viện</a></div>`}</div><div class="gh-modal-actions"><span class="gh-chip">${esc(v.subject)}</span><span class="muted">${esc(v.duration)} · ${esc(v.views)} lượt xem</span><button class="gh-btn primary" data-close-modal>Đóng</button></div>`,'wide');
-    const cleanup=()=>{if(objectUrl){URL.revokeObjectURL(objectUrl);objectUrl='';}};
+    const modal=openModal(`<div class="gh-modal-head"><div><span class="kicker">VIDEO BÀI GIẢNG</span><h2>${esc(v.title)}</h2></div><button class="gh-icon-btn" data-close-modal aria-label="Đóng">${ICON('cil-x')}</button></div><div class="gh-video-player">${src?`<video controls playsinline preload="metadata" ${coverUrl?`poster="${esc(coverUrl)}"`:''} src="${esc(src)}"></video>`:`<div class="gh-sim-placeholder"><div class="big">${ICON('cil-video')}</div><h3>Chưa có nguồn video</h3><p>Nội dung này chưa có file video hoặc URL phát. Các video được upload vào thư viện của website sẽ xuất hiện tại đây tự động.</p><a class="gh-btn" href="videos.html">Quay lại thư viện</a></div>`}</div><div class="gh-modal-actions"><span class="gh-chip">${esc(v.subject)}</span><span class="muted">${esc(v.duration)} · ${esc(v.views)} lượt xem</span><button class="gh-btn primary" data-close-modal>Đóng</button></div>`,'wide');
+    const cleanup=()=>{if(objectUrl){URL.revokeObjectURL(objectUrl);objectUrl='';}if(coverUrl){URL.revokeObjectURL(coverUrl);coverUrl='';}};
     modal._ghCleanup=cleanup;
   }
 

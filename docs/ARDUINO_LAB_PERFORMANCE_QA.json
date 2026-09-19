@@ -1,0 +1,20 @@
+{
+  "sourceZip": "giahuy_site_arduino_esp32_lab_universal_v3_merged.zip",
+  "modules": 247,
+  "boards": 94,
+  "ports": 4213,
+  "thumbs": 247,
+  "fullAssets": 247,
+  "thumbFormat": "WebP RGBA 180x110",
+  "thumbnailBytes": 722468,
+  "fullAssetBytes": 3051360,
+  "virtualList": "renderLibraryViewport",
+  "fullImagePolicy": "assetFor only used in componentMarkup/workbench",
+  "searchDebounce": "80ms",
+  "dragOptimization": "DOM position + renderWires during drag, full render on release",
+  "defaultHardwareBatchRender": true,
+  "oldRealPhotoLoaderPresent": false,
+  "jsSyntax": "PASS",
+  "thumbIntegrity": "PASS",
+  "status": "PASS"
+}

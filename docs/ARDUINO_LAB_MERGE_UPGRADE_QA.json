@@ -1,0 +1,34 @@
+{
+  "htmlFiles": 28,
+  "jsFiles": 25,
+  "jsSyntaxErrors": 0,
+  "missingLocalRefs": [],
+  "registry": {
+    "count": 247,
+    "names": 247,
+    "boards": 94,
+    "ports": 4213,
+    "assets": 0
+  },
+  "topdownPngCount": 247,
+  "all247PngNamesPresent": true,
+  "wireAssetCount": 4,
+  "vercelConfigs": [],
+  "features": [
+    "247-module registry",
+    "94 boards",
+    "topdown 2D transparent assets",
+    "direct wire drag + snap",
+    "port labels both ends",
+    "single/double/triple/quad wire bundles",
+    "wire colors/connectors/length",
+    "move components",
+    "scale 55-180%",
+    "rotate/duplicate/delete",
+    "undo/redo",
+    "board quick-add",
+    "Arduino + breadboard defaults",
+    "local save/open/export",
+    "console logs"
+  ]
+}

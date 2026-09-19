@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "modules": 200,
+  "ports": 2291,
+  "pngAssets": 200,
+  "pngMode": "RGBA",
+  "pngSize": "640x420",
+  "transparentAll": true,
+  "oldAssetDirsPresent": [],
+  "oldActiveRefs": [],
+  "jsSyntax": "PASS",
+  "arduinoHtmlAssetRefs": "PASS"
+}

@@ -1,0 +1,31 @@
+{
+  "javascript_files": 23,
+  "javascript_syntax": "PASS",
+  "topdown_module_images": 200,
+  "wire_assets": 4,
+  "wire_assets_expected": [
+    "wire-single.svg",
+    "wire-double.svg",
+    "wire-triple.svg",
+    "wire-quad.svg"
+  ],
+  "wire_assets_present": [
+    "wire-double.svg",
+    "wire-quad.svg",
+    "wire-single.svg",
+    "wire-triple.svg"
+  ],
+  "wire_svg_valid": true,
+  "arduino_local_refs_missing": [],
+  "feature_markers": {
+    "single": true,
+    "double": true,
+    "triple": true,
+    "quad": true,
+    "drawBundle": true,
+    "bundleCount": true,
+    "legacy_migration": true,
+    "connect_button": true
+  },
+  "status": "PASS"
+}
