@@ -1,181 +1,149 @@
-(function(){
+/**
+ * Sidebar collapse — works on homepage, legacy pages, and platform pages (Quiz/Game/Video…).
+ */
+(function () {
   'use strict';
 
-  // This script is intentionally scoped to unlocked pages only.
-  // Do not include it on login/register/panel/auth pages.
-  if(!document.body || !document.body.classList.contains('gh-unlocked')) return;
-  if(document.body.dataset.sidebarToggleReady === '1') return;
-  document.body.dataset.sidebarToggleReady = '1';
+  var STORAGE_KEY = 'giahuy-sidebar-collapsed-v1';
+  var DESKTOP = window.matchMedia('(min-width: 821px)');
 
-  const STORAGE_KEY = 'giahuy-sidebar-collapsed-v1';
-  const DESKTOP_QUERY = window.matchMedia('(min-width: 821px)');
-  const isLegacyHome = document.body.classList.contains('gh-home');
-
-  function sidebar(){
-    return document.querySelector('.gh-sidebar, aside.sidebar, .sidebar');
+  function isUnlocked() {
+    return document.body && (
+      document.body.classList.contains('gh-unlocked') ||
+      document.body.classList.contains('gh-platform')
+    );
   }
 
-  function getLabel(el){
-    if(!el) return '';
-    const explicit = el.getAttribute('data-sidebar-label');
-    if(explicit) return explicit.trim();
-    const text = [...el.childNodes]
-      .filter(n => n.nodeType === Node.TEXT_NODE)
-      .map(n => n.textContent || '')
-      .join(' ')
-      .trim();
-    if(text) return text;
-    const span = el.querySelector(':scope > span:not(.side-icon)');
-    return (span?.textContent || el.textContent || '').trim().replace(/›$/,'').trim();
+  function getSidebar() {
+    return document.querySelector('aside.gh-sidebar, aside.sidebar, .gh-sidebar, .sidebar');
   }
 
-  function addToggle(side){
-    if(!side || side.querySelector('.gh-sidebar-toggle,.sidebar-toggle-control')) return;
-    const isGh = side.classList.contains('gh-sidebar');
-    const btn = document.createElement('button');
+  function isCollapsed() {
+    return document.body.classList.contains('gh-sidebar-collapsed');
+  }
+
+  function ensureToggle(side) {
+    if (!side) return null;
+    var btn = side.querySelector('.gh-sidebar-toggle, .sidebar-toggle-control');
+    if (btn) return btn;
+
+    var isGh = side.classList.contains('gh-sidebar');
+    btn = document.createElement('button');
     btn.type = 'button';
     btn.className = isGh ? 'gh-sidebar-toggle' : 'sidebar-toggle-control';
-    btn.setAttribute('aria-controls', isGh ? 'ghSidebar' : 'legacySidebar');
     btn.setAttribute('aria-label', 'Thu gọn thanh chức năng');
-    btn.setAttribute('title', 'Thu gọn thanh chức năng');
-    btn.innerHTML = '<span class="gh-toggle-icon"><i class="cil-chevron-left" aria-hidden="true"></i></span><span class="gh-toggle-text">Thu gọn</span><kbd class="gh-toggle-shortcut">Ctrl B</kbd><span class="gh-toggle-sr">Thu gọn</span>';
-    if(isGh) side.id = side.id || 'ghSidebar';
-    else side.id = side.id || 'legacySidebar';
+    btn.setAttribute('title', 'Thu gọn thanh chức năng (Ctrl B)');
+    btn.innerHTML =
+      '<span class="gh-toggle-icon"><i class="cil-chevron-left" aria-hidden="true"></i></span>' +
+      '<span class="gh-toggle-text">Thu gọn</span>' +
+      '<kbd class="gh-toggle-shortcut">Ctrl B</kbd>' +
+      '<span class="gh-toggle-sr">Thu gọn</span>';
     side.appendChild(btn);
-    btn.addEventListener('click', toggle);
-  }
-
-  function syncLabels(collapsed){
-    const side = sidebar();
-    if(!side) return;
-    const links = side.querySelectorAll('a.gh-side-link, a.side-item');
-    links.forEach(link=>{
-      const label=getLabel(link);
-      if(label && !link.title) link.title=label;
-      if(collapsed){
-        link.setAttribute('aria-label', label || 'Điều hướng');
-      }else{
-        // Keep a useful title without forcing a browser tooltip on every link while open.
-        if(label) link.removeAttribute('title');
-      }
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggle();
     });
+    return btn;
   }
 
-  function updateButton(){
-    const side=sidebar();
-    const btn=side?.querySelector('.gh-sidebar-toggle,.sidebar-toggle-control');
-    if(!btn) return;
-    const collapsed=document.body.classList.contains('gh-sidebar-collapsed');
-    const icon=btn.querySelector('i');
-    const text=btn.querySelector('.gh-toggle-text');
-    const shortcut=btn.querySelector('.gh-toggle-shortcut');
-    const sr=btn.querySelector('.gh-toggle-sr');
-    const label=collapsed ? 'Mở rộng' : 'Thu gọn';
-    const fullLabel=collapsed ? 'Mở rộng thanh chức năng' : 'Thu gọn thanh chức năng';
-    if(icon) icon.className=collapsed ? 'cil-chevron-right' : 'cil-chevron-left';
-    if(text) text.textContent=label;
-    if(shortcut) shortcut.textContent=collapsed ? 'Ctrl B' : 'Ctrl B';
-    if(sr) sr.textContent=fullLabel;
+  function updateButton() {
+    var side = getSidebar();
+    var btn = side && side.querySelector('.gh-sidebar-toggle, .sidebar-toggle-control');
+    if (!btn) return;
+    var collapsed = isCollapsed();
+    var icon = btn.querySelector('i');
+    var text = btn.querySelector('.gh-toggle-text');
+    if (icon) icon.className = collapsed ? 'cil-chevron-right' : 'cil-chevron-left';
+    if (text) text.textContent = collapsed ? 'Mở rộng' : 'Thu gọn';
     btn.setAttribute('aria-expanded', String(!collapsed));
-    btn.setAttribute('aria-label', fullLabel);
-    btn.title=fullLabel;
-    btn.dataset.state=collapsed ? 'collapsed' : 'expanded';
-    syncLabels(collapsed);
+    btn.setAttribute('aria-label', collapsed ? 'Mở rộng thanh chức năng' : 'Thu gọn thanh chức năng');
+    btn.title = collapsed ? 'Mở rộng (Ctrl B)' : 'Thu gọn (Ctrl B)';
   }
 
-  function apply(collapsed, persist=true){
-    const safeCollapsed=Boolean(collapsed && DESKTOP_QUERY.matches);
-    document.body.classList.toggle('gh-sidebar-collapsed', safeCollapsed);
-    if(persist){
-      try{ localStorage.setItem(STORAGE_KEY, safeCollapsed ? '1' : '0'); }catch{}
+  function apply(collapsed, persist) {
+    var on = Boolean(collapsed && DESKTOP.matches);
+    document.body.classList.toggle('gh-sidebar-collapsed', on);
+    if (persist !== false) {
+      try { localStorage.setItem(STORAGE_KEY, on ? '1' : '0'); } catch (e) {}
     }
     updateButton();
-    window.dispatchEvent(new CustomEvent('giahuy:sidebar-change',{detail:{collapsed:safeCollapsed}}));
+    try {
+      window.dispatchEvent(new CustomEvent('giahuy:sidebar-change', { detail: { collapsed: on } }));
+    } catch (e2) {}
   }
 
-  function toggle(){
-    apply(!document.body.classList.contains('gh-sidebar-collapsed'), true);
+  function toggle() {
+    apply(!isCollapsed(), true);
   }
 
-  function init(){
-    const side=sidebar();
-    if(!side){
-      // gh-platform pages create the sidebar synchronously during pageShell(); retry once.
-      window.setTimeout(init, 0);
-      return;
+  function readStored() {
+    try { return localStorage.getItem(STORAGE_KEY) === '1'; } catch (e) { return false; }
+  }
+
+  function setup() {
+    if (!isUnlocked()) return;
+    var side = getSidebar();
+    if (!side) return false;
+    ensureToggle(side);
+    apply(readStored(), false);
+    return true;
+  }
+
+  function boot() {
+    if (!setup()) {
+      // Sidebar may appear later (platform shell)
+      var tries = 0;
+      var timer = setInterval(function () {
+        tries += 1;
+        if (setup() || tries > 40) clearInterval(timer);
+      }, 50);
     }
-    addToggle(side);
-    let stored=false;
-    try{ stored=localStorage.getItem(STORAGE_KEY)==='1'; }catch{}
-    apply(stored, false);
   }
 
-  // A single keyboard shortcut: Ctrl/Cmd + B toggles sidebar on desktop.
-  document.addEventListener('keydown', e=>{
-    if(!DESKTOP_QUERY.matches) return;
-    if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='b'){
+  document.addEventListener('keydown', function (e) {
+    if (!DESKTOP.matches || !isUnlocked()) return;
+    if ((e.ctrlKey || e.metaKey) && String(e.key).toLowerCase() === 'b') {
       e.preventDefault();
       toggle();
     }
   });
 
-  const onViewportChange=()=>{
-    if(!DESKTOP_QUERY.matches && document.body.classList.contains('gh-sidebar-collapsed')){
-      apply(false, false);
-    }else{
-      updateButton();
-    }
-  };
-  if(typeof DESKTOP_QUERY.addEventListener==='function') DESKTOP_QUERY.addEventListener('change', onViewportChange);
-  else if(typeof DESKTOP_QUERY.addListener==='function') DESKTOP_QUERY.addListener(onViewportChange);
+  if (typeof DESKTOP.addEventListener === 'function') {
+    DESKTOP.addEventListener('change', function () {
+      if (!DESKTOP.matches) apply(false, false);
+      else apply(readStored(), false);
+    });
+  }
 
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init, {once:true});
-  else init();
-  document.addEventListener('gh:platform-ready', function(){
-    document.body.dataset.sidebarToggleReady = '0';
-    // allow re-init once after shell rebuild
-    try {
-      const side = document.querySelector('.gh-sidebar, aside.sidebar, .sidebar');
-      if (side && !side.querySelector('.gh-sidebar-toggle,.sidebar-toggle-control')) {
-        document.body.dataset.sidebarToggleReady = '1';
-        // manually call pieces without full guard
-        const STORAGE_KEY = 'giahuy-sidebar-collapsed-v1';
-        // re-run by cloning init path: remove guard temporarily
-      }
-    } catch(e){}
-    // Force re-add toggle
-    window.setTimeout(function(){
-      const side = document.querySelector('.gh-sidebar, aside.sidebar, .sidebar');
-      if(!side) return;
-      if(!side.querySelector('.gh-sidebar-toggle,.sidebar-toggle-control')){
-        const isGh = side.classList.contains('gh-sidebar');
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = isGh ? 'gh-sidebar-toggle' : 'sidebar-toggle-control';
-        btn.setAttribute('aria-label', 'Thu gọn thanh chức năng');
-        btn.innerHTML = '<span class="gh-toggle-icon"><i class="cil-chevron-left" aria-hidden="true"></i></span><span class="gh-toggle-text">Thu gọn</span><kbd class="gh-toggle-shortcut">Ctrl B</kbd><span class="gh-toggle-sr">Thu gọn</span>';
-        side.appendChild(btn);
-        btn.addEventListener('click', function(){
-          const collapsed = !document.body.classList.contains('gh-sidebar-collapsed');
-          document.body.classList.toggle('gh-sidebar-collapsed', collapsed);
-          try{ localStorage.setItem('giahuy-sidebar-collapsed-v1', collapsed ? '1' : '0'); }catch(e){}
-          const icon = btn.querySelector('i');
-          const text = btn.querySelector('.gh-toggle-text');
-          if(icon) icon.className = collapsed ? 'cil-chevron-right' : 'cil-chevron-left';
-          if(text) text.textContent = collapsed ? 'Mở rộng' : 'Thu gọn';
-          btn.setAttribute('aria-label', collapsed ? 'Mở rộng thanh chức năng' : 'Thu gọn thanh chức năng');
-        });
-        // restore collapsed state
-        try{
-          if(localStorage.getItem('giahuy-sidebar-collapsed-v1')==='1' && window.matchMedia('(min-width:821px)').matches){
-            document.body.classList.add('gh-sidebar-collapsed');
-            const icon = btn.querySelector('i');
-            const text = btn.querySelector('.gh-toggle-text');
-            if(icon) icon.className = 'cil-chevron-right';
-            if(text) text.textContent = 'Mở rộng';
-          }
-        }catch(e){}
-      }
-    }, 30);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+
+  // After platform rebuilds DOM / unified sidebar rewrites innerHTML
+  document.addEventListener('gh:platform-ready', function () {
+    setTimeout(boot, 30);
   });
+  window.addEventListener('giahuy:sidebar-change', function () {
+    /* no-op listener keeps API stable */
+  });
+
+  // Re-attach if unified sidebar wiped the button
+  var obs;
+  try {
+    obs = new MutationObserver(function () {
+      var side = getSidebar();
+      if (side && !side.querySelector('.gh-sidebar-toggle, .sidebar-toggle-control')) {
+        ensureToggle(side);
+        updateButton();
+      }
+    });
+    if (document.body) {
+      obs.observe(document.body, { childList: true, subtree: true });
+    }
+  } catch (e3) {}
+
+  window.GiaHuySidebarToggle = { apply: apply, toggle: toggle, setup: setup };
 })();
