@@ -51,7 +51,7 @@
   .ap-badge-free{display:inline-block;padding:3px 8px;border-radius:999px;background:#e8f8f0;color:#0d7a4f;font-size:11px;font-weight:800}
   .ap-badge-paid{display:inline-block;padding:3px 8px;border-radius:999px;background:#fff4e5;color:#b45309;font-size:11px;font-weight:800}
 </style>
-<link rel="stylesheet" href="css/inline-extracted.css"><link rel="stylesheet" href="css/theme.css"><link rel="stylesheet" href="css/redesign.css"><link rel="stylesheet" href="css/edu.css"><link rel="stylesheet" href="css/app.css"><link rel="stylesheet" href="css/icons.css"></head>
+<link rel="stylesheet" href="css/inline-extracted.css"><link rel="stylesheet" href="css/theme.css"><link rel="stylesheet" href="css/redesign.css"><link rel="stylesheet" href="css/edu.css"><link rel="stylesheet" href="css/app.css"><link rel="stylesheet" href="css/icons.css"><style>.ap-video-cover{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px;border:1px dashed #9aa8b8;border-radius:12px;margin:10px 0;background:#f8fafc}.ap-video-cover img{width:160px;height:90px;object-fit:cover;border-radius:10px}.ap-donate-preview{min-height:90px;border:1px dashed #cbd5e1;border-radius:12px;display:grid;place-items:center;margin:8px 0;padding:8px}.ap-donate-preview img{max-width:220px;max-height:220px;object-fit:contain}</style></head>
 <body class="admin-page">
   <header class="ap-top">
     <div>
@@ -59,7 +59,7 @@
       <small id="apSub">Upload · Thư viện · Thống kê</small>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <a class="t-btn" href="teacher"><i class="cil-arrow-left"></i> Panel tài khoản</a>
+      <a class="t-btn" href="teacher.html"><i class="cil-arrow-left"></i> Panel tài khoản</a>
       <a class="t-btn" href="/"><i class="cil-home"></i> Trang chủ</a>
       <button type="button" class="t-btn" id="apLogout" style="border-color:#f0c4c4;color:#9b2c2c"><i class="cil-account-logout"></i> Đăng xuất</button>
     </div>
@@ -92,6 +92,7 @@
             <button type="button" class="admin-tab" data-tab="library"><i class="cil-library"></i> Thư viện</button>
             <button type="button" class="admin-tab" data-tab="music" id="tabMusic"><i class="cil-music-note"></i> Nhạc</button>
             <button type="button" class="admin-tab" data-tab="stats"><i class="cil-chart"></i> Thống kê</button>
+            <button type="button" class="admin-tab" data-tab="donate"><i class="cil-heart"></i> Ủng hộ</button>
           </div>
           <div id="adminWorkspace"><p style="color:#5c738a;padding:12px 0">Đang tải công cụ…</p></div>
         </div>
@@ -115,7 +116,7 @@
       ? 'Panel Quản trị viên'
       : (isManager ? 'Panel Quản lí — Công cụ' : 'Panel Giáo viên — Công cụ');
     document.getElementById('apSub').textContent = isAdmin
-      ? 'Upload · Thư viện · Nhạc · Thống kê · Avatar'
+      ? 'Upload · Thư viện · Nhạc · Ủng hộ · Thống kê · Avatar'
       : 'Theo quyền được cấp';
     document.getElementById('apBadge').textContent = isAdmin ? 'ADMIN' : (isManager ? 'QUẢN LÍ' : 'GIÁO VIÊN');
     // Avatar + tên theo tài khoản đang đăng nhập
@@ -241,6 +242,7 @@
                 </label>
                 <p class="ap-access-hint" id="apAccessHint"></p>
               </div>
+              <div class="ap-video-cover" id="apVideoCover" hidden><div class="ap-access-title">Ảnh bìa video</div><input name="cover" type="file" accept="image/*" hidden id="apCover"><button type="button" class="secondary-btn" id="apCoverBtn">Chọn ảnh bìa</button><span id="apCoverLabel">Chưa chọn ảnh bìa</span><img id="apCoverPreview" alt="Xem trước ảnh bìa" hidden></div>
               <div class="ap-drop" id="apDrop">
                 <input name="file" type="file" multiple hidden id="apFile">
                 <strong>Chọn file / kéo thả</strong>
@@ -261,6 +263,10 @@
       const form = document.getElementById('apUploadForm');
       const input = document.getElementById('apFile');
       const drop = document.getElementById('apDrop');
+      const coverWrap = document.getElementById('apVideoCover');
+      const coverInput = document.getElementById('apCover');
+      const coverPreview = document.getElementById('apCoverPreview');
+      const coverLabel = document.getElementById('apCoverLabel');
       // Hiện Free/Paid theo quyền
       (function applyAccessPerms() {
         const allowFree = isAdmin || can('upload') || can('upload_free') || can('settings');
@@ -285,7 +291,12 @@
       input.addEventListener('change', () => {
         document.getElementById('apFileLabel').textContent =
           input.files.length ? `${input.files.length} file đã chọn` : 'pdf, docx, pptx, zip, ảnh…';
+        const hasVideo=[...input.files].some(f=>f.type.startsWith('video/'));
+        if(coverWrap) coverWrap.hidden=!hasVideo;
+        if(!hasVideo && coverInput) coverInput.value='';
       });
+      document.getElementById('apCoverBtn')?.addEventListener('click',()=>coverInput?.click());
+      coverInput?.addEventListener('change',()=>{const f=coverInput.files?.[0];if(coverLabel)coverLabel.textContent=f?.name||'Chưa chọn ảnh bìa';if(f&&coverPreview){coverPreview.src=URL.createObjectURL(f);coverPreview.hidden=false;}});
       ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.style.borderColor = '#163a66'; }));
       ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.style.borderColor = ''; }));
       drop.addEventListener('drop', e => {
@@ -298,6 +309,9 @@
         e.preventDefault();
         const fs = [...input.files];
         if (!fs.length) return toast('Chưa chọn file.', true);
+        const selectedCover = coverInput?.files?.[0] || null;
+        if (fs.some(f => f.type.startsWith('video/')) && !selectedCover) return toast('Video cần chọn ảnh bìa.', true);
+        if (selectedCover && (!selectedCover.type.startsWith('image/') || selectedCover.size > 8 * 1024 * 1024)) return toast('Ảnh bìa phải là ảnh và nhỏ hơn 8 MB.', true);
         const fd = new FormData(form);
         const access = fd.get('access') === 'paid' ? 'paid' : 'free';
         const allowFree = isAdmin || can('upload') || can('upload_free') || can('settings');
@@ -328,6 +342,9 @@
             mime: f.type,
             size: f.size,
             blob: f,
+            coverBlob: (f.type.startsWith('video/') && coverInput?.files?.[0]) ? coverInput.files[0] : null,
+            coverMime: (f.type.startsWith('video/') && coverInput?.files?.[0]) ? coverInput.files[0].type : '',
+            coverFileName: (f.type.startsWith('video/') && coverInput?.files?.[0]) ? coverInput.files[0].name : '',
             created: Date.now(),
             builtin: false,
             featured: fd.get('featured') === 'on',
@@ -444,6 +461,14 @@
         </div>`;
     }
 
+    async function renderDonate() {
+      const cfg = (()=>{try{return Object.assign({method:'Chuyển khoản ngân hàng',bank:'',accountNumber:'',accountName:'Gia Huy',content:'Ung ho Gia Huy',qr:''},JSON.parse(localStorage.getItem('giahuy-donate-config')||'{}'))}catch{return {method:'Chuyển khoản ngân hàng',bank:'',accountNumber:'',accountName:'Gia Huy',content:'Ung ho Gia Huy',qr:''}}})();
+      ws.innerHTML=`<div class="ap-upload-grid"><div class="ap-box"><h2><i class="cil-heart"></i> Cấu hình Ủng hộ</h2><form id="apDonateForm"><label class="ap-field">Phương thức<input name="method" value="${esc(cfg.method)}" placeholder="Chuyển khoản ngân hàng / MoMo / PayPal"></label><label class="ap-field">Ngân hàng / Ví<input name="bank" value="${esc(cfg.bank)}"></label><label class="ap-field">Số tài khoản<input name="accountNumber" value="${esc(cfg.accountNumber)}"></label><label class="ap-field">Chủ tài khoản<input name="accountName" value="${esc(cfg.accountName)}"></label><label class="ap-field">Nội dung chuyển khoản<input name="content" value="${esc(cfg.content)}"></label><label class="ap-field">Ảnh QR<input id="apDonateQr" type="file" accept="image/*"></label><div class="ap-donate-preview">${cfg.qr?`<img src="${esc(cfg.qr)}" alt="QR hiện tại">`:'Chưa có QR'}</div><button class="primary-btn" type="submit"><i class="cil-save"></i> Lưu cấu hình</button><button class="secondary-btn" id="apDonateClearQr" type="button">Xóa QR</button></form></div><div class="ap-box"><h3>Xem trước</h3><p>Cấu hình này sẽ được hiển thị khi người học bấm <b>Ủng hộ Thầy</b>.</p><div class="ap-tip">Thông tin được lưu trong trình duyệt bằng localStorage.</div></div></div>`;
+      const form=document.getElementById('apDonateForm'); const qr=document.getElementById('apDonateQr');
+      form?.addEventListener('submit',async e=>{e.preventDefault();const fd=new FormData(form);let qrData=cfg.qr||'';const f=qr?.files?.[0];if(f){qrData=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(f)});}localStorage.setItem('giahuy-donate-config',JSON.stringify({method:fd.get('method')||'',bank:fd.get('bank')||'',accountNumber:fd.get('accountNumber')||'',accountName:fd.get('accountName')||'',content:fd.get('content')||'',qr:qrData}));toast('Đã lưu cấu hình ủng hộ.');});
+      document.getElementById('apDonateClearQr')?.addEventListener('click',()=>{const x=JSON.parse(localStorage.getItem('giahuy-donate-config')||'{}');x.qr='';localStorage.setItem('giahuy-donate-config',JSON.stringify(x));toast('Đã xóa QR.');renderDonate();});
+    }
+
     async function loadTab(tab) {
       document.querySelectorAll('.admin-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
       try {
@@ -451,6 +476,7 @@
         else if (tab === 'library') await renderLibrary();
         else if (tab === 'music') await renderMusic();
         else if (tab === 'stats') await renderStats();
+        else if (tab === 'donate') await renderDonate();
         else await renderUpload();
       } catch (err) {
         console.error(err);
