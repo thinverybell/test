@@ -105,23 +105,8 @@ body.gh-unlocked.gh-home .footer {
   box-sizing: border-box !important;
 }
 
-/* Toggle button stays inside the sidebar and never occupies the main grid. */
-body.gh-unlocked.gh-home .sidebar .sidebar-toggle-control {
-  left: 14px !important;
-  right: auto !important;
-  width: calc(100% - 28px) !important;
-}
+/* toggle geometry controlled by gh-sidebar-polish.css */
 
-body.gh-unlocked.gh-home.gh-sidebar-collapsed .sidebar .sidebar-toggle-control {
-  left: 50% !important;
-  right: auto !important;
-  width: 44px !important;
-  transform: translateX(-50%) !important;
-}
-
-body.gh-unlocked.gh-home.gh-sidebar-collapsed .sidebar .sidebar-toggle-control:hover {
-  transform: translateX(-50%) translateY(-1px) !important;
-}
 
 /* Collapsed sidebar: keep the menu below the toggle control and centered. */
 body.gh-unlocked.gh-home.gh-sidebar-collapsed .sidebar .side-inner {

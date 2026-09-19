@@ -131,4 +131,51 @@
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init, {once:true});
   else init();
+  document.addEventListener('gh:platform-ready', function(){
+    document.body.dataset.sidebarToggleReady = '0';
+    // allow re-init once after shell rebuild
+    try {
+      const side = document.querySelector('.gh-sidebar, aside.sidebar, .sidebar');
+      if (side && !side.querySelector('.gh-sidebar-toggle,.sidebar-toggle-control')) {
+        document.body.dataset.sidebarToggleReady = '1';
+        // manually call pieces without full guard
+        const STORAGE_KEY = 'giahuy-sidebar-collapsed-v1';
+        // re-run by cloning init path: remove guard temporarily
+      }
+    } catch(e){}
+    // Force re-add toggle
+    window.setTimeout(function(){
+      const side = document.querySelector('.gh-sidebar, aside.sidebar, .sidebar');
+      if(!side) return;
+      if(!side.querySelector('.gh-sidebar-toggle,.sidebar-toggle-control')){
+        const isGh = side.classList.contains('gh-sidebar');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = isGh ? 'gh-sidebar-toggle' : 'sidebar-toggle-control';
+        btn.setAttribute('aria-label', 'Thu gọn thanh chức năng');
+        btn.innerHTML = '<span class="gh-toggle-icon"><i class="cil-chevron-left" aria-hidden="true"></i></span><span class="gh-toggle-text">Thu gọn</span><kbd class="gh-toggle-shortcut">Ctrl B</kbd><span class="gh-toggle-sr">Thu gọn</span>';
+        side.appendChild(btn);
+        btn.addEventListener('click', function(){
+          const collapsed = !document.body.classList.contains('gh-sidebar-collapsed');
+          document.body.classList.toggle('gh-sidebar-collapsed', collapsed);
+          try{ localStorage.setItem('giahuy-sidebar-collapsed-v1', collapsed ? '1' : '0'); }catch(e){}
+          const icon = btn.querySelector('i');
+          const text = btn.querySelector('.gh-toggle-text');
+          if(icon) icon.className = collapsed ? 'cil-chevron-right' : 'cil-chevron-left';
+          if(text) text.textContent = collapsed ? 'Mở rộng' : 'Thu gọn';
+          btn.setAttribute('aria-label', collapsed ? 'Mở rộng thanh chức năng' : 'Thu gọn thanh chức năng');
+        });
+        // restore collapsed state
+        try{
+          if(localStorage.getItem('giahuy-sidebar-collapsed-v1')==='1' && window.matchMedia('(min-width:821px)').matches){
+            document.body.classList.add('gh-sidebar-collapsed');
+            const icon = btn.querySelector('i');
+            const text = btn.querySelector('.gh-toggle-text');
+            if(icon) icon.className = 'cil-chevron-right';
+            if(text) text.textContent = 'Mở rộng';
+          }
+        }catch(e){}
+      }
+    }, 30);
+  });
 })();

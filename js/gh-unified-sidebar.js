@@ -289,6 +289,33 @@
     return true;
   }
 
+  function markTopnavActive(activeKey) {
+    var map = {
+      home: 'index.html',
+      plugins: 'plugins.html',
+      config: 'config.html',
+      mods: 'mods.html',
+      assets: 'assets.html',
+      tools: 'tools.html',
+      resources: 'resources.html',
+      guide: 'guide.html',
+      library: 'my-library.html',
+      flashcards: 'flashcards.html',
+      quiz: 'quiz.html',
+      videos: 'videos.html',
+      games: 'games.html',
+      settings: 'settings.html',
+      qna: 'qna.html'
+    };
+    var href = map[activeKey] || '';
+    document.querySelectorAll('.topnav a, .gh-header-nav a').forEach(function (a) {
+      a.classList.remove('active');
+      var h = (a.getAttribute('href') || '').split('/').pop();
+      if (href && h === href) a.classList.add('active');
+      if (activeKey === 'home' && (h === 'index.html' || h === '' || h === '/')) a.classList.add('active');
+    });
+  }
+
   function applyUnified() {
     // Skip locked auth pages
     if (document.body && document.body.classList.contains('locked-zone')) return;
@@ -298,6 +325,7 @@
 
     if (legacy) fillSidebar(legacy, 'legacy');
     if (platform) fillSidebar(platform, 'platform');
+    markTopnavActive(detectActiveKey());
   }
 
   // Public API for platform shell to reuse the same menu

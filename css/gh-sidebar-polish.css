@@ -617,3 +617,158 @@ body.gh-platform.gh-sidebar-collapsed .gh-sidebar {
     padding: 14px 12px 96px !important;
   }
 }
+
+/* ============================================================
+   TOGGLE + ACTIVE + TOPBAR LOCK (final overrides)
+   ============================================================ */
+
+/* --- Toggle: one clean pill, never broken overflow --- */
+.gh-sidebar .gh-sidebar-toggle,
+body.gh-unlocked .sidebar .sidebar-toggle-control,
+body.gh-home .sidebar .sidebar-toggle-control {
+  position: absolute !important;
+  top: 12px !important;
+  left: 12px !important;
+  right: 12px !important;
+  width: auto !important;
+  max-width: calc(100% - 24px) !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 8px !important;
+  padding: 0 10px !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 14px !important;
+  background: #fff !important;
+  color: #334155 !important;
+  box-shadow: 0 6px 18px rgba(15,23,42,.06) !important;
+  overflow: hidden !important;
+  z-index: 30 !important;
+  box-sizing: border-box !important;
+  transform: none !important;
+}
+
+.gh-sidebar .gh-sidebar-toggle::after,
+body.gh-unlocked .sidebar .sidebar-toggle-control::after {
+  display: none !important;
+}
+
+.gh-toggle-icon {
+  width: 28px !important;
+  height: 28px !important;
+  flex: 0 0 28px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 9px !important;
+  background: #eef2ff !important;
+  color: #4f46e5 !important;
+  border: 1px solid #e0e7ff !important;
+}
+
+.gh-toggle-text {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #334155 !important;
+}
+
+.gh-toggle-shortcut {
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+  padding: 3px 6px !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 6px !important;
+  background: #f8fafc !important;
+  color: #94a3b8 !important;
+  font: 700 9px/1 ui-monospace, Menlo, monospace !important;
+}
+
+.gh-toggle-sr {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0,0,0,0) !important;
+  border: 0 !important;
+}
+
+/* Collapsed: icon-only circle, centered */
+body.gh-sidebar-collapsed .gh-sidebar .gh-sidebar-toggle,
+body.gh-sidebar-collapsed .sidebar .sidebar-toggle-control {
+  left: 50% !important;
+  right: auto !important;
+  width: 42px !important;
+  max-width: 42px !important;
+  height: 42px !important;
+  padding: 0 !important;
+  justify-content: center !important;
+  gap: 0 !important;
+  border-radius: 14px !important;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  transform: translateX(-50%) !important;
+}
+
+body.gh-sidebar-collapsed .gh-toggle-text,
+body.gh-sidebar-collapsed .gh-toggle-shortcut {
+  display: none !important;
+}
+
+body.gh-sidebar-collapsed .gh-toggle-icon {
+  background: rgba(255,255,255,.18) !important;
+  border-color: rgba(255,255,255,.25) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+/* Room for toggle above menu */
+.gh-sidebar .side-inner,
+body.gh-unlocked .sidebar .side-inner {
+  padding-top: 56px !important;
+}
+
+/* --- ACTIVE state: very clear which page you're on --- */
+body.gh-unlocked .sidebar .side-item.active,
+body.gh-unlocked .sidebar a.side-item.active,
+body.gh-platform .gh-sidebar .gh-side-link.active,
+body.gh-platform .gh-sidebar a.side-item.active,
+body.gh-home .sidebar .side-item.active {
+  color: #3730a3 !important;
+  background: linear-gradient(135deg, #eef2ff, #e0e7ff) !important;
+  border-color: #c7d2fe !important;
+  box-shadow: inset 3px 0 0 #4f46e5, 0 6px 16px rgba(79,70,229,.1) !important;
+  font-weight: 700 !important;
+}
+
+body.gh-unlocked .sidebar .side-item.active .side-icon,
+body.gh-platform .gh-sidebar .gh-side-link.active .side-icon,
+body.gh-home .sidebar .side-item.active .side-icon {
+  background: #4f46e5 !important;
+  color: #fff !important;
+  box-shadow: 0 6px 14px rgba(79,70,229,.25) !important;
+}
+
+/* Topnav active (legacy header) */
+body.gh-unlocked .topnav a.active,
+body.gh-unlocked .topbar .topnav a.active {
+  color: #3730a3 !important;
+  background: #eef2ff !important;
+  border-color: #c7d2fe !important;
+  font-weight: 700 !important;
+}
+
+/* Platform header active */
+body.gh-platform .gh-header-nav a.active {
+  color: #3730a3 !important;
+  background: #eef2ff !important;
+  font-weight: 700 !important;
+}
